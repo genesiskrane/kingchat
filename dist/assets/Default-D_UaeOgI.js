@@ -1,0 +1,1 @@
+import{c as e,a,u as t,F as o,b as s,o as r,R as c}from"./index-BEzkNpsU.js";const n=s("div",null,"Default Layout",-1),m={__name:"Default",setup(u){return(l,_)=>(r(),e(o,null,[n,a(t(c))],64))}};export{m as default};
