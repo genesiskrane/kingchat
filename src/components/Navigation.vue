@@ -1,11 +1,6 @@
 <template>
   <nav class="flex flex-col justify-between">
-    <RouterLink
-      v-for="item in menu"
-      :key="item"
-      :to="item.link"
-      class="px-4 py-2"
-    >
+    <v-btn v-for="item in menu" :key="item" :to="item.link" class="px-4 py-2">
       <div class="flex flex-row justify-start gap-4">
         <div>
           <img :src="geticon(item.icon)" alt="" />
@@ -14,7 +9,7 @@
           <span>{{ item.name }}</span>
         </div>
       </div>
-    </RouterLink>
+    </v-btn>
   </nav>
 </template>
 

@@ -15,7 +15,7 @@ export default defineConfig({
       template: { transformAssetUrls },
     }),
     // https://github.com/vuetifyjs/vuetify-loader/tree/master/packages/vite-plugin#readme
-    Vuetify(),
+    // Vuetify(),
     Components({
       dirs: ["src/components", "src/pages"],
       directoryAsNamespace: true,
