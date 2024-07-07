@@ -22,7 +22,9 @@
         <div>
           <div class="bg-red-5">
             <div>
-              <q-img src="../assets/img/logo.png" class="ma-4 w-12"></q-img>
+              <q-avatar size="3rem">
+                <img src="../assets/img/logo.png" />
+              </q-avatar>
             </div>
             <div><span>King Chat</span></div>
           </div>
