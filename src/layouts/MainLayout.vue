@@ -61,5 +61,11 @@ export default {
 </script>
 
 <script setup>
+import { ref } from "vue";
 import Navigation from "../components/Navigation.vue";
+
+const leftDrawerOpen = ref(false);
+function toggleLeftDrawer() {
+  leftDrawerOpen.value = !leftDrawerOpen.value;
+}
 </script>
