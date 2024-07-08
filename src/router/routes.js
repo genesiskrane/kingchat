@@ -8,6 +8,46 @@ const routes = [
       {
         path: '/home',
         component: () => import('../pages/Home.vue')
+      },
+      {
+        path: '/chats',
+        component: () => import('../pages/Chats.vue')
+      },
+      {
+        path: '/rooms',
+        component: () => import('../pages/Rooms.vue')
+      },
+      {
+        path: '/explore',
+        component: () => import('../pages/Explore.vue')
+      },
+      {
+        path: '/notifications',
+        component: () => import('../pages/Notifications.vue')
+      },
+      {
+        path: '/messages',
+        component: () => import('../pages/Messages.vue')
+      },
+      {
+        path: '/bookmarks',
+        component: () => import('../pages/Bookmarks.vue')
+      },
+      {
+        path: '/communities',
+        component: () => import('../pages/Communities.vue')
+      },
+      {
+        path: '/spaces',
+        component: () => import('../pages/Spaces.vue')
+      },
+      {
+        path: '/profile',
+        component: () => import('../pages/Profile.vue')
+      },
+      {
+        path: '/recharge',
+        component: () => import('../pages/Recharge.vue')
       }
     ]
   },

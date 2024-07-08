@@ -1,4 +1,5 @@
 import './assets/css/main.css'
+import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -15,7 +16,10 @@ import * as directives from 'vuetify/directives'
 
 const vuetify = createVuetify({
   components,
-  directives
+  directives,
+  icons: {
+    defaultSet: 'mdi' // This is already the default value - only for display purposes
+  }
 })
 
 const app = createApp(App)

@@ -16,7 +16,7 @@
       <navigation></navigation>
     </div>
 
-    <div id="footer" class="flex p-4 gap-4">
+    <div id="footer" class="flex p-4 gap-4 mt-12">
       <div>
         <v-img
           src="../assets/img/avatar.png"

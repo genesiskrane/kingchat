@@ -25,6 +25,7 @@
       link: "/home",
       icon: "home",
     },
+    { name: "Chats", link: "/chats", icon: "envelop" },
     { name: "Rooms", link: "/rooms", icon: "door" },
     { name: "Explore", link: "/explore", icon: "search" },
     { name: "Notifications", link: "/notifications", icon: "notifications" },
