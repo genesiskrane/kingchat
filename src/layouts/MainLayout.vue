@@ -1,5 +1,4 @@
 <template>
-  <v-responsive class="border rounded" max-height="300">
     <v-app>
       <v-navigation-drawer v-model="drawer">
         <side-bar></side-bar>
@@ -12,12 +11,11 @@
       </v-app-bar>
 
       <v-main>
-        <v-container>
+        <v-container class="ma-0 pa-0">
           <router-view></router-view>
         </v-container>
       </v-main>
     </v-app>
-  </v-responsive>
 </template>
 
 <script setup>

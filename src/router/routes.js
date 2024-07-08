@@ -2,7 +2,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    redirect: '/home',
+    redirect: '/chats',
     component: () => import('../layouts/MainLayout.vue'),
     children: [
       {
@@ -24,10 +24,6 @@ const routes = [
       {
         path: '/notifications',
         component: () => import('../pages/Notifications.vue')
-      },
-      {
-        path: '/messages',
-        component: () => import('../pages/Messages.vue')
       },
       {
         path: '/bookmarks',

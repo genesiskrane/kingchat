@@ -29,7 +29,6 @@
     { name: "Rooms", link: "/rooms", icon: "door" },
     { name: "Explore", link: "/explore", icon: "search" },
     { name: "Notifications", link: "/notifications", icon: "notifications" },
-    { name: "Messages", link: "/messages", icon: "envelop" },
     { name: "Bookmarks", link: "/bookmarks", icon: "bookmark" },
     { name: "Communities", link: "/communities", icon: "users" },
     { name: "Spaces", link: "/spaces", icon: "mic" },
