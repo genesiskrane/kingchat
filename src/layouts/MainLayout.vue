@@ -1,5 +1,5 @@
 <template>
-  <div>Main Layout</div>
+  <div class="mx-auto">Main Layout</div>
   <router-view></router-view>
 </template>
 
