@@ -1,21 +1,21 @@
 <template>
-    <v-app>
-      <v-navigation-drawer v-model="drawer">
-        <side-bar></side-bar>
-      </v-navigation-drawer>
+  <v-app>
+    <v-navigation-drawer v-model="drawer">
+      <side-bar></side-bar>
+    </v-navigation-drawer>
 
-      <v-app-bar :elevation="2" color="red-darken-1">
-        <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+    <v-app-bar :elevation="2" color="red-darken-1">
+      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-        <v-app-bar-title>Application Bar</v-app-bar-title>
-      </v-app-bar>
+      <v-app-bar-title>Application Bar</v-app-bar-title>
+    </v-app-bar>
 
-      <v-main>
-        <v-container class="ma-0 pa-0">
-          <router-view></router-view>
-        </v-container>
-      </v-main>
-    </v-app>
+    <v-main>
+      <v-container class="ma-0 pa-0 mx-auto">
+        <router-view></router-view>
+      </v-container>
+    </v-main>
+  </v-app>
 </template>
 
 <script setup>
