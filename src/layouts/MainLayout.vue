@@ -2,25 +2,22 @@
   <v-responsive class="border rounded" max-height="300">
     <v-app>
       <v-navigation-drawer>
-        <v-list>
-          <v-list-item title="Navigation drawer"></v-list-item>
-        </v-list>
+        <side-bar></side-bar>
       </v-navigation-drawer>
 
-      <v-app-bar title="App bar"></v-app-bar>
+      <v-app-bar title="King Chat"></v-app-bar>
 
       <v-main>
         <v-container>
-          <h1>Main Content</h1>
+          <router-view></router-view>
         </v-container>
-        <router-view></router-view>
       </v-main>
     </v-app>
   </v-responsive>
 </template>
 
-<script>
-export default {}
+<script setup>
+import SideBar from '../components/SideBar.vue'
 </script>
 
 <style></style>
