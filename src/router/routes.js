@@ -3,6 +3,9 @@ const routes = [
     path: '/',
     name: 'home',
     redirect: '/chats',
+    meta: {
+      requiresAuth: true
+    },
     component: () => import('../layouts/MainLayout.vue'),
     children: [
       {
@@ -44,6 +47,21 @@ const routes = [
       {
         path: '/recharge',
         component: () => import('../pages/Recharge.vue')
+      }
+    ]
+  },
+  {
+    path: '/auth',
+    component: () => import('../layouts/Auth.vue'),
+    children: [
+      { path: 'signup', component: () => import('../pages/auth/SignUp.vue') },
+      {
+        path: 'login',
+        component: () => import('../pages/auth/Login.vue')
+      },
+      {
+        path: 'email-verification',
+        component: () => import('../pages/auth/EmailVerification.vue')
       }
     ]
   },

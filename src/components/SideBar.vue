@@ -16,22 +16,11 @@
       <navigation></navigation>
     </div>
 
-    <div id="footer" class="flex p-4 gap-4 mt-12">
-      <div>
-        <v-img
-          src="../assets/img/avatar.png"
-          aspect-ratio="1"
-          class="w-12 h-12 rounded-full"
-        ></v-img>
-      </div>
-      <div class="flex flex-col">
-        <div>Lord God</div>
-        <div>@_augment</div>
-      </div>
-    </div>
+    <app-footer></app-footer>
   </div>
 </template>
 
 <script setup>
 import Navigation from './Navigation.vue'
+import AppFooter from './Footer.vue'
 </script>

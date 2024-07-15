@@ -1,12 +1,13 @@
 import './assets/css/main.css'
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
+import { auth, onAuthStateChanged } from './firebase'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
-import App from './App.vue'
-
 import router from './router'
+
+import App from './App.vue'
 
 // Vuetify
 import 'vuetify/styles'
@@ -22,10 +23,14 @@ const vuetify = createVuetify({
   }
 })
 
-const app = createApp(App)
+onAuthStateChanged(auth, (user) => {
+  sessionStorage.setItem('user', JSON.stringify(user))
 
-app.use(vuetify)
-app.use(createPinia())
-app.use(router)
+  const app = createApp(App)
 
-app.mount('#app')
+  app.use(vuetify)
+  app.use(createPinia())
+  app.use(router)
+
+  app.mount('#app')
+})
