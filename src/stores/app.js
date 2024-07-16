@@ -100,9 +100,10 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
-  async function createPassword(password) {
+  async function createPassword(uid,password) {
     try {
       let { data } = await axios.post('/auth/create-password', {
+      uid,
         password
       })
       return data
