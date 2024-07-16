@@ -1,0 +1,1 @@
+import{_ as t}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{c as o,b as n,w as a,F as s,d as c,r,o as _,j as l}from"./index-B0ZEkQbq.js";const m={},d=c("div",null,"Home Page",-1);function f(u,i){const e=r("v-btn");return _(),o(s,null,[d,n(e,null,{default:a(()=>[l(" Button ")]),_:1})],64)}const v=t(m,[["render",f]]);export{v as default};

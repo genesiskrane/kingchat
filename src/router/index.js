@@ -11,7 +11,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const store = useAppStore()
   let user = store.app.user
-console.log(user);
+
   if (to.meta.requiresAuth && !user) next({ path: '/auth/login' })
   else next()
 })

@@ -1,7 +1,7 @@
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'app',
     redirect: '/chats',
     meta: {
       requiresAuth: true
@@ -10,6 +10,7 @@ const routes = [
     children: [
       {
         path: '/home',
+        name: 'home',
         component: () => import('../pages/Home.vue')
       },
       {
@@ -62,6 +63,18 @@ const routes = [
       {
         path: 'email-verification',
         component: () => import('../pages/auth/EmailVerification.vue')
+      },
+      {
+        path: 'create-password',
+        component: () => import('../pages/auth/CreatePassword.vue')
+      },
+      {
+        path: 'pick-profile-picture',
+        component: () => import('../pages/auth/PickProfilePicture.vue')
+      },
+      {
+        path: 'create-username',
+        component: () => import('../pages/auth/CreateUsername.vue')
       }
     ]
   },

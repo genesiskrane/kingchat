@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import './assets/css/main.css'
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
@@ -23,7 +25,9 @@ const vuetify = createVuetify({
   }
 })
 
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
+  let { data } = await axios.post('http://localhost:3000/api/auth/get-user', { uid: user.uid })
+  user = { ...user, ...data }
   sessionStorage.setItem('user', JSON.stringify(user))
 
   const app = createApp(App)

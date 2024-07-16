@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth'
+import { ref, getStorage, uploadBytes } from 'firebase/storage'
 import { getAnalytics } from 'firebase/analytics'
 
 const firebaseConfig = {
@@ -15,5 +16,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const auth = getAuth(app)
 const analytics = getAnalytics(app)
+const storage = getStorage()
 
-export { auth, analytics, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+export {
+  ref,
+  uploadBytes,
+  auth,
+  storage,
+  analytics,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+}

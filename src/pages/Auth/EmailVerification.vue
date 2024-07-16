@@ -6,16 +6,18 @@
     <div>
       <h2 class="my-2 text-center">Verify Email</h2>
       <v-form @submit.prevent="" class="flex flex-col mx-4 gap-4">
+        <v-alert text="Invalid OTP" type="warning" v-model="alert" rounded closable></v-alert>
+
         <div class="text-right">Resend Email</div>
+
         <v-text-field
           v-model="code"
           label="Verification Code"
           id="code"
-          placeholder="000000"
+          placeholder="XXXXXX"
           maxlength="6"
           counter
           @input="verify()"
-          :error-messages="errorMessage"
         ></v-text-field>
       </v-form>
     </div>
@@ -30,20 +32,17 @@ import { useAppStore } from '../../stores/app'
 const router = useRouter()
 const store = useAppStore()
 
-const loading = ref(false)
+const alert = ref(false)
 const code = ref('')
 
-function verify() {
-  console.log(code.value.length)
+async function verify() {
   if (code.value.length == 6) {
-    loading.value = true
-    console.log('verifying', code.value)
-    let isVerified = store.verifyOTP({ uid: store.app.user.uid, code: code.value })
+    let isVerified = await store.verifyOTP({ uid: store.app.user.uid, code: code.value })
+
+    console.log(isVerified)
     if (isVerified) {
-      router.push()
-    }
-  } else {
-    loading.value = false
+      router.push('/auth/create-password')
+    } else alert.value = true
   }
 }
 </script>

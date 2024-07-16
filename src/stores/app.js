@@ -1,20 +1,26 @@
 import { defineStore } from 'pinia'
 import { reactive } from 'vue'
-import { auth, signInWithEmailAndPassword, signOut } from '../firebase'
+import { auth, signInWithEmailAndPassword, signOut, storage, ref, uploadBytes } from '../firebase'
 import router from '../router'
 import axios from 'axios'
 
+axios.defaults.baseURL =
+  process.env.NODE_ENV == 'production' ? 'https://kingchat.one' : 'http://localhost:3000/api'
+
+console.log(axios.defaults.baseURL)
 export const useAppStore = defineStore('app', () => {
   let app = reactive({
     name: 'King Chat',
     user: {}
   })
 
-  function init() {
+  async function init() {
     console.log('App Initialized')
+
     let user = JSON.parse(sessionStorage.getItem('user'))
-    console.log(user)
     app.user = user
+
+    return
   }
 
   async function login(data) {
@@ -33,7 +39,7 @@ export const useAppStore = defineStore('app', () => {
     } else {
       // This block is for username attemts
       try {
-        let result = await axios.post('http://localhost:3000/api/auth/login', {
+        let result = await axios.post('/auth/login', {
           username: data.id
         })
         let email = result.data.email
@@ -46,10 +52,11 @@ export const useAppStore = defineStore('app', () => {
       }
     }
   }
+
   async function signup(data) {
     console.log('Sign Up Data:', data)
     try {
-      let response = await axios.post('http://localhost:3000/api/auth/signup', data)
+      let response = await axios.post('/auth/signup', data)
 
       console.log(response)
       app.user = response.data
@@ -58,6 +65,7 @@ export const useAppStore = defineStore('app', () => {
       console.log(error)
     }
   }
+
   async function logout() {
     await signOut(auth)
     router.push('/auth/login')
@@ -65,15 +73,16 @@ export const useAppStore = defineStore('app', () => {
 
   async function verifyEmail(email) {
     try {
-      let response = await axios.post('http://localhost:3000/api/auth/verify-email', { email })
+      let response = await axios.post('/auth/verify-email', { email })
       return response
     } catch (error) {
       return error
     }
   }
+
   async function verifyOTP(data) {
     try {
-      let result = await axios.post('http://localhost:3000/api/auth/verify-otp', data)
+      let result = await axios.post('/auth/verify-otp', data)
 
       return result.data
     } catch (error) {
@@ -81,8 +90,90 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
-  async function initUser() {
-    console.log('Getting All User Data')
+  async function verifyUsername(username) {
+    try {
+      let { data } = await axios.post('/auth/verify-username', {
+        username
+      })
+      return data
+    } catch (error) {
+      return error
+    }
   }
-  return { app, init, login, signup, logout, verifyEmail, verifyOTP, initUser }
+
+  async function createPassword(password) {
+    try {
+      let { data } = await axios.post('/auth/create-password', {
+        password
+      })
+      return data
+    } catch (error) {
+      return error.message
+    }
+  }
+
+  async function initUser() {
+    console.log('Reinitializing User Data')
+
+    let { data } = await axios.post('/auth/get-user', {
+      uid: app.user.uid
+    })
+
+    let user = data
+    app.user = user
+    console.log(app)
+  }
+
+  async function updateUsername(uid, username) {
+    try {
+      let isUsernameUpdated = await axios.post('/auth/update-username', {
+        uid,
+        username
+      })
+      initUser()
+      return isUsernameUpdated
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
+  async function upload(file, imgPath) {
+    const imgRef = ref(storage, imgPath)
+    const snapshot = await uploadBytes(imgRef, file)
+
+    let bucket = snapshot.metadata.bucket
+    let path = snapshot.metadata.fullPath
+    let imgURL = `https://storage.googleapis.com/${bucket}/${path}`
+    return imgURL
+  }
+
+  async function updateProfilePhotoImage(uid, imgURL) {
+    app.user.photoURL = imgURL
+
+    let { data } = await axios.post('/auth/update-profile-photo-image', {
+      uid,
+      imgURL
+    })
+
+    await initUser()
+
+    return data
+  }
+
+  return {
+    app,
+    init,
+    login,
+    signup,
+    logout,
+    verifyEmail,
+    verifyUsername,
+    verifyOTP,
+    createPassword,
+    initUser,
+    upload,
+    updateProfilePhotoImage,
+    updateUsername
+  }
 })
