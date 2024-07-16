@@ -5,9 +5,8 @@ import router from '../router'
 import axios from 'axios'
 
 axios.defaults.baseURL =
-  process.env.NODE_ENV == 'production' ? 'https://kingchat.one' : 'http://localhost:3000/api'
+  process.env.NODE_ENV == 'production' ? 'https://www.kingchat.one/api' : 'http://localhost:3000/api'
 
-console.log(axios.defaults.baseURL)
 export const useAppStore = defineStore('app', () => {
   let app = reactive({
     name: 'King Chat',
