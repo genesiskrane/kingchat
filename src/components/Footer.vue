@@ -1,5 +1,5 @@
 <template>
-  <div id="footer" class="flex flex-col mt-12">
+  <div id="footer" class="flex flex-col">
     <div :class="{ more: isOpen }" class="border-2">
       <div class="">
         <ul>
@@ -10,14 +10,12 @@
     </div>
     <div class="flex p-4 justify-between">
       <div class="flex gap-4">
-        <v-img
-          src="../assets/img/avatar.png"
-          aspect-ratio="1"
-          class="w-12 h-12 rounded-full"
-        ></v-img>
+        <div class="grid content-center">
+          <v-img :src="user.photoURL" aspect-ratio="1" class="w-12 h-12 rounded-full"></v-img>
+        </div>
         <div class="flex flex-col">
-          <div>Lord God</div>
-          <div>@_augment</div>
+          <div id="display-name">{{ user.displayName }}</div>
+          <div id="username">@{{ user.username }}</div>
         </div>
       </div>
       <div class="grid content-center">
@@ -30,11 +28,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useAppStore } from '../stores/app'
 
 const store = useAppStore()
-
+const user = reactive(store.app.user)
 const isOpen = ref(true)
 
 function toggleMenu() {

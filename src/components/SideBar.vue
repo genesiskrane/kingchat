@@ -13,10 +13,14 @@
           <span class="">King Chat</span>
         </div>
       </header>
+      <hr />
       <navigation></navigation>
     </div>
 
-    <app-footer></app-footer>
+    <div>
+      <hr class="mt-12" />
+      <app-footer></app-footer>
+    </div>
   </div>
 </template>
 
