@@ -54,11 +54,16 @@ const routes = [
   {
     path: '/auth',
     component: () => import('../layouts/Auth.vue'),
+    redirect: '/auth/login',
     children: [
       { path: 'signup', component: () => import('../pages/auth/SignUp.vue') },
       {
         path: 'login',
         component: () => import('../pages/auth/Login.vue')
+      },
+      {
+        path: 'forgot-password',
+        component: () => import('../pages/auth/ForgotPassword.vue')
       },
       {
         path: 'email-verification',
@@ -75,6 +80,14 @@ const routes = [
       {
         path: 'create-username',
         component: () => import('../pages/auth/CreateUsername.vue')
+      },
+      {
+        path: 'recovery-code-confirmation',
+        component: () => import('../pages/auth/RecoveryCodeConfirmation.vue')
+      },
+      {
+        path: 'reset-password',
+        component: () => import('../pages/auth/ResetPassword.vue')
       }
     ]
   },

@@ -5,7 +5,9 @@ import router from '../router'
 import axios from 'axios'
 
 axios.defaults.baseURL =
-  process.env.NODE_ENV == 'production' ? 'https://www.kingchat.one/api' : 'http://localhost:3000/api'
+  process.env.NODE_ENV == 'production'
+    ? 'https://www.kingchat.one/api'
+    : 'http://localhost:3000/api'
 
 export const useAppStore = defineStore('app', () => {
   let app = reactive({
@@ -46,8 +48,11 @@ export const useAppStore = defineStore('app', () => {
         app.user = user
         return user
       } catch (error) {
-        if (error.response) return error.response.data.split('/')[1]
-        console.log(error)
+        let message = error.message
+          .substring(error.message.indexOf('(') + 1, error.message.indexOf(')'))
+          .split('/')[1]
+
+        return message
       }
     }
   }
@@ -100,10 +105,10 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
-  async function createPassword(uid,password) {
+  async function createPassword(uid, password) {
     try {
       let { data } = await axios.post('/auth/create-password', {
-      uid,
+        uid,
         password
       })
       return data
@@ -151,14 +156,27 @@ export const useAppStore = defineStore('app', () => {
   async function updateProfilePhotoImage(uid, imgURL) {
     app.user.photoURL = imgURL
 
-    let { data } = await axios.post('/auth/update-profile-photo-image', {
-      uid,
-      imgURL
-    })
+    try {
+      let { data } = await axios.post('/auth/update-profile-photo-image', {
+        uid,
+        imgURL
+      })
+      await initUser()
+      return data
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-    await initUser()
-
-    return data
+  async function generateRecoveryCode(id) {
+    try {
+      let { data } = await axios.post('/auth/generate-recovery-code', { id })
+      if (data.uid) app.user = { ...data }
+      else return false
+      return true
+    } catch (error) {
+      return error
+    }
   }
 
   return {
@@ -174,6 +192,7 @@ export const useAppStore = defineStore('app', () => {
     initUser,
     upload,
     updateProfilePhotoImage,
-    updateUsername
+    updateUsername,
+    generateRecoveryCode
   }
 })

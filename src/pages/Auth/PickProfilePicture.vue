@@ -44,12 +44,11 @@ const store = useAppStore()
 const file = ref()
 const loading = ref(false)
 const displayedImage = ref(store.app.user.photoURL)
-
+const uploadedImage = ref('')
 function displayImage() {
-  file.value = file.value.$el.children[1].children[0].children[2].children[2].files[0]
-
-  displayedImage.value = URL.createObjectURL(file.value)
-  console.log(file.value)
+  uploadedImage.value = file.value.$el.children[1].children[0].children[2].children[2].files[0]
+  console.log(uploadedImage.value)
+  displayedImage.value = URL.createObjectURL(uploadedImage.value)
 }
 
 function skip() {
@@ -60,9 +59,10 @@ async function next() {
   loading.value = true
 
   const uid = store.app.user.uid
-  const imgPath = 'users/avatars/' + uid + '.png'
+  let extension = uploadedImage.value.name.split('.')[1]
 
-  let imgURL = await store.upload(file.value, imgPath)
+  const imgPath = 'users/avatars/' + uid + '.' + extension
+  let imgURL = await store.upload(uploadedImage.value, imgPath)
 
   await store.updateProfilePhotoImage(uid, imgURL)
 

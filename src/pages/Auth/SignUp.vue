@@ -46,7 +46,8 @@
           @click="submit()"
         ></v-btn>
         <div class="text-center my-2">
-          <span>Already have an account?</span> <router-link to="/auth/login"><span class="font-bold">Login</span></router-link>
+          <span>Already have an account?</span>
+          <router-link to="/auth/login"><span class="font-bold">Login</span></router-link>
         </div>
       </v-form>
     </div>
@@ -71,6 +72,7 @@ let isEmailAvialableResponse = ref('')
 const data = reactive({
   name: '',
   email: '',
+  password: '12345678',
   month: '',
   day: '',
   year: ''
@@ -115,14 +117,19 @@ let months = [
 ]
 
 async function submit() {
-  loading.value = true
   console.log('SignUp Form Submitted', data)
 
+  loading.value = true
+
+  data.email = data.email.toLowerCase()
+
   let response = await store.signup(data)
+
   console.log(response, store.$state.app.user.uid)
+
   if (response.status == 200) {
     loading.value = false
-    await store.login({ id: store.$state.app.user.email, password: '12345678' })
+    await store.login({ id: store.$state.app.user.email, password: data.password })
     router.push('/auth/email-verification')
   }
 }

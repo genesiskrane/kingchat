@@ -68,7 +68,6 @@ const v$ = useVuelidate(rules, data)
 async function submit() {
   console.log('Logging In...')
   let res = await store.login(data)
-  console.log(res)
 
   if (res.uid) {
     await store.initUser()
@@ -76,6 +75,6 @@ async function submit() {
   } else if (res == 'invalid-credential') alert.value = true
 }
 function forgotPassword() {
-  router.push('/auth/forgot-password')
+  router.push({ path: '/auth/forgot-password', query: { id: data.id } })
 }
 </script>

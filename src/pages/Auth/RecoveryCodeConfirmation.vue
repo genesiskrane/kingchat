@@ -3,16 +3,18 @@
     <div>
       <v-img src="../assets/img/logo.png" class="w-20 h-20 mx-auto my-8 rounded-sm"></v-img>
     </div>
-    <div>
-      <h2 class="my-2 text-center">Verify Email</h2>
-      <v-form @submit.prevent="" class="flex flex-col mx-4 gap-4">
-        <v-alert text="Invalid OTP" type="warning" v-model="alert" rounded closable></v-alert>
-
-        <div class="text-right">Resend Verification Email</div>
+    <div class="mx-4">
+      <h2 class="my-2 text-center">We sent you a code</h2>
+      <p class="mx-2 my-2 text-xs">
+        Check your email  {{ email }} to get your confirmation code. If you need to request a new
+        code, go back and re-enter your username or email.
+      </p>
+      <v-form @submit.prevent="" class="flex flex-col gap-4">
+        <v-alert text="Invalid Code" type="warning" v-model="alert" rounded closable></v-alert>
 
         <v-text-field
           v-model="code"
-          label="Verification Code"
+          label="Recovery Code"
           id="code"
           placeholder="XXXXXX"
           maxlength="6"
@@ -34,6 +36,20 @@ const store = useAppStore()
 
 const alert = ref(false)
 const code = ref('')
+const email = hideEmail(store.app.user.email)
+
+function hideEmail(email) {
+  console.log(email)
+
+  let hiddenEmail = email.replace(/(.{3})(.*)(?=@)/, (gp1, gp2, gp3) => {
+    console.log(gp1, gp2, gp3)
+    for (let i = 0; i < gp3.length; i++) {
+      gp2 += '*'
+    }
+    return gp2
+  })
+  return hiddenEmail
+}
 
 async function verify() {
   if (code.value.length == 6) {
@@ -41,7 +57,7 @@ async function verify() {
 
     console.log(isVerified)
     if (isVerified) {
-      router.push('/auth/create-password')
+      router.push('/auth/reset-password')
     } else alert.value = true
   }
 }

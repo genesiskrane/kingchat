@@ -18,7 +18,9 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
 axios.defaults.baseURL =
-  process.env.NODE_ENV == 'production' ? 'https://www.kingchat.one/api' : 'http://localhost:3000/api'
+  process.env.NODE_ENV == 'production'
+    ? 'https://www.kingchat.one/api'
+    : 'http://localhost:3000/api'
 
 const vuetify = createVuetify({
   components,
@@ -29,6 +31,7 @@ const vuetify = createVuetify({
 })
 
 onAuthStateChanged(auth, async (user) => {
+  console.log(user)
   if (user) {
     try {
       let { data } = await axios.post('/auth/get-user', { uid: user.uid })
