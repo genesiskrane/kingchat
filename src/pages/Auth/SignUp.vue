@@ -46,7 +46,7 @@
           @click="submit()"
         ></v-btn>
         <div class="text-center my-2">
-          <span>Already have an account?</span>
+          <span>Already have an account? </span>
           <router-link to="/auth/login"><span class="font-bold">Login</span></router-link>
         </div>
       </v-form>

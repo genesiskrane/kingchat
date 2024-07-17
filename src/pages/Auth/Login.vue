@@ -31,7 +31,7 @@
             @click="forgotPassword()"
           ></v-btn>
           <div class="text-center my-2">
-            <span>Don't have an account?</span>
+            <span>Don't have an account? </span>
             <router-link to="/auth/signup"><span class="font-bold">Sign Up</span></router-link>
           </div>
         </v-form>

@@ -5,7 +5,7 @@ import router from '../router'
 import axios from 'axios'
 
 axios.defaults.baseURL =
-  process.env.NODE_ENV == 'production'
+  process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
     ? 'https://www.kingchat.one/api'
     : 'http://localhost:3000/api'
 
