@@ -2,11 +2,11 @@
   <div id="sidebar" class="flex flex-col justify-between h-screen">
     <div>
       <header class="flex px-4 py-8 gap-4">
-        <div>
+        <div class="p-2 bg-red-500 rounded-2xl">
           <v-img
-            src="../assets/img/logo.png"
+            class="w-20 h-20 "
+            src="../assets/img/icon-black.svg"
             aspect-ratio="1"
-            class="w-20 h-20 rounded-full"
           ></v-img>
         </div>
         <div class="grid items-center">

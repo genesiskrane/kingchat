@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col w-full">
     <div v-for="chat in chats" :key="chat">
-      <router-link to="/chat">
+      <router-link :to="getLink(chat.username)">
         <div class="flex flex-row px-2 py-2 gap-2">
           <div>
             <v-img :src="chat.avatar" class="w-12 h-12 rounded-full" aspect-ratio="1"></v-img>
@@ -90,4 +90,8 @@ const chats = [
     message: 'i am a boy'
   }
 ]
+
+function getLink(username) {
+  return `/chats/${username}?name=${username}`
+}
 </script>

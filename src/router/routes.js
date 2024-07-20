@@ -1,3 +1,5 @@
+import { useAppStore } from '../stores/app'
+
 const routes = [
   {
     path: '/',
@@ -46,8 +48,8 @@ const routes = [
         component: () => import('../pages/Profile.vue')
       },
       {
-        path: '/recharge',
-        component: () => import('../pages/Recharge.vue')
+        path: '/store',
+        component: () => import('../pages/Store.vue')
       }
     ]
   },
@@ -91,6 +93,26 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/chats',
+    children: [{ path: ':username', component: () => import('../pages/Chat.vue') }]
+  },
+  {
+    path: '/rooms',
+    children: [
+      {
+        path: ':room',
+        component: () => import('../pages/Room.vue'),
+        beforeEnter: async (to) => {
+          const store = useAppStore()
+
+          await store.openRoom(to)
+          return
+        }
+      }
+    ]
+  },
+
   {
     path: '/:catchAll(.*)*',
     component: () => import('../pages/ErrorNotFound.vue')

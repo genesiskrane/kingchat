@@ -2,7 +2,10 @@
   <div class="grid content-center h-full w-full">
     <div>
       <div>
-        <v-img src="../assets/img/logo.png" class="w-20 h-20 mx-auto my-8 rounded-sm"></v-img>
+        <v-img
+          src="../assets/img/icon-black.svg"
+          class="w-20 h-20 mx-auto my-8 rounded-2xl bg-red-600"
+        ></v-img>
         <h2 class="my-4 text-3xl text-center">Find your account</h2>
         <p class="my-2 text-center">
           Enter the email or username associated with your account to change your password.

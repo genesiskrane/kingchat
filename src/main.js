@@ -31,7 +31,8 @@ const vuetify = createVuetify({
 })
 
 onAuthStateChanged(auth, async (user) => {
-  console.log(user)
+  console.log('Auth Changed', user)
+
   if (user) {
     try {
       let { data } = await axios.post('/auth/get-user', { uid: user.uid })
@@ -40,13 +41,14 @@ onAuthStateChanged(auth, async (user) => {
       console.log(error)
     }
   }
+
   sessionStorage.setItem('user', JSON.stringify(user))
-
-  const app = createApp(App)
-
-  app.use(vuetify)
-  app.use(createPinia())
-  app.use(router)
-
-  app.mount('#app')
 })
+
+const app = createApp(App)
+
+app.use(vuetify)
+app.use(createPinia())
+app.use(router)
+
+app.mount('#app')

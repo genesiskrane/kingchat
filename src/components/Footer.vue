@@ -39,8 +39,8 @@ function toggleMenu() {
   isOpen.value = !isOpen.value
 }
 
-function logout() {
-  store.logout()
+async function logout() {
+  await store.logout()
 }
 </script>
 

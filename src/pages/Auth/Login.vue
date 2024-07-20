@@ -2,7 +2,11 @@
   <div class="grid content-center h-full w-full">
     <div>
       <div>
-        <v-img src="../assets/img/logo.png" class="w-20 h-20 mx-auto my-8 rounded-sm"></v-img>
+        <v-img
+          src="../assets/img/icon-black.svg"
+          class="w-20 h-20 mx-auto my-8 rounded-2xl bg-red-500"
+          aspect-ratio="1"
+        ></v-img>
       </div>
       <div>
         <v-form @submit.prevent="submit" class="flex flex-col mx-4 gap-4">
@@ -70,7 +74,6 @@ async function submit() {
   let res = await store.login(data)
 
   if (res.uid) {
-    await store.initUser()
     router.push('/chats')
   } else if (res == 'invalid-credential') alert.value = true
 }

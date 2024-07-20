@@ -1,7 +1,11 @@
 <template>
   <div class="grid content-center h-full w-full">
     <div>
-      <v-img src="../assets/img/logo.png" class="w-20 h-20 mx-auto rounded-sm border"></v-img>
+      <v-img
+        src="../assets/img/icon-black.svg"
+        class="w-20 h-20 mx-auto rounded-2xl bg-red-500 border"
+        aspect-ratio="1"
+      ></v-img>
     </div>
     <h2 class="my-2 text-center">Create Unique Username</h2>
     <div>

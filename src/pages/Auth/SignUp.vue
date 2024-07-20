@@ -1,7 +1,11 @@
 <template>
   <div class="grid content-center h-full w-full">
     <div>
-      <v-img src="../assets/img/logo.png" class="w-20 h-20 mx-auto my-8 rounded-sm"></v-img>
+      <v-img
+        src="../assets/img/icon-black.svg"
+        class="w-20 h-20 mx-auto my-8 rounded-2xl bg-red-500"
+        aspect-ratio="1"
+      ></v-img>
     </div>
     <div>
       <h2 class="my-2 text-center">Sign Up</h2>
@@ -123,13 +127,12 @@ async function submit() {
 
   data.email = data.email.toLowerCase()
 
-  let response = await store.signup(data)
+  let user = await store.signup(data)
 
-  console.log(response, store.$state.app.user.uid)
+  console.log(store.app.user.uid, user)
 
-  if (response.status == 200) {
+  if (user.uid) {
     loading.value = false
-    await store.login({ id: store.$state.app.user.email, password: data.password })
     router.push('/auth/email-verification')
   }
 }

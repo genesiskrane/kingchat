@@ -3,24 +3,53 @@ import { reactive } from 'vue'
 import { auth, signInWithEmailAndPassword, signOut, storage, ref, uploadBytes } from '../firebase'
 import router from '../router'
 import axios from 'axios'
+import { io } from 'socket.io-client'
 
+// Configs
 axios.defaults.baseURL =
   process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
     ? 'https://www.kingchat.one/api'
     : 'http://localhost:3000/api'
 
+const ioURL =
+  process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
+    ? 'https://www.kingchat.one/'
+    : 'http://localhost:3000/'
+
+const socket = io(ioURL)
+const roomsSocket = io(`${ioURL}rooms`)
+
+class Room {
+  constructor(data) {
+    Object.assign(this, data)
+  }
+}
+
+const getAppConfig = async (id) => {
+  // Get App Data
+  let { data } = await axios.get('/app', { params: { id } })
+  return data
+}
+
 export const useAppStore = defineStore('app', () => {
   let app = reactive({
     name: 'King Chat',
-    user: {}
+    user: {},
+    rooms: { active: '', all: [] }
   })
 
   async function init() {
     console.log('App Initialized')
 
+    // Get User Data
     let user = JSON.parse(sessionStorage.getItem('user'))
     app.user = user
 
+    // Get App Data
+    let appConfig = await getAppConfig(app.user.id)
+    app = Object.assign(app, appConfig)
+
+    console.log(app)
     return
   }
 
@@ -30,7 +59,10 @@ export const useAppStore = defineStore('app', () => {
       try {
         let { user } = await signInWithEmailAndPassword(auth, data.id, data.password)
         app.user = user
-        return user
+
+        await initUser()
+
+        return app.user
       } catch (error) {
         let message = error.message
           .substring(error.message.indexOf('(') + 1, error.message.indexOf(')'))
@@ -46,6 +78,9 @@ export const useAppStore = defineStore('app', () => {
         let email = result.data.email
         let { user } = await signInWithEmailAndPassword(auth, email, data.password)
         app.user = user
+
+        await initUser()
+
         return user
       } catch (error) {
         let message = error.message
@@ -60,11 +95,16 @@ export const useAppStore = defineStore('app', () => {
   async function signup(data) {
     console.log('Sign Up Data:', data)
     try {
-      let response = await axios.post('/auth/signup', data)
+      await axios.post('/auth/signup', data)
 
-      console.log(response)
-      app.user = response.data
-      return response
+      data.id = data.email
+      data.password = '12345678'
+
+      await login(data)
+
+      delete app.user.auth
+
+      return app.user
     } catch (error) {
       console.log(error)
     }
@@ -126,6 +166,7 @@ export const useAppStore = defineStore('app', () => {
 
     let user = data
     app.user = user
+
     console.log(app)
   }
 
@@ -179,6 +220,26 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
+  // Rooms
+  async function openRoom(to) {
+    const roomID = to.query.id
+    let room = null
+
+    if (app.user) {
+      let { data } = await axios.get('/rooms/enter-room', {
+        params: { uid: app.user.uid, roomID }
+      })
+      room = new Room(data)
+    }
+
+    app.rooms.active = room
+    return
+  }
+
+  function sendToRoom(message) {
+    console.log(message)
+  }
+
   return {
     app,
     init,
@@ -193,6 +254,8 @@ export const useAppStore = defineStore('app', () => {
     upload,
     updateProfilePhotoImage,
     updateUsername,
-    generateRecoveryCode
+    generateRecoveryCode,
+    openRoom,
+    sendToRoom
   }
 })
