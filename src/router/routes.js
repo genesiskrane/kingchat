@@ -94,7 +94,7 @@ const routes = [
     ]
   },
   {
-    path: '/chats',
+    path: '/chat',
     children: [{ path: ':username', component: () => import('../pages/Chat.vue') }]
   },
   {
