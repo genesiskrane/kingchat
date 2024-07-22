@@ -30,10 +30,7 @@ const store = useAppStore()
 const chats = computed(() => store.app.chats)
 function getLink(username) {
   return {
-    path: '/chat',
-    params: {
-      username
-    }
+    path: `/chat/${username}`
   }
 }
 </script>
