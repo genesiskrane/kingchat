@@ -30,9 +30,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, defineProps } from 'vue'
 import { useAppStore } from '../../stores/app'
 
+const props = defineProps(['to'])
 const store = useAppStore()
 
 const placeholder = ref()
@@ -64,6 +65,9 @@ function send() {
   text.value.innerText = ''
   active.value = false
 
-  store.sendToRoom(message)
+  let chatid = props.to.receiver
+  let type = props.to.type
+
+  store.send({ chatid, type }, message)
 }
 </script>

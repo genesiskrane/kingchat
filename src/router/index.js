@@ -8,11 +8,14 @@ const router = createRouter({
   scrollBehavior: () => ({ left: 0, top: 0 })
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const store = useAppStore()
-  let user = store.app.user
 
-  if (to.meta.requiresAuth && !user) next({ path: '/auth/login' })
+  let isInitialized = store.app.isInitialized
+
+  if (!isInitialized) await store.init()
+
+  if (to.meta.requiresAuth && !store.app.user) next({ path: '/auth/login' })
   else next()
 })
 

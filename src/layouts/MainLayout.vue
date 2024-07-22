@@ -14,7 +14,7 @@
       <v-container class="ma-0 pa-0 mx-auto">
         <router-view></router-view>
 
-        <bottom-navigation></bottom-navigation>
+        <!-- <bottom-navigation></bottom-navigation> -->
       </v-container>
     </v-main>
   </v-app>
@@ -24,7 +24,7 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import SideBar from '../components/SideBar.vue'
-import BottomNavigation from '../components/BottomNavigation.vue'
+// import BottomNavigation from '../components/BottomNavigation.vue'
 
 const route = useRoute()
 

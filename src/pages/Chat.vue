@@ -16,7 +16,7 @@
           <!-- <div v-for="message in room.messages" :key="message" class="mx-2 my-4">{{ message }}</div> -->
         </div>
 
-        <messenger></messenger>
+        <messenger :to="to"></messenger>
       </v-container>
     </v-main>
   </v-app>
@@ -24,12 +24,17 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useAppStore } from '../stores/app'
+import { useRoute } from 'vue-router'
 import SideBar from '../components/SideBar.vue'
 import Messenger from '../components/ui/Messenger.vue'
 
-const store = useAppStore()
+const route = useRoute()
+
 let drawer = ref(false)
 
-const room = computed(() => store.app.rooms.active)
+const to = computed(() => {
+  let receiver = route.query.chatid
+
+  return { type: 'Chat', receiver }
+})
 </script>

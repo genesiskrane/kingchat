@@ -13,6 +13,7 @@
         <v-text-field
           v-model="data.username"
           label="Choose Username"
+          prefix="@"
           :error-messages="errorMessage"
           :messages="message"
           maxlength="15"
@@ -56,11 +57,20 @@ const rules = {
 const v$ = useVuelidate(rules, data)
 
 async function verifyUsername() {
+  let isValid = data.username.match(/^@?(\w){1,15}$/) !== null
+
+  if (!isValid) {
+    errorMessage.value = 'Username is invalid'
+    isUsertaken.value = true
+    return
+  }
+
+  console.log(data.username, isValid)
   let isUsernameAvailabe = await store.verifyUsername(data.username)
   console.log(isUsernameAvailabe)
   if (isUsernameAvailabe) {
-    isUsertaken.value = false
     message.value = 'Username is available'
+    isUsertaken.value = false
   } else {
     message.value = 'Username is taken'
     isUsertaken.value = true

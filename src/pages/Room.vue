@@ -16,7 +16,7 @@
           <div v-for="message in room.messages" :key="message" class="mx-2 my-4">{{ message }}</div>
         </div>
 
-        <messenger></messenger>
+        <messenger :type="room"></messenger>
       </v-container>
     </v-main>
   </v-app>
@@ -31,5 +31,9 @@ import Messenger from '../components/ui/Messenger.vue'
 const store = useAppStore()
 let drawer = ref(false)
 
-const room = computed(() => store.app.rooms.active)
+const room = computed(() => {
+  let room = store.app.rooms.active
+  room.type = 'Room'
+  return room
+})
 </script>

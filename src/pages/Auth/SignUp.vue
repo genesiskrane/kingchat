@@ -125,6 +125,7 @@ async function submit() {
 
   loading.value = true
 
+  data.name = data.name.trim()
   data.email = data.email.toLowerCase()
 
   let user = await store.signup(data)

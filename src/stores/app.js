@@ -19,11 +19,35 @@ const ioURL =
 const socket = io(ioURL)
 const roomsSocket = io(`${ioURL}rooms`)
 
+class Chat {
+  constructor(payload) {
+    Object.assign(this, payload)
+    
+  }
+}
+
+class User {}
 class Room {
   constructor(data) {
     Object.assign(this, data)
   }
 }
+
+socket.on('message', (payload) => {
+  const store = useAppStore()
+  let chats = store.app.chats
+  const { chatid, message } = payload
+
+  let chatIndex = chats.findIndex((chat) => chat.id == chatid)
+  if (chatIndex < 0) chats.push(new Chat(payload))
+  else {
+    chats[chatIndex].message = message
+    console.log(chatIndex)
+    console.log('New Entry', message)
+  }
+
+  store.app.chats[0].message = message
+})
 
 const getAppConfig = async (id) => {
   // Get App Data
@@ -31,11 +55,14 @@ const getAppConfig = async (id) => {
   return data
 }
 
-export const useAppStore = defineStore('app', () => {
+const useAppStore = defineStore('app', () => {
   let app = reactive({
     name: 'King Chat',
     user: {},
-    rooms: { active: '', all: [] }
+    chats: [],
+    online: [],
+    rooms: { active: '', all: [] },
+    isInitialized: false
   })
 
   async function init() {
@@ -45,12 +72,36 @@ export const useAppStore = defineStore('app', () => {
     let user = JSON.parse(sessionStorage.getItem('user'))
     app.user = user
 
+    console.log('Getting User Data')
     // Get App Data
-    let appConfig = await getAppConfig(app.user.id)
-    app = Object.assign(app, appConfig)
+    let { online, chats, rooms } = await getAppConfig(app.user.id)
+
+    console.log('Sorting Data')
+    for (let [index, user] of online.entries())
+      online[index].chatid = [app.user.uid, user._id].sort().join('')
+
+    app.online = online
+    app.chats = chats
+    app.rooms = rooms
+
+    app.isInitialized = true
 
     console.log(app)
+
     return
+  }
+
+  async function initUser() {
+    console.log('Reinitializing User Data')
+
+    let { data } = await axios.post('/auth/get-user', {
+      uid: app.user.uid
+    })
+
+    let user = data
+    app.user = user
+
+    console.log(app)
   }
 
   async function login(data) {
@@ -157,19 +208,6 @@ export const useAppStore = defineStore('app', () => {
     }
   }
 
-  async function initUser() {
-    console.log('Reinitializing User Data')
-
-    let { data } = await axios.post('/auth/get-user', {
-      uid: app.user.uid
-    })
-
-    let user = data
-    app.user = user
-
-    console.log(app)
-  }
-
   async function updateUsername(uid, username) {
     try {
       let isUsernameUpdated = await axios.post('/auth/update-username', {
@@ -236,10 +274,33 @@ export const useAppStore = defineStore('app', () => {
     return
   }
 
-  function sendToRoom(message) {
-    console.log(message)
+  function send(payload, message) {
+    const chatid = payload.chatid
+
+    const type = payload.type
+    switch (type) {
+      case 'Chat':
+        sendToPrivateChat(chatid, message)
+        break
+      case 'Room':
+        sendToRoomChat(chatid, message)
+        break
+      default:
+        console.error('Message Type Unknown')
+    }
   }
 
+  function sendAsNewChat(chatid, message) {
+    console.log('New Chat', chatid)
+    socket.emit('message', { chatid, message })
+  }
+
+  function sendToPrivateChat(chatid, message) {
+    let chat = app.chats.find((chat) => chat.id == chatid)
+    if (!chat) return sendAsNewChat(chatid, message)
+  }
+
+  function sendToRoomChat(chatid, message) {}
   return {
     app,
     init,
@@ -256,6 +317,8 @@ export const useAppStore = defineStore('app', () => {
     updateUsername,
     generateRecoveryCode,
     openRoom,
-    sendToRoom
+    send
   }
 })
+
+export { useAppStore }
