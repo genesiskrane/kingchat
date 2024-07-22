@@ -31,7 +31,7 @@ const chats = computed(() => store.app.chats)
 function getLink(username) {
   return {
     path: '/chat',
-    query: {
+    params: {
       username
     }
   }

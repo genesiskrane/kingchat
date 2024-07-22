@@ -22,7 +22,6 @@ const roomsSocket = io(`${ioURL}rooms`)
 class Chat {
   constructor(payload) {
     Object.assign(this, payload)
-    
   }
 }
 
@@ -70,7 +69,8 @@ const useAppStore = defineStore('app', () => {
 
     // Get User Data
     let user = JSON.parse(sessionStorage.getItem('user'))
-    app.user = user
+    if (user) app.user = user
+    else await initUser()
 
     console.log('Getting User Data')
     // Get App Data

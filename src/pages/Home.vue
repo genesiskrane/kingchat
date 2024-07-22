@@ -10,7 +10,6 @@
             </div>
             <div class="grid items-center">
               <div>
-                <pre>{{ user }}</pre>
                 <span class="text-base underline">{{ user.displayName }}</span>
               </div>
               <div>
