@@ -1,1 +1,0 @@
-import{_ as o,h as t,b as c,o as r,a as s}from"./index-Bf6PF1uf.js";const n={},a={id:"auth",class:"h-screen"};function _(i,d){const e=s("router-view");return r(),t("div",a,[c(e)])}const f=o(n,[["render",_]]);export{f as default};

@@ -15,7 +15,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (!isInitialized) await store.init()
 
-  if (to.meta.requiresAuth && !store.app.user) next({ path: '/auth/login' })
+  if (to.meta.requiresAuth && !store.app.user.uid) next({ path: '/auth/login' })
   else next()
 })
 

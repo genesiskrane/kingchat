@@ -93,15 +93,14 @@ const useAppStore = defineStore('app', () => {
 
   async function initUser() {
     console.log('Reinitializing User Data')
-
-    let { data } = await axios.post('/auth/get-user', {
-      uid: app.user.uid
-    })
-
-    let user = data
-    app.user = user
-
-    console.log(app)
+    if (app.user.uid) {
+      let { data } = await axios.post('/auth/get-user', {
+        uid: app.user.uid
+      })
+      let user = data
+      app.user = user
+      console.log(app)
+    } else console.log('No User Initialized')
   }
 
   async function login(data) {
