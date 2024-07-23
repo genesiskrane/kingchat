@@ -3,7 +3,7 @@
     <h2>Active Users</h2>
     <div class="flex flex-col">
       <div v-for="(user, key) in activeUsers" :key="key">
-        <router-link :to="getLink(user.username, user.chatid)">
+        <router-link :to="getLink(user.username)">
           <div class="flex flex-row px-2 py-2 gap-2">
             <div>
               <v-img :src="user.photoURL" class="w-12 h-12 rounded-full" aspect-ratio="1"></v-img>

@@ -10,10 +10,10 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   const store = useAppStore()
-
   let isInitialized = store.app.isInitialized
 
-  if (!isInitialized) await store.init()
+  // All Non-Auth Routes Pass Through Here
+  if (to.matched[0].path !== '/auth' && !isInitialized) await store.init()
 
   if (to.meta.requiresAuth && !store.app.user.uid) next({ path: '/auth/login' })
   else next()

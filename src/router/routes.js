@@ -18,14 +18,17 @@ const routes = [
       },
       {
         path: '/chats',
+        name: 'chats',
         component: () => import('../pages/Chats.vue')
       },
       {
         path: '/rooms',
+        name: 'Rooms',
         component: () => import('../pages/Rooms.vue')
       },
       {
         path: '/explore',
+        name: 'explore',
         component: () => import('../pages/Explore.vue')
       },
       {
@@ -50,6 +53,7 @@ const routes = [
       },
       {
         path: '/store',
+        name: 'store',
         component: () => import('../pages/Store.vue')
       }
     ]
@@ -111,10 +115,16 @@ const routes = [
 
           user = store.app.online.find((user) => user.username == to.params.username)
           to.query.chatid = user.chatid
-        
+          to.query.name = user.displayName
+          
           console.log(user, to)
           break
-
+          case '/chats':
+            console.log('Coming From Chats');
+            user = store.app.online.find((user) => user.username == to.params.username)
+            to.query.chatid = user.chatid
+            to.query.name = user.displayName
+          break
         default:
           break
       }

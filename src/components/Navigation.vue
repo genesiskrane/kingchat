@@ -36,7 +36,7 @@ const menu = [
 ]
 
 function getLink(item) {
-  return `/${item.route}?name=${item.name}`
+  return `/${item.route}`
 }
 
 function geticon(name) {

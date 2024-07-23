@@ -1,5 +1,12 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from 'firebase/auth'
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  setPersistence,
+  browserSessionPersistence
+} from 'firebase/auth'
 import { ref, getStorage, uploadBytes } from 'firebase/storage'
 import { getAnalytics } from 'firebase/analytics'
 
@@ -24,7 +31,9 @@ export {
   auth,
   storage,
   analytics,
-  signInWithEmailAndPassword,
   onAuthStateChanged,
+  setPersistence,
+  browserSessionPersistence,
+  signInWithEmailAndPassword,
   signOut
 }

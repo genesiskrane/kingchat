@@ -3,7 +3,7 @@ import axios from 'axios'
 import './assets/css/main.css'
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
-import { auth, onAuthStateChanged } from './firebase'
+import { auth, onAuthStateChanged, browserSessionPersistence } from './firebase'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -22,16 +22,10 @@ axios.defaults.baseURL =
     ? 'https://www.kingchat.one/api'
     : 'http://localhost:3000/api'
 
-const vuetify = createVuetify({
-  components,
-  directives,
-  icons: {
-    defaultSet: 'mdi' // This is already the default value - only for display purposes
-  }
-})
-
 onAuthStateChanged(auth, async (user) => {
   console.log('Auth Changed', user)
+
+  auth.setPersistence(browserSessionPersistence)
 
   if (user) {
     try {
@@ -42,7 +36,15 @@ onAuthStateChanged(auth, async (user) => {
     }
   }
 
-  sessionStorage.setItem('user', JSON.stringify(user))
+  if (user == null || user.uid) sessionStorage.setItem('user', JSON.stringify(user))
+})
+
+const vuetify = createVuetify({
+  components,
+  directives,
+  icons: {
+    defaultSet: 'mdi' // This is already the default value - only for display purposes
+  }
 })
 
 const app = createApp(App)

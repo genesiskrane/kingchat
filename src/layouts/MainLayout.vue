@@ -1,13 +1,17 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer">
-      <side-bar></side-bar>
-    </v-navigation-drawer>
+    <keep-alive>
+      <v-navigation-drawer v-model="drawer">
+        <side-bar></side-bar>
+      </v-navigation-drawer>
+    </keep-alive>
 
     <v-app-bar :elevation="2" color="red-darken-1">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-app-bar-title>{{ route.query.name }}</v-app-bar-title>
+      <v-app-bar-title>
+        <span class="capitalize">{{ route.name }}</span>
+      </v-app-bar-title>
     </v-app-bar>
 
     <v-main>

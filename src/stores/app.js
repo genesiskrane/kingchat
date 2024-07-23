@@ -34,24 +34,81 @@ class Room {
 
 socket.on('message', (payload) => {
   const store = useAppStore()
-  let chats = store.app.chats
   const { chatid, message } = payload
 
-  let chatIndex = chats.findIndex((chat) => chat.id == chatid)
-  if (chatIndex < 0) chats.push(new Chat(payload))
+  let chatIndex = store.app.chats.findIndex((chat) => chat.id == chatid)
+
+  if (chatIndex < 0) store.app.chats.push(new Chat(payload))
   else {
-    chats[chatIndex].message = message
+    store.app.chats[chatIndex].message = message
     console.log(chatIndex)
-    console.log('New Entry', message)
+    console.log('New Message', message)
   }
 
-  store.app.chats[0].message = message
+  store.app.chats.sort((a, b) => b.lastMessage.time - a.lastMessage.time)
+  console.log(store.app.chats)
 })
 
 const getAppConfig = async (id) => {
   // Get App Data
   let { data } = await axios.get('/app', { params: { id } })
   return data
+}
+
+const updateDeliveryTimeDisplay = (chats) => {
+  for (let [index, chat] of chats.entries()) {
+    const timestamp = chat.lastMessage.time
+
+    let displayTime
+    let datetime = new Date(timestamp)
+    console.log(datetime.getDay())
+    let hours = datetime.getHours()
+    let minutes = datetime.getMinutes()
+    let ampm = hours >= 12 ? 'PM' : 'AM'
+    hours = hours % 12
+    hours = hours ? hours : 12 // the hour '0' should be '12'
+    minutes = minutes < 10 ? '0' + minutes : minutes
+    let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+    switch (true) {
+      // 24 Hours
+      case timestamp + 86400000 > Date.now():
+        displayTime = `${hours}:${minutes} ${ampm}`
+        break
+      // A Day
+      case timestamp + 86400000 * 2 > Date.now():
+        displayTime = `Yesterday`
+        break
+      case timestamp + 86400000 * 3 > Date.now():
+        displayTime = days[datetime.getDay()]
+        break
+      default:
+        datetime = new Date(timestamp)
+        displayTime = `${datetime.getMonth()}/${datetime.getDate()}/${datetime.getFullYear().toString().substr(-2)}`
+        break
+    }
+
+    chats[index].lastMessage.displayTime = displayTime
+  }
+  return chats
+}
+
+const sortChats = (chats) => {
+  console.log('Sorting Chats')
+
+  for (let [index, chat] of chats.entries()) {
+    chat.messages.sort((a, b) => b.time - a.time)
+
+    chat.lastMessage = {
+      message: chat.messages[0].text,
+      time: chat.messages[0].time
+    }
+    chat.unread = 4
+
+    chats[index] = chat
+  }
+
+  return chats
 }
 
 const useAppStore = defineStore('app', () => {
@@ -70,13 +127,13 @@ const useAppStore = defineStore('app', () => {
     // Get User Data
     let user = JSON.parse(sessionStorage.getItem('user'))
     if (user) app.user = user
-    else await initUser()
+    else return router.push('/auth/login')
 
     console.log('Getting User Data')
     // Get App Data
-    let { online, chats, rooms } = await getAppConfig(app.user.id)
-
-    console.log('Sorting Data')
+    let { online, chats, rooms } = await getAppConfig(app.user.uid)
+    chats = sortChats(chats)
+    chats = updateDeliveryTimeDisplay(chats)
     for (let [index, user] of online.entries())
       online[index].chatid = [app.user.uid, user._id].sort().join('')
 
@@ -100,7 +157,7 @@ const useAppStore = defineStore('app', () => {
       let user = data
       app.user = user
       console.log(app)
-    } else console.log('No User Initialized')
+    } else console.log('No User Authenticated')
   }
 
   async function login(data) {
@@ -275,28 +332,29 @@ const useAppStore = defineStore('app', () => {
 
   function send(payload, message) {
     const chatid = payload.chatid
-
+    const uid = app.user.uid
     const type = payload.type
+
     switch (type) {
       case 'Chat':
-        sendToPrivateChat(chatid, message)
+        sendToPrivateChat(chatid, message, uid)
         break
       case 'Room':
-        sendToRoomChat(chatid, message)
+        sendToRoomChat(chatid, message, uid)
         break
       default:
         console.error('Message Type Unknown')
     }
   }
 
-  function sendAsNewChat(chatid, message) {
-    console.log('New Chat', chatid)
-    socket.emit('message', { chatid, message })
-  }
+  // function sendAsNewChat(chatid, message, uid) {
+  //   console.log('New Chat', chatid)
+  //   socket.emit('message', { chatid, message })
+  // }
 
-  function sendToPrivateChat(chatid, message) {
-    let chat = app.chats.find((chat) => chat.id == chatid)
-    if (!chat) return sendAsNewChat(chatid, message)
+  function sendToPrivateChat(chatid, message, uid) {
+    socket.emit('message', { chatid, message, uid })
+    console.log('New Chat', chatid)
   }
 
   function sendToRoomChat(chatid, message) {}

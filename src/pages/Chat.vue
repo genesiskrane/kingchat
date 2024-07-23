@@ -7,7 +7,7 @@
     <v-app-bar :elevation="2" color="red-darken-1">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-app-bar-title>{{ `Chat` }}</v-app-bar-title>
+      <v-app-bar-title>{{ to.name }}</v-app-bar-title>
     </v-app-bar>
 
     <v-main>
@@ -23,18 +23,17 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import SideBar from '../components/SideBar.vue'
 import Messenger from '../components/ui/Messenger.vue'
 
 const route = useRoute()
-
 let drawer = ref(false)
 
-const to = computed(() => {
-  let receiver = route.query.chatid
-
-  return { type: 'Chat', receiver }
+const to = reactive({
+  type: 'Chat',
+  receiver: route.query.chatid,
+  name: route.query.name
 })
 </script>
