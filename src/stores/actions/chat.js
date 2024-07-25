@@ -27,7 +27,7 @@ export function useChat() {
       chat.lastMessage = {
         message: chat.messages[0].text,
         time: chat.messages[0].time,
-        displayTime: formatTimeDisplay(chat.messages[0].time)
+        displayTime: store.formatTimeDisplay(chat.messages[0].time)
       }
 
       chat.unread = 4
@@ -42,11 +42,8 @@ export function useChat() {
   }
 
   function formatTimeDisplay(timestamp) {
-    // for (let [index, chat] of chats.entries()) {
-
     let displayTime
     let datetime = new Date(timestamp)
-    console.log(datetime.getDay())
     let hours = datetime.getHours()
     let minutes = datetime.getMinutes()
     let ampm = hours >= 12 ? 'PM' : 'AM'
@@ -60,13 +57,15 @@ export function useChat() {
       case timestamp + 86400000 > Date.now():
         displayTime = `${hours}:${minutes} ${ampm}`
         break
-      // A Day
+      // Yesterday
       case timestamp + 86400000 * 2 > Date.now():
         displayTime = `Yesterday`
         break
+      // Day
       case timestamp + 86400000 * 3 > Date.now():
         displayTime = days[datetime.getDay()]
         break
+      // Date
       default:
         datetime = new Date(timestamp)
         displayTime = `${datetime.getMonth()}/${datetime.getDate()}/${datetime.getFullYear().toString().substr(-2)}`
@@ -104,6 +103,7 @@ export function useChat() {
     send,
     sendToPrivateChat,
     sendToRoomChat,
-    sortChats
+    sortChats,
+    formatTimeDisplay
   }
 }

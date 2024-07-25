@@ -1,6 +1,5 @@
 class Chat {
   constructor(chatid, message, profile) {
-    console.log(profile)
     this._id = chatid
     this.lastMessage = { time: message.time, message: message.message }
     this.messages = [message]
