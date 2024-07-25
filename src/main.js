@@ -3,7 +3,7 @@ import axios from 'axios'
 import './assets/css/main.css'
 import '@mdi/font/css/materialdesignicons.css' // Ensure you are using css-loader
 
-import { auth, onAuthStateChanged, browserSessionPersistence } from './firebase'
+import { auth, onAuthStateChanged } from './func/firebase'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -23,20 +23,12 @@ axios.defaults.baseURL =
     : 'http://localhost:3000/api'
 
 onAuthStateChanged(auth, async (user) => {
-  console.log('Auth Changed', user)
+  if (user) console.log('Auth Changed', user.uid)
+  else console.log(user)
 
-  auth.setPersistence(browserSessionPersistence)
+  let uid = user ? user.uid : ''
 
-  if (user) {
-    try {
-      let { data } = await axios.post('/auth/get-user', { uid: user.uid })
-      user = { ...user, ...data }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  if (user == null || user.uid) sessionStorage.setItem('user', JSON.stringify(user))
+  sessionStorage.setItem('uid', JSON.stringify(uid))
 })
 
 const vuetify = createVuetify({

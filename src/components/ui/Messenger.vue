@@ -65,7 +65,7 @@ function send() {
   text.value.innerText = ''
   active.value = false
 
-  let chatid = props.to.receiver
+  let chatid = props.to.chatid
   let type = props.to.type
 
   store.send({ chatid, type }, message)

@@ -73,10 +73,10 @@ async function submit() {
   console.log('Logging In...')
   let res = await store.login(data)
 
-  if (res.uid) {
-    router.push('/chats')
-  } else if (res == 'invalid-credential') alert.value = true
+  if (res) router.push('/chats')
+  else if (res == 'invalid-credential') alert.value = true
 }
+
 function forgotPassword() {
   router.push({ path: '/auth/forgot-password', query: { id: data.id } })
 }

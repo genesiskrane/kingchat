@@ -27,11 +27,8 @@ const menu = [
   // { name: "Bookmarks", route: "/bookmarks", icon: "bookmark" },
   // { name: "Communities", route: "/communities", icon: "users" },
   // { name: "Spaces", route: "/spaces", icon: "mic" },
-  // {
-  //   name: "Profile",
-  //   route: "/profile",
-  //   icon: "person",
-  // },
+  // { name: 'Events', route: '/events', icon: 'event' },
+  // { name: 'Profile', route: '/profile', icon: 'person' },
   { name: 'Store', route: 'store', icon: 'buy' }
 ]
 

@@ -15,7 +15,7 @@ router.beforeEach(async (to, from, next) => {
   // All Non-Auth Routes Pass Through Here
   if (to.matched[0].path !== '/auth' && !isInitialized) await store.init()
 
-  if (to.meta.requiresAuth && !store.app.user.uid) next({ path: '/auth/login' })
+  if (to.meta.requiresAuth && !store.$state.user.uid) next({ path: '/auth/login' })
   else next()
 })
 

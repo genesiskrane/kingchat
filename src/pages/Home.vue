@@ -3,17 +3,21 @@
     <h2>Active Users</h2>
     <div class="flex flex-col">
       <div v-for="(user, key) in activeUsers" :key="key">
-        <router-link :to="getLink(user.username)">
+        <router-link :to="getLink(user.profile.username)">
           <div class="flex flex-row px-2 py-2 gap-2">
             <div>
-              <v-img :src="user.photoURL" class="w-12 h-12 rounded-full" aspect-ratio="1"></v-img>
+              <v-img
+                :src="user.profile.photoURL"
+                class="w-12 h-12 rounded-full"
+                aspect-ratio="1"
+              ></v-img>
             </div>
             <div class="grid items-center">
               <div>
-                <span class="text-base underline">{{ user.displayName }}</span>
+                <span class="text-base underline">{{ user.profile.displayName }}</span>
               </div>
               <div>
-                <span class="text-base">@{{ user.username }}</span>
+                <span class="text-base">@{{ user.profile.username }}</span>
               </div>
               <div>
                 <span class="text-sm">Click To Chat</span>
@@ -33,7 +37,7 @@ import { computed } from 'vue'
 import { useAppStore } from '../stores/app'
 
 const store = useAppStore()
-const activeUsers = computed(() => store.app.online)
+const activeUsers = computed(() => store.recent)
 
 function getLink(username) {
   return {

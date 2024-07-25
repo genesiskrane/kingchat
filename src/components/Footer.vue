@@ -32,7 +32,7 @@ import { ref, reactive } from 'vue'
 import { useAppStore } from '../stores/app'
 
 const store = useAppStore()
-const user = reactive(store.app.user)
+const user = reactive(store.user)
 const isOpen = ref(true)
 
 function toggleMenu() {

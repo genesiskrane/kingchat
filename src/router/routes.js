@@ -101,33 +101,8 @@ const routes = [
   {
     path: '/chat',
     beforeEnter: (to, from) => {
-      const store = useAppStore()
-      console.log(from)
       if (from.path !== '/') sessionStorage.setItem('route', JSON.stringify({ from: from.path }))
-
-      let origin = JSON.parse(sessionStorage.getItem('route')).from
-
-      console.log(origin)
-      let user
-      switch (origin) {
-        case '/home':
-          console.log('Coming from home')
-
-          user = store.app.online.find((user) => user.username == to.params.username)
-          to.query.chatid = user.chatid
-          to.query.name = user.displayName
-          
-          console.log(user, to)
-          break
-          case '/chats':
-            console.log('Coming From Chats');
-            user = store.app.online.find((user) => user.username == to.params.username)
-            to.query.chatid = user.chatid
-            to.query.name = user.displayName
-          break
-        default:
-          break
-      }
+      to.query.origin = JSON.parse(sessionStorage.getItem('route')).from
     },
     children: [{ path: ':username', component: () => import('../pages/Chat.vue') }]
   },

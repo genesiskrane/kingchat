@@ -7,7 +7,7 @@
     <v-app-bar :elevation="2" color="red-darken-1">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-app-bar-title>{{ to.name }}</v-app-bar-title>
+      <v-app-bar-title>{{ chat.profile.displayName }}</v-app-bar-title>
     </v-app-bar>
 
     <v-main>
@@ -25,15 +25,32 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
+import { useAppStore } from '../stores/app'
+
 import SideBar from '../components/SideBar.vue'
 import Messenger from '../components/ui/Messenger.vue'
 
+const store = useAppStore()
 const route = useRoute()
+
 let drawer = ref(false)
+
+const origin = route.query.origin
+let array
+
+switch (origin) {
+  case '/home':
+    array = 'recent'
+    break
+  case '/chats':
+    array = 'chats'
+    break
+}
+
+let chat = reactive(store[array].find((user) => user.profile.username == route.params.username))
 
 const to = reactive({
   type: 'Chat',
-  receiver: route.query.chatid,
-  name: route.query.name
+  chatid: chat._id || chat.chatid
 })
 </script>
