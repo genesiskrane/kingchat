@@ -7,14 +7,21 @@
     <v-app-bar :elevation="2" color="red-darken-1">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
-      <v-app-bar-title>{{ chat.profile.displayName }}</v-app-bar-title>
+      <v-avatar>
+        <v-img alt="John" :src="active.profile.photoURL"></v-img>
+      </v-avatar>
+
+      <v-app-bar-title>
+        <span>
+          {{ active.profile.displayName }}
+        </span>
+        <span class="text-xs"> @{{ active.profile.username }} </span>
+      </v-app-bar-title>
     </v-app-bar>
 
     <v-main>
       <v-container class="ma-0 pa-0 mx-auto flex flex-col justify-between h-full">
-        <div class="bg-green-100">
-          <!-- <div v-for="message in room.messages" :key="message" class="mx-2 my-4">{{ message }}</div> -->
-        </div>
+        <chat :chat="active"></chat>
 
         <messenger :to="to"></messenger>
       </v-container>
@@ -27,6 +34,7 @@ import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAppStore } from '../stores/app'
 
+import Chat from '../components/Chat.vue'
 import SideBar from '../components/SideBar.vue'
 import Messenger from '../components/ui/Messenger.vue'
 
@@ -47,10 +55,10 @@ switch (origin) {
     break
 }
 
-let chat = reactive(store[array].find((user) => user.profile.username == route.params.username))
-
+let active = reactive(store[array].find((user) => user.profile.username == route.params.username))
+console.log(active)
 const to = reactive({
   type: 'Chat',
-  chatid: chat._id || chat.chatid
+  chatid: active._id || active.chatid
 })
 </script>

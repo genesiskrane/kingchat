@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Active Users</h2>
+    <h2 class="px-2">Active Users</h2>
     <div class="flex flex-col">
       <div v-for="(user, key) in activeUsers" :key="key">
         <router-link :to="getLink(user.profile.username)">

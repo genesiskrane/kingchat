@@ -97,7 +97,9 @@ export function useChat() {
     console.log('Sent', chatid, message)
   }
 
-  function sendToRoomChat(chatid, message) {}
+  function sendToRoomChat(chatid, message) {
+    chatid, message
+  }
 
   return {
     send,

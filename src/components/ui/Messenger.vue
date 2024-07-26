@@ -1,5 +1,5 @@
 <template>
-  <div id="messenger" class="flex flex-row bg-black m-1 p-1 gap-1">
+  <div id="messenger" class="flex flex-row bg-black p-1 gap-1">
     <div id="message" class="w-full h-full bg-white grid items-center p-0">
       <div class="bg-yellow-100 h-full grid items-center">
         <p
