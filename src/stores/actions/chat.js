@@ -22,11 +22,11 @@ export function useChat() {
 
     // Sort Main Chats
     for (let [index, chat] of chats.entries()) {
-      chat.messages.sort((a, b) => b.time - a.time)
+      chat.messages.sort((a, b) => a.time - b.time)
 
       chat.lastMessage = {
-        message: chat.messages[0].text,
-        time: chat.messages[0].time,
+        message: chat.messages[chat.messages.length - 1].text,
+        time: chat.messages[chat.messages.length - 1].time,
         displayTime: store.formatTimeDisplay(chat.messages[0].time)
       }
 

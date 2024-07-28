@@ -56,9 +56,9 @@ switch (origin) {
 }
 
 let active = reactive(store[array].find((user) => user.profile.username == route.params.username))
-console.log(active)
 const to = reactive({
   type: 'Chat',
   chatid: active._id || active.chatid
 })
+
 </script>
