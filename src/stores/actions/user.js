@@ -1,6 +1,10 @@
 import axios from 'axios'
+import { io } from 'socket.io-client'
+import { initSockets } from '../socket'
 import { storage, ref, uploadBytes } from '../../func/firebase'
 import { useAppStore } from '../app'
+
+let socket
 
 // Configs
 axios.defaults.baseURL =
@@ -8,7 +12,12 @@ axios.defaults.baseURL =
     ? 'https://www.kingchat.one/api'
     : 'http://localhost:3000/api'
 
-export function useUser() {
+const ioURL =
+  process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
+    ? 'https://www.kingchat.one/'
+    : 'http://localhost:3000/'
+
+function useUser() {
   const store = useAppStore()
 
   async function initUser() {
@@ -18,26 +27,38 @@ export function useUser() {
       let { data } = await axios.post('/auth/get-user', {
         uid: store.user.uid
       })
+
       data.user.uid = data.user._id
 
       store.$patch({ user: data.user })
       store.$patch({ chats: data.chats })
 
+      // Initialize Socket
+      socket = io(ioURL, {
+        auth: { uid: store.user.uid }
+      })
+
+      socket.room = io(`${ioURL}/room`, {
+        auth: { uid: store.user.uid }
+      })
+
+      initSockets(socket)
     } catch (error) {
       console.log(error)
     }
-    
+
     try {
       //   Get Recent Users & Rooms
       let { data } = await axios.get('/app', { params: { id: store.user.uid } })
-      
+
       store.$patch({ recent: data.recent })
       store.$patch({ rooms: data.rooms })
     } catch (error) {
       console.log(error)
     }
-    
+
     store.sortChats()
+    store.sendChatDeliveryReciepts()
     store.$patch({ app: { isInitialized: true } })
   }
 
@@ -87,3 +108,5 @@ export function useUser() {
     updateProfilePhotoImage
   }
 }
+
+export { useUser, socket }

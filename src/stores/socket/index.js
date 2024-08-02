@@ -1,19 +1,26 @@
-import { io } from 'socket.io-client'
-import { initSocket } from './socket'
-import { initRoomSocket } from './roomSocket'
-import { reactive } from 'vue'
+import { useAppStore } from '../app'
 
-const ioURL =
-  process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
-    ? 'https://www.kingchat.one/'
-    : 'http://localhost:3000/'
+function initSockets(socket) {
+  socket.on('message', (chatid, message) => {
+    const store = useAppStore()
+    store.message(chatid, message)
+  })
 
-export function useSockets() {
-  const socket = reactive(initSocket(io(ioURL)))
-  socket.room = reactive(initRoomSocket(io(`${ioURL}rooms`)))
+  socket.on('reciept', ({ chatid, reciept }) => {
+    const store = useAppStore()
+    const uid = store.user.uid
+    const splitChatID = chatid.split(uid)
+    // let senderID = uid
+    let receiverID = splitChatID.find((id) => id.length > 0)
 
-  console.log(socket)
-  return {
-    socket
-  }
+    let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
+
+    console.log(chatid, reciept, chatIndex)
+    if (chatIndex > -1)
+      console.log(chatid, reciept, chatIndex)
+      if (reciept.lastDelivered)
+        store.chats[chatIndex].meta[receiverID].lastDelivered = reciept.lastDelivered
+  })
 }
+
+export { initSockets }

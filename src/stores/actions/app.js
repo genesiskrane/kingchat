@@ -18,7 +18,11 @@ export function useApp() {
   const store = useAppStore()
 
   async function init() {
-    console.log('App Initialized')
+    console.log('App Initializing')
+
+    // Initialize Chat Reciepts
+    const chatReciepts = sessionStorage.getItem('reciepts')
+    if (!chatReciepts) sessionStorage.setItem('reciepts', JSON.stringify([]))
 
     // Get User Data
     store.$patch({ user: { uid: JSON.parse(sessionStorage.getItem('uid')) } })
@@ -26,14 +30,15 @@ export function useApp() {
 
     if (!store.app.isInitialized) await store.initUser()
 
+    console.log('App Initialized')
     return
   }
 
   async function getProfile(uid) {
-    console.log(uid);
+    console.log(uid)
     try {
       let { data } = await axios.get(`/app/getProfile?uid=${uid}`)
-      console.log(data);
+      console.log(data)
       return data
     } catch (error) {
       console.log(error)
@@ -60,12 +65,9 @@ export function useApp() {
   return {
     init,
     getProfile,
+
     // Rooms
     openRoom
   }
 }
 
-//   chats = sortChats(chats)
-//   chats = updateDeliveryTimeDisplay(chats)
-//   for (let [index, user] of recent.entries())
-//     online[index].chatid = [app.user.uid, user._id].sort().join('')

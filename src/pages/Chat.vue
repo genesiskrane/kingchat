@@ -20,28 +20,26 @@
     </v-app-bar>
 
     <v-main>
-      <v-container class="ma-0 pa-0 mx-auto flex flex-col justify-between h-full">
-        <chat :chat="active"></chat>
-
-        <messenger :to="to"></messenger>
+      <v-container class="ma-0 pa-0 mx-auto">
+        <chat :active="active" :to="to"></chat>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { ref, reactive } from 'vue'
+
+import SideBar from '../components/SideBar.vue'
+import Chat from '../components/Chat.vue'
+
+const drawer = ref(false)
+
 import { useRoute } from 'vue-router'
 import { useAppStore } from '../stores/app'
 
-import Chat from '../components/Chat.vue'
-import SideBar from '../components/SideBar.vue'
-import Messenger from '../components/ui/Messenger.vue'
-
 const store = useAppStore()
 const route = useRoute()
-
-let drawer = ref(false)
 
 const origin = route.query.origin
 let array
@@ -60,5 +58,5 @@ const to = reactive({
   type: 'Chat',
   chatid: active._id || active.chatid
 })
-
+console.log(active)
 </script>

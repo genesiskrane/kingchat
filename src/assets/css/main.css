@@ -6,3 +6,7 @@
 html {
   font-family: 'Montserrat' !important;
 }
+
+body {
+  overflow: hidden;
+}

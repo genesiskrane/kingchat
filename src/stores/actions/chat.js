@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { useAppStore } from '../app'
-
+import { socket } from '../actions/user'
+import { Chat } from '../../classes'
 // Configs
 axios.defaults.baseURL =
   process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
@@ -39,6 +40,37 @@ export function useChat() {
     // chats = updateDeliveryTimeDisplay(chats)
     store.$patch({ chats })
     store.$patch({ recent })
+  }
+
+  async function message({ chatid, message }) {
+    console.log(chatid, message)
+
+    let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
+    let uid = store.user.uid
+
+    if (chatIndex < 0) {
+      let chat = new Chat(
+        chatid,
+        message,
+        await store.getProfile(chatid.split(uid).find((id) => id.length > 0))
+      )
+
+      chat.lastMessage.displayTime = store.formatTimeDisplay(chat.lastMessage.time)
+      store.chats.push(chat)
+    } else {
+      store.chats[chatIndex].messages.push(message)
+      store.chats[chatIndex].lastMessage = {
+        time: message.time,
+        message: message.text,
+        displayTime: store.formatTimeDisplay(message.time)
+      }
+    }
+
+    socket.emit(
+      'reciept',
+      { uid, chatid, reciept: { lastDelivered: Date.now() } },
+      ({ chatid, reciept }) => updateReciept(chatid, reciept)
+    )
   }
 
   function formatTimeDisplay(timestamp) {
@@ -93,12 +125,96 @@ export function useChat() {
   }
 
   function sendToPrivateChat(chatid, message, uid) {
-    store.socket.emit('send', { chatid, message, uid })
-    console.log('Sent', chatid, message)
+    socket.emit('send', { chatid, message, uid }, async (chatid, { message, reciept }) => {
+      let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
+
+      if (chatIndex < 0) {
+        let chat = new Chat(
+          chatid,
+          message,
+          await store.getProfile(chatid.split(store.user.uid).find((id) => id.length > 0))
+        )
+        chat.lastMessage.displayTime = store.formatTimeDisplay(chat.lastMessage.time)
+        store.chats.push(chat)
+      } else {
+        store.chats[chatIndex].messages.push(message)
+        store.chats[chatIndex].lastMessage = {
+          time: message.time,
+          message: message.text,
+          displayTime: store.formatTimeDisplay(message.time)
+        }
+      }
+
+      store.chats.sort((a, b) => b.lastMessage.time - a.lastMessage.time)
+
+      updateReciept(chatid, reciept)
+    })
+
+    // Update Message Length
+    // (This is to track new messages delivered by their lenght)
+    let reciepts = JSON.parse(sessionStorage.getItem('reciepts'))
+    let recieptIndex = reciepts.findIndex((reciept) => reciept.id == chatid)
+
+    reciepts[recieptIndex].length++
+    sessionStorage.setItem('reciepts', JSON.stringify(reciepts))
+  }
+
+  function updateReciept(chatid, reciept) {
+    let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
+
+    Object.assign(store.chats[chatIndex].meta[store.user.uid], reciept)
   }
 
   function sendToRoomChat(chatid, message) {
     chatid, message
+  }
+
+  function sendReciept(chatid, reciept) {
+    const uid = store.user.uid
+
+    socket.emit('reciept', { uid, chatid, reciept }, ({ chatid, reciept }) => {
+      let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
+
+      if (chatIndex) {
+        if (reciept.lastRead) {
+          store.chats[chatIndex].meta[store.user.uid].lastRead = reciept.lastRead
+        }
+      }
+    })
+
+    console.log(chatid)
+  }
+
+  function sendChatDeliveryReciepts() {
+    const chats = store.chats
+    const lastDelivered = Date.now()
+
+    let reciepts = JSON.parse(sessionStorage.getItem('reciepts'))
+    console.log(reciepts)
+
+    chats.forEach(({ _id, messages }) => {
+      let chatInfoIndex = reciepts.findIndex((reciept) => reciept.id == _id)
+
+      if (chatInfoIndex < 0) {
+        reciepts.push({
+          id: _id,
+          length: messages.length
+        })
+
+        sendReciept(_id, { lastDelivered })
+      }
+
+      if (chatInfoIndex >= 0) {
+        if (messages.length > reciepts[chatInfoIndex].length) sendReciept(_id, { lastDelivered })
+
+        reciepts[chatInfoIndex] = {
+          id: _id,
+          length: messages.length
+        }
+      }
+
+      sessionStorage.setItem('reciepts', JSON.stringify(reciepts))
+    })
   }
 
   return {
@@ -106,6 +222,9 @@ export function useChat() {
     sendToPrivateChat,
     sendToRoomChat,
     sortChats,
-    formatTimeDisplay
+    formatTimeDisplay,
+    sendReciept,
+    sendChatDeliveryReciepts,
+    message
   }
 }
