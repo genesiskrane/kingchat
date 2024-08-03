@@ -161,7 +161,6 @@ let messages = computed(() => {
   messages.read = chat.messages.filter((message) => message.time < status.value[sender].lastRead)
   messages.unread = chat.messages.filter((message) => message.time > status.value[sender].lastRead)
 
-  console.log(messages.unread)
   return messages
 })
 
@@ -187,7 +186,6 @@ function mountReadTriggers() {
   bubbles.forEach((target) => {
     const time = target.getAttribute('time')
     if (time > status.value[sender].lastRead) {
-      console.log(target)
       observer.observe(target)
     }
   })
@@ -204,10 +202,8 @@ function getSide(sender) {
 
 function sendReciept(entries) {
   entries.forEach((entry) => {
-    console.log(entry)
     if (entry.isIntersecting) {
       const time = entry.target.getAttribute('time')
-      console.log('read')
       if (time > status.value[sender].lastRead) {
         console.log('Sending Read Reciept')
         store.sendReciept(chat._id, { lastRead: time })

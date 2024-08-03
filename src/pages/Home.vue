@@ -14,13 +14,10 @@
             </div>
             <div class="grid items-center">
               <div>
-                <span class="text-base underline">{{ user.profile.displayName }}</span>
+                <span class="text-base">{{ user.profile.displayName }}</span>
               </div>
               <div>
-                <span class="text-base">@{{ user.profile.username }}</span>
-              </div>
-              <div>
-                <span class="text-sm">Click To Chat</span>
+                <span class="text-xs">@{{ user.profile.username }}</span>
               </div>
             </div>
           </div>

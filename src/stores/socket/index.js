@@ -10,7 +10,7 @@ function initSockets(socket) {
     const store = useAppStore()
     const uid = store.user.uid
     const splitChatID = chatid.split(uid)
-    // let senderID = uid
+    let senderID = uid
     let receiverID = splitChatID.find((id) => id.length > 0)
 
     let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
@@ -18,7 +18,7 @@ function initSockets(socket) {
     console.log(chatid, reciept, chatIndex)
     if (chatIndex > -1) console.log(chatid, reciept, chatIndex)
     if (reciept.lastDelivered)
-      store.chats[chatIndex].meta[receiverID].lastDelivered = reciept.lastDelivered
+      store.chats[chatIndex].meta[senderID].lastDelivered = reciept.lastDelivered
     if (reciept.lastRead) store.chats[chatIndex].meta[receiverID].lastRead = reciept.lastRead
   })
 }

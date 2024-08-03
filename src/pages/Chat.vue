@@ -5,10 +5,12 @@
     </v-navigation-drawer>
 
     <v-app-bar :elevation="2" color="red-darken-1">
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="back()">
+        <v-icon icon="mdi-keyboard-backspace"></v-icon>
+      </v-app-bar-nav-icon>
 
       <v-avatar>
-        <v-img alt="John" :src="active.profile.photoURL"></v-img>
+        <v-img :alt="active.profile.displayName" :src="active.profile.photoURL"></v-img>
       </v-avatar>
 
       <v-app-bar-title>
@@ -28,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onUnmounted } from 'vue'
 
 import SideBar from '../components/SideBar.vue'
 import Chat from '../components/Chat.vue'
@@ -36,10 +38,12 @@ import Chat from '../components/Chat.vue'
 const drawer = ref(false)
 
 import { useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useAppStore } from '../stores/app'
 
 const store = useAppStore()
 const route = useRoute()
+const router = useRouter()
 
 const origin = route.query.origin
 let array
@@ -53,10 +57,24 @@ switch (origin) {
     break
 }
 
-let active = reactive(store[array].find((user) => user.profile.username == route.params.username))
+let active = store['chats'].find((user) => user.profile.username == route.params.username)
+
+if (!active) {
+  let { _id, profile } = store[array].find((user) => user.profile.username == route.params.username)
+  active = store.createNewChat(_id, profile)
+}
+
 const to = reactive({
   type: 'Chat',
-  chatid: active._id || active.chatid
+  chatid: active._id
 })
-console.log(active)
+
+function back() {
+  if (window.history.length > 1) router.back()
+  else router.push({ path: '/chats' })
+}
+
+onUnmounted(() => {
+  store.chats = store.chats.filter((chat) => chat.messages.length > 0)
+})
 </script>

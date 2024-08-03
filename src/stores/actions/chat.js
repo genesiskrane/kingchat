@@ -19,7 +19,7 @@ export function useChat() {
     // Sort Recent Active Users
     if (!store.app.isInitialized)
       for (let [index, user] of recent.entries())
-        recent[index].chatid = [store.user.uid, user.profile._id].sort().join('')
+        recent[index]._id = [store.user.uid, user.profile._id].sort().join('')
 
     // Sort Main Chats
     for (let [index, chat] of chats.entries()) {
@@ -40,6 +40,8 @@ export function useChat() {
     // chats = updateDeliveryTimeDisplay(chats)
     store.$patch({ chats })
     store.$patch({ recent })
+
+    console.log('Chats Sorted')
   }
 
   async function message({ chatid, message }) {
@@ -124,25 +126,22 @@ export function useChat() {
     }
   }
 
+  function createNewChat(chatid, profile) {
+    const uid = store.user.uid
+    let chat = new Chat(chatid, null, profile, uid)
+    store.chats.push(chat)
+    return store.chats.find((chat) => chat._id == chatid)
+  }
+
   function sendToPrivateChat(chatid, message, uid) {
     socket.emit('send', { chatid, message, uid }, async (chatid, { message, reciept }) => {
       let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
 
-      if (chatIndex < 0) {
-        let chat = new Chat(
-          chatid,
-          message,
-          await store.getProfile(chatid.split(store.user.uid).find((id) => id.length > 0))
-        )
-        chat.lastMessage.displayTime = store.formatTimeDisplay(chat.lastMessage.time)
-        store.chats.push(chat)
-      } else {
-        store.chats[chatIndex].messages.push(message)
-        store.chats[chatIndex].lastMessage = {
-          time: message.time,
-          message: message.text,
-          displayTime: store.formatTimeDisplay(message.time)
-        }
+      store.chats[chatIndex].messages.push(message)
+      store.chats[chatIndex].lastMessage = {
+        time: message.time,
+        message: message.text,
+        displayTime: store.formatTimeDisplay(message.time)
       }
 
       store.chats.sort((a, b) => b.lastMessage.time - a.lastMessage.time)
@@ -151,17 +150,18 @@ export function useChat() {
     })
 
     // Update Message Length
-    // (This is to track new messages delivered by their lenght)
+    // (This is to track new messages delivered by their length)
     let reciepts = JSON.parse(sessionStorage.getItem('reciepts'))
     let recieptIndex = reciepts.findIndex((reciept) => reciept.id == chatid)
 
-    reciepts[recieptIndex].length++
+    if (recieptIndex >= 0) reciepts[recieptIndex].length++
+    else reciepts.push({ id: chatid, length: 1 })
     sessionStorage.setItem('reciepts', JSON.stringify(reciepts))
   }
 
   function updateReciept(chatid, reciept) {
     let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
-
+    console.log(chatIndex, store.chats)
     Object.assign(store.chats[chatIndex].meta[store.user.uid], reciept)
   }
 
@@ -189,7 +189,7 @@ export function useChat() {
     const chats = store.chats
     const lastDelivered = Date.now()
 
-    let reciepts = JSON.parse(sessionStorage.getItem('reciepts'))
+    let reciepts = JSON.parse(sessionStorage.getItem('reciepts')) || []
     console.log(reciepts)
 
     chats.forEach(({ _id, messages }) => {
@@ -225,6 +225,7 @@ export function useChat() {
     formatTimeDisplay,
     sendReciept,
     sendChatDeliveryReciepts,
-    message
+    message,
+    createNewChat
   }
 }

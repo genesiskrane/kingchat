@@ -1,4 +1,4 @@
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive } from 'vue'
 
 export function useState() {
   const app = reactive({
@@ -9,14 +9,6 @@ export function useState() {
   const chats = ref([])
   const rooms = reactive({})
   const recent = ref([])
-
-  watch(rooms, (news, old) => {
-    console.info('Rooms Changed', old, news)
-  })
-
-  watch(recent, (news, old) => {
-    console.info('Recent Users Changed', old, news)
-  })
 
   return {
     app,

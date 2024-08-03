@@ -18,7 +18,6 @@ export function useAuth() {
       try {
         let userRecord = await signInWithEmailAndPassword(FBAuth, data.id, data.password)
         store.$patch({ user: { uid: userRecord.user.uid } })
-
         await store.initUser()
 
         return true

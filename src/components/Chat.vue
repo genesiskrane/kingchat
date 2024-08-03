@@ -33,7 +33,7 @@ onMounted(() => {
   window.addEventListener('resize', setupMessenger)
 })
 
-onUnmounted(() => window.removeEventListener('resize'))
+onUnmounted(() => window.removeEventListener('resize', setupMessenger))
 </script>
 
 <style scoped>

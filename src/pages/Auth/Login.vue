@@ -74,6 +74,7 @@ async function submit() {
   loading.value = true
   console.log('Logging In...')
   let res = await store.login(data)
+  console.log(res)
 
   if (res) router.push('/chats')
   else if (res == 'invalid-credential') alert.value = true
