@@ -20,7 +20,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container class="ma-0 pa-0 mx-auto">
+      <v-container class="ma-0 pa-0 mx-auto h-full">
         <chat :active="active" :to="to"></chat>
       </v-container>
     </v-main>

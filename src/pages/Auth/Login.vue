@@ -26,14 +26,15 @@
             @input="v$.password.$touch"
           ></v-text-field>
 
-          <v-btn :loading="loading" class="mt-2" text="Login" block @click="submit()"></v-btn>
           <v-btn
             :loading="loading"
-            class="mt-4"
-            text="Forgot Password"
+            class="mt-2"
+            color="indigo-darken-3"
+            text="Login"
             block
-            @click="forgotPassword()"
+            @click="submit()"
           ></v-btn>
+          <v-btn class="mt-4" text="Forgot Password" block @click="forgotPassword()"></v-btn>
           <div class="text-center my-2">
             <span>Don't have an account? </span>
             <router-link to="/auth/signup"><span class="font-bold">Sign Up</span></router-link>
@@ -70,6 +71,7 @@ const rules = {
 const v$ = useVuelidate(rules, data)
 
 async function submit() {
+  loading.value = true
   console.log('Logging In...')
   let res = await store.login(data)
 

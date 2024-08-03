@@ -1,5 +1,5 @@
 <template>
-  <div ref="bubbleDiv">
+  <div id="bubbleDiv" ref="bubbleDiv">
     <template v-for="(value, type) in messages" :key="type">
       <div v-if="type == 'unread' && messages.length > 0" id="unread-tag" class="text-center">
         <span class="text-xl underline">Unread Messages</span>
@@ -153,33 +153,49 @@ defineExpose({ bubbleDiv })
 const sender = store.user.uid
 const reciever = chat._id.split(sender).find((id) => id.length > 0)
 
+let observer
 const status = computed(() => chat.meta)
 
-console.log(status.value[sender])
 let messages = computed(() => {
   let messages = {}
   messages.read = chat.messages.filter((message) => message.time < status.value[sender].lastRead)
   messages.unread = chat.messages.filter((message) => message.time > status.value[sender].lastRead)
+
+  console.log(messages.unread)
   return messages
 })
 
-let unread = ref([])
+function mountReadTriggers() {
+  const marginBottom = bubbleDiv.value.parentElement.children[1].offsetHeight
 
-let options = {
-  root: null,
-  rootMargin: '0px',
-  threshold: 0
+  let options = {
+    root: null,
+    rootMargin: `0px 0px -${marginBottom}px 0px`,
+    threshold: 0
+  }
+
+  observer = new IntersectionObserver(sendReciept, options)
+
+  let bubbles = []
+  let bubbleDivChildren = bubbleDiv.value.children
+
+  for (let bubble of bubbleDivChildren) {
+    const target = bubble.children[0].children[0].children[1].children[1]
+    if (target.getAttribute('time')) bubbles.push(target)
+  }
+
+  bubbles.forEach((target) => {
+    const time = target.getAttribute('time')
+    if (time > status.value[sender].lastRead) {
+      console.log(target)
+      observer.observe(target)
+    }
+  })
 }
-let observer = new IntersectionObserver(sendReciept, options)
 
 onMounted(() => {
-  unread.value = unread.value.map((el) => el.children[0].children[0].children[1].children[1])
-  unread.value = unread.value.filter((el) => el.getAttribute('time'))
-
-  unread.value.forEach((target) => {
-    console.log(target)
-    observer.observe(target)
-  })
+  const observer = new MutationObserver(() => mountReadTriggers())
+  observer.observe(bubbleDiv.value, { childList: true })
 })
 
 function getSide(sender) {
@@ -188,13 +204,14 @@ function getSide(sender) {
 
 function sendReciept(entries) {
   entries.forEach((entry) => {
-    console.log('entry')
+    console.log(entry)
     if (entry.isIntersecting) {
       const time = entry.target.getAttribute('time')
       console.log('read')
       if (time > status.value[sender].lastRead) {
         console.log('Sending Read Reciept')
         store.sendReciept(chat._id, { lastRead: time })
+        observer.unobserve(entry.target)
       }
     }
   })

@@ -16,10 +16,10 @@ function initSockets(socket) {
     let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
 
     console.log(chatid, reciept, chatIndex)
-    if (chatIndex > -1)
-      console.log(chatid, reciept, chatIndex)
-      if (reciept.lastDelivered)
-        store.chats[chatIndex].meta[receiverID].lastDelivered = reciept.lastDelivered
+    if (chatIndex > -1) console.log(chatid, reciept, chatIndex)
+    if (reciept.lastDelivered)
+      store.chats[chatIndex].meta[receiverID].lastDelivered = reciept.lastDelivered
+    if (reciept.lastRead) store.chats[chatIndex].meta[receiverID].lastRead = reciept.lastRead
   })
 }
 
