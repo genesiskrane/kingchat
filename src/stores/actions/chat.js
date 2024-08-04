@@ -19,7 +19,7 @@ export function useChat() {
     // Sort Recent Active Users
     if (!store.app.isInitialized)
       for (let [index, user] of recent.entries())
-        recent[index]._id = [store.user.uid, user.profile._id].sort().join('')
+        recent[index].chatid = [store.user.uid, user.profile._id].sort().join('')
 
     // Sort Main Chats
     for (let [index, chat] of chats.entries()) {
@@ -37,7 +37,6 @@ export function useChat() {
     }
     chats.sort((a, b) => b.lastMessage.time - a.lastMessage.time)
 
-    // chats = updateDeliveryTimeDisplay(chats)
     store.$patch({ chats })
     store.$patch({ recent })
 

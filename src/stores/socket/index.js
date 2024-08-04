@@ -1,6 +1,36 @@
 import { useAppStore } from '../app'
 
 function initSockets(socket) {
+  socket.on('connect', () => socket.emit('init'))
+
+  socket.on('init', (data) => {
+    console.log('Live Data:', data)
+  })
+
+  socket.on('online', ({ online }) => {
+    const store = useAppStore()
+
+    // Populate Online Users
+    store.online = online = online
+      .filter(
+        (profile, index, onlineArray) =>
+          onlineArray.map((account) => account._id).indexOf(profile._id) == index
+      )
+      .map((profile) => ({
+        chatid: [store.user.uid, profile._id].sort().join(''),
+        profile
+      }))
+
+    // Remove Found Online Users From Recent Users
+    store.recent = store.recent.filter(({ profile }) => {
+      let uid = profile._id
+      console.log(uid)
+      let account = online.find(({ profile }) => profile._id == uid)
+      console.log(account)
+      if (!account) return true
+    })
+  })
+
   socket.on('message', (chatid, message) => {
     const store = useAppStore()
     store.message(chatid, message)

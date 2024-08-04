@@ -14,10 +14,13 @@
       </v-avatar>
 
       <v-app-bar-title>
-        <span>
-          {{ active.profile.displayName }}
-        </span>
-        <span class="text-xs"> @{{ active.profile.username }} </span>
+        <div>
+          <p>
+            <span> {{ active.profile.displayName }}</span>
+            <br />
+            <span class="text-xs">@{{ active.profile.username }} </span>
+          </p>
+        </div>
       </v-app-bar-title>
     </v-app-bar>
 

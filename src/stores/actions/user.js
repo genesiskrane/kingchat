@@ -33,16 +33,6 @@ function useUser() {
       store.$patch({ user: data.user })
       store.$patch({ chats: data.chats })
 
-      // Initialize Socket
-      socket = io(ioURL, {
-        auth: { uid: store.user.uid }
-      })
-
-      socket.room = io(`${ioURL}/room`, {
-        auth: { uid: store.user.uid }
-      })
-
-      initSockets(socket)
     } catch (error) {
       console.log(error)
     }
@@ -53,9 +43,23 @@ function useUser() {
 
       store.$patch({ recent: data.recent })
       store.$patch({ rooms: data.rooms })
+
+      
     } catch (error) {
       console.log(error)
     }
+
+          // Initialize Socket
+          socket = io(ioURL, {
+            auth: { uid: store.user.uid }
+          })
+    
+          socket.room = io(`${ioURL}/room`, {
+            auth: { uid: store.user.uid }
+          })
+    
+          initSockets(socket)
+    
 
     store.sortChats()
     store.sendChatDeliveryReciepts()
