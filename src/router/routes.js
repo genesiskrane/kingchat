@@ -115,7 +115,7 @@ const routes = [
         beforeEnter: async (to) => {
           const store = useAppStore()
 
-          await store.openRoom(to)
+          let roomInfo = await store.openRoom(to)
           return
         }
       }

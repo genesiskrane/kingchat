@@ -16,6 +16,7 @@ function initSockets(socket) {
         (profile, index, onlineArray) =>
           onlineArray.map((account) => account._id).indexOf(profile._id) == index
       )
+      .filter((profile)=>profile._id !== store.user.uid)
       .map((profile) => ({
         chatid: [store.user.uid, profile._id].sort().join(''),
         profile
@@ -24,9 +25,7 @@ function initSockets(socket) {
     // Remove Found Online Users From Recent Users
     store.recent = store.recent.filter(({ profile }) => {
       let uid = profile._id
-      console.log(uid)
       let account = online.find(({ profile }) => profile._id == uid)
-      console.log(account)
       if (!account) return true
     })
   })

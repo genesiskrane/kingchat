@@ -24,9 +24,9 @@
                     </div>
                   </div>
 
-                  <div v-if="categoryKey == 0" class="presence">
-                    <div class="ringring"></div>
+                  <div v-if="categoryKey == 0" class="presence grid relative px-4 items-center">
                     <div class="circle"></div>
+                    <div class="ringring"></div>
                   </div>
                 </div>
               </div>
@@ -57,23 +57,24 @@ function getLink(username) {
 
 <style scoped>
 .circle {
-  width: 15px;
-  height: 15px;
+  position: relative;
+  width: 7.5px;
+  height: 7.5px;
   background-color: #62bd19;
   border-radius: 50%;
-  top: 23px;
-  left: 23px;
 }
 
 .ringring {
+  position: absolute;
   border: 3px solid #62bd19;
   border-radius: 30px;
-  height: 25px;
-  width: 25px;
-  float: left;
-  animation: pulsate 1s ease-out;
+  height: 15px;
+  width: 15px;
+  animation: pulsate 2.5s ease-out;
   animation-iteration-count: infinite;
   opacity: 0;
+  inset: 0;
+  margin: auto;
 }
 
 @keyframes pulsate {
