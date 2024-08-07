@@ -1,0 +1,1 @@
+import{_ as o}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{f as e,o as t}from"./index-DJemBHAc.js";const c={},r={id:"ludo"};function n(s,_){return t(),e("div",r," Ludo ")}const f=o(c,[["render",n]]);export{f as default};

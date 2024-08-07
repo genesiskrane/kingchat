@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onUnmounted } from 'vue'
+import { ref, reactive, onUnmounted, inject } from 'vue'
 
 import SideBar from '../components/app/SideBar.vue'
 import Chat from '../components/chat/Chat.vue'
@@ -43,6 +43,8 @@ const drawer = ref(false)
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '../stores'
+
+const { back } = inject('app')
 
 const store = useAppStore()
 const route = useRoute()
@@ -71,11 +73,6 @@ const to = reactive({
   type: 'Chat',
   chatid: active._id
 })
-
-function back() {
-  if (window.history.length > 1) router.back()
-  else router.push({ path: '/chats' })
-}
 
 onUnmounted(() => {
   store.chats = store.chats.filter((chat) => chat.messages.length > 0)

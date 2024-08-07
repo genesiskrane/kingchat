@@ -1,4 +1,5 @@
 import { ref, reactive } from 'vue'
+import games from '@/games'
 
 export function useState() {
   const app = reactive({
@@ -20,6 +21,7 @@ export function useState() {
     rooms,
     online,
     recent,
-    sockets
+    sockets,
+    games
   }
 }

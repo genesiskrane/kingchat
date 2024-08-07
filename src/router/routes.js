@@ -130,6 +130,16 @@ const routes = [
       }
     ]
   },
+  {
+    name: 'Game',
+    path: '/games',
+    component: () => import('../pages/games/Game.vue'),
+    children: [
+      { path: 'ludo', component: () => import('../pages/games/ludo/Index.vue') },
+      { path: 'dice-merge', component: () => import('../pages/games/dice-merge/Index.vue') },
+      { path: 'chess', component: () => import('../pages/games/chess/Index.vue') }
+    ]
+  },
 
   {
     path: '/:catchAll(.*)*',
