@@ -4,12 +4,16 @@ const routes = [
   {
     path: '/',
     name: 'app',
-    redirect: '/chats',
-    meta: {
-      requiresAuth: true
-    },
-    component: () => import('../layouts/MainLayout.vue'),
+    beforeEnter: (to, from, next) => {
+      const store = useAppStore()
 
+      if (to.path == '/') {
+        if (to.path == '/' && store.app.isLoggedIn) next('/chats')
+        else if (to.path == '/' && !store.app.isLoggedIn) next('/games')
+      } else next()
+    },
+
+    component: () => import('../layouts/MainLayout.vue'),
     children: [
       {
         path: '/home',
@@ -25,6 +29,11 @@ const routes = [
         path: '/rooms',
         name: 'Rooms',
         component: () => import('../pages/Rooms.vue')
+      },
+      {
+        path: '/games',
+        name: 'Games',
+        component: () => import('../pages/games/Index.vue')
       },
       {
         path: '/explore',

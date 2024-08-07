@@ -3,7 +3,8 @@ import { ref, reactive } from 'vue'
 export function useState() {
   const app = reactive({
     name: 'King Chat',
-    isInitialized: false
+    isInitialized: false,
+    isLoggedIn: false
   })
   const user = reactive({})
   const chats = ref([])

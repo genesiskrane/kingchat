@@ -13,18 +13,24 @@ function useUser() {
 
   async function initUser() {
     console.log('Reinitializing User Data')
+    if (store.user.uid) {
+      try {
+        let { data } = await axios.post('/auth/get-user', {
+          uid: store.user.uid
+        })
 
-    try {
-      let { data } = await axios.post('/auth/get-user', {
-        uid: store.user.uid
-      })
+        data.user.uid = data.user._id
 
-      data.user.uid = data.user._id
+        store.$patch({ user: data.user })
+        store.$patch({ chats: data.chats })
+      } catch (error) {
+        console.log(error)
+      }
 
-      store.$patch({ user: data.user })
-      store.$patch({ chats: data.chats })
-    } catch (error) {
-      console.log(error)
+      store.sortChats()
+      store.sendChatDeliveryReciepts()
+    } else {
+      store.user.uid = 'anonymous'
     }
 
     try {
@@ -36,9 +42,7 @@ function useUser() {
     } catch (error) {
       console.log(error)
     }
-    // store.initSockets(store.user.uid)
-    store.sortChats()
-    store.sendChatDeliveryReciepts()
+
     store.$patch({ app: { isInitialized: true } })
   }
 

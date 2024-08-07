@@ -10,7 +10,15 @@
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title>
-        <span class="capitalize">{{ route.name }}</span>
+        <div class="flex flex-row justify-between px-2">
+          <div class="grid items-center">
+            <span class="capitalize">{{ route.name }}</span>
+          </div>
+          <div>
+            <v-btn id="login" @click="router.push('/auth/login')"> Login </v-btn>
+            <v-btn id="signup" @click="router.push('/auth/signup')"> SignUp </v-btn>
+          </div>
+        </div>
       </v-app-bar-title>
     </v-app-bar>
 
@@ -26,11 +34,12 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import SideBar from '../components/app/SideBar.vue'
 // import BottomNavigation from '../components/BottomNavigation.vue'
 
 const route = useRoute()
+const router = useRouter()
 
 let drawer = ref(false)
 </script>

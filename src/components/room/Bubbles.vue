@@ -27,33 +27,7 @@
 
             <div v-if="getSide(message.sender) == 'right'" id="reciept" class="grid items-center">
               <svg
-                v-if="status[reciever].lastRead >= message.time"
-                xmlns="http://www.w3.org/2000/svg"
-                style="width: 1.5em; height: 1.5em"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  stroke="#43A047"
-                  d="M.41 13.41L6 19l1.41-1.42L1.83 12m20.41-6.42L11.66 16.17L7.5 12l-1.43 1.41L11.66 19l12-12M18 7l-1.41-1.42l-6.35 6.35l1.42 1.41z"
-                />
-              </svg>
-
-              <svg
-                v-else-if="status[reciever].lastDelivered > message.time"
-                xmlns="http://www.w3.org/2000/svg"
-                style="width: 1.5em; height: 1.5em"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  fill="currentColor"
-                  stroke="#ECEFF1"
-                  d="M.41 13.41L6 19l1.41-1.42L1.83 12m20.41-6.42L11.66 16.17L7.5 12l-1.43 1.41L11.66 19l12-12M18 7l-1.41-1.42l-6.35 6.35l1.42 1.41z"
-                />
-              </svg>
-
-              <svg
-                v-else-if="status[sender].lastSent > message.time"
+                v-if="true"
                 xmlns="http://www.w3.org/2000/svg"
                 style="width: 1.5em; height: 1.5em"
                 viewBox="0 0 24 24"
@@ -66,7 +40,7 @@
               </svg>
 
               <svg
-                v-else-if="status[sender].lastSent < message.time"
+                v-else
                 xmlns="http://www.w3.org/2000/svg"
                 style="width: 1.5em; height: 1.5em"
                 viewBox="0 0 24 24"
