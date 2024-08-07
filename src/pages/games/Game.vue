@@ -18,9 +18,7 @@
           <p>
             <span> {{ game.name }}</span>
             <br />
-            <span class="text-xs" v-if="store.user.displayName">
-              @{{ store.user.displayName }}
-            </span>
+            <span class="text-xs" v-if="store.user.username"> @{{ store.user.username }} </span>
           </p>
         </div>
       </v-app-bar-title>

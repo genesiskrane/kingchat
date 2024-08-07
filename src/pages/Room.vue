@@ -36,6 +36,7 @@
 import { ref, computed, inject } from 'vue'
 import { useAppStore } from '../stores'
 
+const { back } = inject('app')
 
 // Components
 import SideBar from '../components/app/SideBar.vue'
