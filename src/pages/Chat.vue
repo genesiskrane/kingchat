@@ -35,14 +35,14 @@
 <script setup>
 import { ref, reactive, onUnmounted } from 'vue'
 
-import SideBar from '../components/SideBar.vue'
-import Chat from '../components/Chat.vue'
+import SideBar from '../components/app/SideBar.vue'
+import Chat from '../components/chat/Chat.vue'
 
 const drawer = ref(false)
 
 import { useRoute } from 'vue-router'
 import { useRouter } from 'vue-router'
-import { useAppStore } from '../stores/app'
+import { useAppStore } from '../stores'
 
 const store = useAppStore()
 const route = useRoute()

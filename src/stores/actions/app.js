@@ -1,6 +1,6 @@
 import axios from 'axios'
 import router from '../../router'
-import { useAppStore } from '../app'
+import { useAppStore } from '..'
 
 // Configs
 axios.defaults.baseURL =
@@ -8,13 +8,7 @@ axios.defaults.baseURL =
     ? 'https://www.kingchat.one/api'
     : 'http://localhost:3000/api'
 
-class Room {
-  constructor(data) {
-    Object.assign(this, data)
-  }
-}
-
-export function useApp() {
+function useApp() {
   const store = useAppStore()
 
   async function init() {
@@ -27,6 +21,9 @@ export function useApp() {
     // Get User Data
     store.$patch({ user: { uid: JSON.parse(sessionStorage.getItem('uid')) } })
     if (!store.user.uid) return router.push('/auth/login')
+
+    // Initialize Socket
+    store.initSockets(store.user.uid)
 
     if (!store.app.isInitialized) await store.initUser()
 
@@ -44,30 +41,29 @@ export function useApp() {
       console.log(error)
     }
   }
-  // Rooms
-  async function openRoom(to) {
-    const roomID = to.query.id
-    let room = null
 
-    try {
-      let { data } = await axios.get('/rooms/enter-room', {
-        params: { uid: store.user.uid, roomID }
-      })
-      room = new Room(data)
-    } catch (error) {
-      console.log(error)
+  function send(payload, message) {
+    const chatid = payload.chatid
+    const uid = store.user.uid
+    const type = payload.type
+
+    switch (type) {
+      case 'Chat':
+        store.sendToPrivateChat(chatid, message, uid)
+        break
+      case 'Room':
+        store.sendToRoomChat(chatid, message, uid)
+        break
+      default:
+        console.error('Message Type Unknown')
     }
-
-    store.$patch({ rooms: { active: room } })
-    return
   }
 
   return {
     init,
     getProfile,
-
-    // Rooms
-    openRoom
+    send
   }
 }
 
+export { useApp }

@@ -31,7 +31,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAppStore } from '../../stores/app'
+import { useAppStore } from '../../stores'
 
 const router = useRouter()
 const store = useAppStore()

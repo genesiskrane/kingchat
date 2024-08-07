@@ -48,7 +48,7 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAppStore } from '../../stores/app'
+import { useAppStore } from '../../stores'
 
 import { email, required, or, alphaNum } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'

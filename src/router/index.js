@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from './routes'
-import { useAppStore } from '../stores/app'
+import { useAppStore } from '../stores'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

@@ -10,6 +10,7 @@ export function useState() {
   const rooms = reactive({})
   const online = ref([])
   const recent = ref([])
+  const sockets = reactive({ app: null, room: null })
 
   return {
     app,
@@ -17,6 +18,7 @@ export function useState() {
     chats,
     rooms,
     online,
-    recent
+    recent,
+    sockets
   }
 }

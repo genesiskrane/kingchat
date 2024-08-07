@@ -5,34 +5,49 @@
     </v-navigation-drawer>
 
     <v-app-bar :elevation="2" color="red-darken-1">
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click="back()">
+        <v-icon icon="mdi-keyboard-backspace"></v-icon>
+      </v-app-bar-nav-icon>
 
-      <v-app-bar-title>{{ room.name }}</v-app-bar-title>
+      <v-avatar>
+        <v-img :alt="room.name" :src="room.imgURL"></v-img>
+      </v-avatar>
+
+      <v-app-bar-title>
+        <div>
+          <p>
+            <span> {{ room.name }} {{ room.number }}</span>
+          </p>
+        </div>
+      </v-app-bar-title>
     </v-app-bar>
 
     <v-main>
       <v-container class="ma-0 pa-0 mx-auto flex flex-col justify-between h-full">
-        <div class="bg-green-100">
-          <div v-for="message in room.messages" :key="message" class="mx-2 my-4">{{ message }}</div>
-        </div>
+        <bubbles :chat="room"></bubbles>
 
-        <messenger :type="room"></messenger>
+        <messenger :to="room"></messenger>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { useAppStore } from '../stores/app'
-import SideBar from '../components/SideBar.vue'
+import { ref, computed, inject } from 'vue'
+import { useAppStore } from '../stores'
+
+const { back } = inject('app')
+
+// Components
+import SideBar from '../components/app/SideBar.vue'
 import Messenger from '../components/ui/Messenger.vue'
+import Bubbles from '@/components/room/Bubbles.vue'
 
 const store = useAppStore()
-let drawer = ref(false)
+const drawer = ref(false)
 
 const room = computed(() => {
-  let room = store.app.rooms.active
+  let room = store.rooms.active
   room.type = 'Room'
   return room
 })

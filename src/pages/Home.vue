@@ -42,7 +42,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useAppStore } from '../stores/app'
+import { useAppStore } from '../stores'
 
 const store = useAppStore()
 const onlineUsers = computed(() => store.online)

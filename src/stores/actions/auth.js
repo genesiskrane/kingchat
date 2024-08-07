@@ -1,7 +1,7 @@
 import { auth as FBAuth, signInWithEmailAndPassword, signOut } from '../../func/firebase'
 import axios from 'axios'
 import router from '../../router'
-import { useAppStore } from '../app'
+import { useAppStore } from '..'
 
 // Configs
 axios.defaults.baseURL =

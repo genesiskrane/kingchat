@@ -27,7 +27,7 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import SideBar from '../components/SideBar.vue'
+import SideBar from '../components/app/SideBar.vue'
 // import BottomNavigation from '../components/BottomNavigation.vue'
 
 const route = useRoute()

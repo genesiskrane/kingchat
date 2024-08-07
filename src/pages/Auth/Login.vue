@@ -48,7 +48,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAppStore } from '../../stores/app'
+import { useAppStore } from '../../stores'
 
 import { email, required, or, alphaNum } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
@@ -74,7 +74,6 @@ async function submit() {
   loading.value = true
   console.log('Logging In...')
   let res = await store.login(data)
-  console.log(res)
 
   if (res) router.push('/chats')
   else if (res == 'invalid-credential') alert.value = true

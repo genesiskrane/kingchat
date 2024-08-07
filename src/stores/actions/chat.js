@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { useAppStore } from '../app'
-import { socket } from '../actions/user'
+import { useAppStore } from '..'
 import { Chat } from '../../classes'
+
 // Configs
 axios.defaults.baseURL =
   process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
@@ -64,7 +64,7 @@ export function useChat() {
       }
     }
 
-    socket.emit(
+    store.sockets.app.emit(
       'reciept',
       { uid, chatid, reciept: { lastDelivered: Date.now() } },
       ({ chatid, reciept }) => updateReciept(chatid, reciept)
@@ -105,23 +105,6 @@ export function useChat() {
     return displayTime
   }
 
-  function send(payload, message) {
-    const chatid = payload.chatid
-    const uid = store.user.uid
-    const type = payload.type
-
-    switch (type) {
-      case 'Chat':
-        sendToPrivateChat(chatid, message, uid)
-        break
-      case 'Room':
-        sendToRoomChat(chatid, message, uid)
-        break
-      default:
-        console.error('Message Type Unknown')
-    }
-  }
-
   function createNewChat(chatid, profile) {
     const uid = store.user.uid
     let chat = new Chat(chatid, null, profile, uid)
@@ -130,20 +113,24 @@ export function useChat() {
   }
 
   function sendToPrivateChat(chatid, message, uid) {
-    socket.emit('send', { chatid, message, uid }, async (chatid, { message, reciept }) => {
-      let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
+    store.sockets.app.emit(
+      'send',
+      { chatid, message, uid },
+      async (chatid, { message, reciept }) => {
+        let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
 
-      store.chats[chatIndex].messages.push(message)
-      store.chats[chatIndex].lastMessage = {
-        time: message.time,
-        message: message.text,
-        displayTime: store.formatTimeDisplay(message.time)
+        store.chats[chatIndex].messages.push(message)
+        store.chats[chatIndex].lastMessage = {
+          time: message.time,
+          message: message.text,
+          displayTime: store.formatTimeDisplay(message.time)
+        }
+
+        store.chats.sort((a, b) => b.lastMessage.time - a.lastMessage.time)
+
+        updateReciept(chatid, reciept)
       }
-
-      store.chats.sort((a, b) => b.lastMessage.time - a.lastMessage.time)
-
-      updateReciept(chatid, reciept)
-    })
+    )
 
     // Update Message Length
     // (This is to track new messages delivered by their length)
@@ -161,14 +148,10 @@ export function useChat() {
     Object.assign(store.chats[chatIndex].meta[store.user.uid], reciept)
   }
 
-  function sendToRoomChat(chatid, message) {
-    chatid, message
-  }
-
   function sendReciept(chatid, reciept) {
     const uid = store.user.uid
 
-    socket.emit('reciept', { uid, chatid, reciept }, ({ chatid, reciept }) => {
+    store.sockets.app.emit('reciept', { uid, chatid, reciept }, ({ chatid, reciept }) => {
       let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
 
       if (chatIndex) {
@@ -214,9 +197,7 @@ export function useChat() {
   }
 
   return {
-    send,
     sendToPrivateChat,
-    sendToRoomChat,
     sortChats,
     formatTimeDisplay,
     sendReciept,

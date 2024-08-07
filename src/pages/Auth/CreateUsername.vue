@@ -37,7 +37,7 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
-import { useAppStore } from '../../stores/app'
+import { useAppStore } from '../../stores'
 
 import { required, minLength } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'

@@ -27,11 +27,11 @@
 
 <script setup>
 import { computed } from 'vue'
-import { useAppStore } from '../stores/app'
+import { useAppStore } from '../stores'
 
 const store = useAppStore()
 
-const rooms = computed(() => store.app.rooms)
+const rooms = computed(() => store.rooms)
 
 function getLink(room) {
   return `/rooms/${room.id}?name=${room.name}&id=${room.id}`

@@ -1,4 +1,4 @@
-import { useAppStore } from '../stores/app'
+import { useAppStore } from '../stores'
 
 const routes = [
   {

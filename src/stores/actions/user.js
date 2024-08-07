@@ -1,21 +1,12 @@
 import axios from 'axios'
-import { io } from 'socket.io-client'
-import { initSockets } from '../socket'
 import { storage, ref, uploadBytes } from '../../func/firebase'
-import { useAppStore } from '../app'
-
-let socket
+import { useAppStore } from '..'
 
 // Configs
 axios.defaults.baseURL =
   process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
     ? 'https://www.kingchat.one/api'
     : 'http://localhost:3000/api'
-
-const ioURL =
-  process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
-    ? 'https://www.kingchat.one/'
-    : 'http://localhost:3000/'
 
 function useUser() {
   const store = useAppStore()
@@ -32,7 +23,6 @@ function useUser() {
 
       store.$patch({ user: data.user })
       store.$patch({ chats: data.chats })
-
     } catch (error) {
       console.log(error)
     }
@@ -43,24 +33,10 @@ function useUser() {
 
       store.$patch({ recent: data.recent })
       store.$patch({ rooms: data.rooms })
-
-      
     } catch (error) {
       console.log(error)
     }
-
-          // Initialize Socket
-          socket = io(ioURL, {
-            auth: { uid: store.user.uid }
-          })
-    
-          socket.room = io(`${ioURL}/room`, {
-            auth: { uid: store.user.uid }
-          })
-    
-          initSockets(socket)
-    
-
+    // store.initSockets(store.user.uid)
     store.sortChats()
     store.sendChatDeliveryReciepts()
     store.$patch({ app: { isInitialized: true } })
@@ -113,4 +89,4 @@ function useUser() {
   }
 }
 
-export { useUser, socket }
+export { useUser }

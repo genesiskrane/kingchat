@@ -65,7 +65,7 @@ import { useRouter } from 'vue-router'
 import { email, required, minLength, maxLength } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 
-import { useAppStore } from '../../stores/app'
+import { useAppStore } from '../../stores'
 
 const store = useAppStore()
 const router = useRouter()
