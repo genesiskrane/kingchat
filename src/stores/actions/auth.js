@@ -74,6 +74,7 @@ export function useAuth() {
 
   async function logout() {
     await signOut(FBAuth)
+    store.app.isLoggedIn = false
     router.push('/games')
   }
 

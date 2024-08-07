@@ -15,5 +15,5 @@ import { useAppStore } from '@/stores'
 
 const store = useAppStore()
 
-const games = reactive([{ name: 'Ludo' }, { name: 'Dice Merge' }, { name: 'Chess' }])
+const games = reactive([{ name: 'Ludo', imgURL:'./assets/img/' }, { name: 'Dice Merge' }, { name: 'Chess' }])
 </script>
