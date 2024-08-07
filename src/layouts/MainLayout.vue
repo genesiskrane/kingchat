@@ -14,8 +14,10 @@
           <div class="grid items-center">
             <span class="capitalize">{{ route.name }}</span>
           </div>
-          <div>
-            <v-btn id="login" @click="router.push('/auth/login')"> Login </v-btn>
+          <div v-if="!store.app.isLoggedIn">
+            <v-btn id="login" @click="router.push('/auth/login')">
+              <span class="">Login</span>
+            </v-btn>
             <v-btn id="signup" @click="router.push('/auth/signup')"> SignUp </v-btn>
           </div>
         </div>
@@ -35,9 +37,11 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAppStore } from '@/stores'
 import SideBar from '../components/app/SideBar.vue'
 // import BottomNavigation from '../components/BottomNavigation.vue'
 
+const store = useAppStore()
 const route = useRoute()
 const router = useRouter()
 

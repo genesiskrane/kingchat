@@ -18,6 +18,8 @@ export function useAuth() {
       try {
         let userRecord = await signInWithEmailAndPassword(FBAuth, data.id, data.password)
         store.$patch({ user: { uid: userRecord.user.uid } })
+        store.app.isLoggedIn = true
+
         await store.initUser()
 
         return true
@@ -36,6 +38,7 @@ export function useAuth() {
         let email = result.data.email
         let userRecord = await signInWithEmailAndPassword(FBAuth, email, data.password)
         store.$patch({ user: { uid: userRecord.user.uid } })
+        store.app.isLoggedIn = true
 
         await store.initUser()
 
@@ -71,7 +74,7 @@ export function useAuth() {
 
   async function logout() {
     await signOut(FBAuth)
-    router.push('/auth/login')
+    router.push('/games')
   }
 
   async function verifyUsername(username) {

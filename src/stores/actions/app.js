@@ -20,11 +20,6 @@ function useApp() {
     // Get User Data
     store.$patch({ user: { uid: JSON.parse(sessionStorage.getItem('uid')) } })
     if (store.user.uid) store.app.isLoggedIn = true
-    console.log(store.app.isLoggedIn)
-    // if (!store.user.uid) return router.push('/auth/login')
-
-    // Initialize Socket
-    store.initSockets(store.user.uid)
 
     if (!store.app.isInitialized) await store.initUser()
 

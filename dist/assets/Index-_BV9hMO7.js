@@ -1,1 +1,0 @@
-import{_ as e}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{k as o,o as r}from"./index-DxFlzq2_.js";const c={};function n(t,s){return r(),o("div",null,"games")}const f=e(c,[["render",n]]);export{f as default};

@@ -151,6 +151,7 @@ export function useChat() {
   function sendReciept(chatid, reciept) {
     const uid = store.user.uid
 
+    console.log(store.sockets)
     store.sockets.app.emit('reciept', { uid, chatid, reciept }, ({ chatid, reciept }) => {
       let chatIndex = store.chats.findIndex((chat) => chat._id == chatid)
 

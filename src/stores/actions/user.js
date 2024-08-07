@@ -13,7 +13,11 @@ function useUser() {
 
   async function initUser() {
     console.log('Reinitializing User Data')
+
     if (store.user.uid) {
+      // Initialize Socket
+      store.initSockets(store.user.uid)
+
       try {
         let { data } = await axios.post('/auth/get-user', {
           uid: store.user.uid

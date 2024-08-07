@@ -10,7 +10,7 @@ const router = useRouter()
 
 function back() {
   if (window.history.length > 1) router.back()
-  else router.push({ path: '/chats' })
+  else router.push({ path: '/home' })
 }
 
 provide('app', {
