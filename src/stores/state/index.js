@@ -1,5 +1,5 @@
 import { ref, reactive } from 'vue'
-import games from '@/games'
+import games from '@/pages/games'
 
 export function useState() {
   const app = reactive({

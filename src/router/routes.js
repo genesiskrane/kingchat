@@ -140,7 +140,6 @@ const routes = [
       { path: 'chess', component: () => import('../pages/games/chess/Index.vue') }
     ]
   },
-
   {
     path: '/:catchAll(.*)*',
     component: () => import('../pages/ErrorNotFound.vue')

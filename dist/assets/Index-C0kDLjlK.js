@@ -1,1 +1,0 @@
-import{_ as e}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{f as c,o}from"./index-DJemBHAc.js";const r={},t={id:"dice-merge"};function n(s,_){return o(),c("div",t,"Dice Merge")}const d=e(r,[["render",n]]);export{d as default};
