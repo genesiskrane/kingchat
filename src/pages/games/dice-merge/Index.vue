@@ -12,6 +12,7 @@
           <div
             v-for="i in 25"
             :key="i"
+            ref="slots"
             class="grid items-center text-center"
             style="
               border-radius: 3px;
@@ -23,10 +24,16 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-row gap-4">
-        <div class="text-center my-10">Dice</div>
-        <div v-for="(die, i) in diceTypes" :key="i" draggable="true" ref="dieRefs">
-          <canvas style="width: 30px; height: 30px; background: pink"></canvas> {{ i + 1 }}
+      <div class="text-center my-10">Dice</div>
+      <div class="flex flex-row flex-wrap gap-3 justify-center">
+        <div
+          v-for="(die, i) in diceTypes"
+          :key="i"
+          draggable="true"
+          ref="dieRefs"
+          class="grid items-center"
+        >
+          <canvas class="canvas w-full h-full bg-pink-400"></canvas>
         </div>
       </div>
     </div>
@@ -38,26 +45,32 @@ import { ref, onMounted } from 'vue'
 import Box from './core.js'
 
 const board = ref(null)
+const slots = ref(null)
 const dieRefs = ref(null)
 
 onMounted(() => {
-  const width = board.value.offsetWidth
-  board.value.style.height = width + 'px'
+  const boardWidth = board.value.offsetWidth
+  board.value.style.height = boardWidth + 'px'
 
   const dice = dieRefs.value
+  const dieWidth = slots.value[0].offsetWidth
 
-  dice.forEach((die) => {
-    let img = new Image()
-    img.src = '../assets/img/games/ludo/drag-icon.jpg'
+  dice.forEach((die, i) => {
+    die.style.width = dieWidth - 4 + 'px'
+    die.style.height = dieWidth - 4 + 'px'
 
-    die.addEventListener('dragstart', (e) => {
-      // e.dataTransfer.dropEffect = 'copy'
-      console.log(e)
-    })
+    let canvas = die.children[0]
+    let ctx = canvas.getContext('2d')
+    ctx.font = '48px serif'
+    ctx.textBaseline = 'hanging'
+    ctx.fillText(i + 1, 40, 40)
 
-    die.addEventListener('touchstart', (e) => {
-      console.log('Touch Started', e)
-    })
+    // Events
+    die.addEventListener('dragstart', start)
+    die.addEventListener('touchstart', start)
+    die.addEventListener('touchmove', move)
+    die.addEventListener('touchend', end)
+    die.addEventListener('touchcancel', cancel)
   })
 })
 const nosOfDice = 6
@@ -66,6 +79,49 @@ const diceTypes = []
 for (let i = 0; i < nosOfDice; i++) {
   console.log(i)
   diceTypes[i] = new Box()
+}
+
+const getDie = (e) => (e.target.classList.contains('canvas') ? e.target.parentElement : e.target)
+
+function start(e) {
+  console.log('Start Event Triggere. Type:' + e.type)
+
+  let die = getDie(e)
+  let touch = {}
+
+  if (e.type == 'dragstart') {
+    touch.clientX = e.clientX
+    touch.clientY = e.clientY
+  }
+
+  if (e.type == 'touchstart') {
+    touch.clientX = e.clientX
+    touch.clientY = e.clientY
+  }
+
+  die = e.target.classList.contains('canvas') ? e.target.parentElement : e.target
+
+  console.log(touch)
+  // Add Start Styles
+  die.style.position = 'absolute'
+  die.style.left = touch.clientX + 'px'
+  die.style.top = touch.clientY + 'px'
+}
+
+function move(e) {
+  let die = getDie(e)
+  const touch = e.touches[0]
+
+  die.style.top = touch.clientY + 'px'
+  die.style.left = touch.clientX + 'px'
+}
+
+function end(e) {
+  console.log('Touch Ended', e)
+}
+
+function cancel(e) {
+  console.log(e)
 }
 
 const dragover = (ev) => ev.preventDefault()

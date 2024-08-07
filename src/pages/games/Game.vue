@@ -1,9 +1,5 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer">
-      <side-bar></side-bar>
-    </v-navigation-drawer>
-
     <v-app-bar :elevation="2" color="red-darken-1">
       <v-app-bar-nav-icon @click="back()">
         <v-icon icon="mdi-keyboard-backspace"></v-icon>
