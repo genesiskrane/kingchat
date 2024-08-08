@@ -130,7 +130,7 @@ async function submit() {
 
   let user = await store.signup(data)
 
-  console.log(store.app.user.uid, user)
+  console.log(store.user.uid, user)
 
   if (user.uid) {
     loading.value = false
