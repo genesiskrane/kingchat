@@ -41,7 +41,7 @@ const code = ref('')
 
 async function verify() {
   if (code.value.length == 6) {
-    let isVerified = await store.verifyOTP({ uid: store.app.user.uid, code: code.value })
+    let isVerified = await store.verifyOTP({ uid: store.user.uid, code: code.value })
 
     console.log(isVerified)
     if (isVerified) {
