@@ -45,6 +45,7 @@
           :loading="loading"
           class="mt-2"
           text="Next"
+          color="indigo-darken-3"
           block
           :disabled="isFormInvalid"
           @click="submit()"

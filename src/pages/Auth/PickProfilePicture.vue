@@ -43,7 +43,7 @@ const store = useAppStore()
 
 const file = ref()
 const loading = ref(false)
-const displayedImage = ref(store.app.user.photoURL)
+const displayedImage = ref(store.user.photoURL)
 const uploadedImage = ref('')
 function displayImage() {
   uploadedImage.value = file.value.$el.children[1].children[0].children[2].children[2].files[0]
@@ -58,7 +58,7 @@ function skip() {
 async function next() {
   loading.value = true
 
-  const uid = store.app.user.uid
+  const uid = store.user.uid
   let extension = uploadedImage.value.name.split('.')[1]
 
   const imgPath = 'users/avatars/' + uid + '.' + extension

@@ -39,8 +39,8 @@ const router = useRouter()
 const store = useAppStore()
 
 const data = reactive({
-  username: store.app.user.username,
-  email: store.app.user.email,
+  username: store.user.username,
+  email: store.user.email,
   password: ''
 })
 const passwordMeter = ref('')
@@ -50,8 +50,8 @@ async function checkStrength() {
 }
 
 async function submit() {
-  let res = await store.createPassword(store.app.user.uid, data.password)
-  await store.login({ id: store.app.user.email, password: data.password })
+  let res = await store.createPassword(store.user.uid, data.password)
+  await store.login({ id: store.user.email, password: data.password })
 
   if (res) router.push('/')
   else console.log(res)

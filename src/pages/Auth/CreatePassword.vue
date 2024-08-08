@@ -43,8 +43,8 @@ async function checkStrength() {
 }
 
 async function submit() {
-  let res = await store.createPassword(store.app.user.uid, password.value)
-  await store.login({ id: store.$state.app.user.email, password: password.value })
+  let res = await store.createPassword(store.user.uid, password.value)
+  await store.login({ id: store.user.email, password: password.value })
 
   if (res) router.push('/auth/pick-profile-picture')
   else console.log(res)

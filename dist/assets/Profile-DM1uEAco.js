@@ -1,0 +1,1 @@
+import{_ as e}from"./_plugin-vue_export-helper-DlAUqK2U.js";import{f as o,o as r}from"./index-Rn7jKIq7.js";const c={};function t(n,f){return r(),o("div",null,"Profiles Page")}const _=e(c,[["render",t]]);export{_ as default};

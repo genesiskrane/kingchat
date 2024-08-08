@@ -36,7 +36,7 @@ const store = useAppStore()
 
 const alert = ref(false)
 const code = ref('')
-const email = hideEmail(store.app.user.email)
+const email = hideEmail(store.user.email)
 
 function hideEmail(email) {
   console.log(email)
@@ -53,7 +53,7 @@ function hideEmail(email) {
 
 async function verify() {
   if (code.value.length == 6) {
-    let isVerified = await store.verifyOTP({ uid: store.app.user.uid, code: code.value })
+    let isVerified = await store.verifyOTP({ uid: store.user.uid, code: code.value })
 
     console.log(isVerified)
     if (isVerified) {

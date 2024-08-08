@@ -45,7 +45,7 @@ import { useVuelidate } from '@vuelidate/core'
 const router = useRouter()
 const store = useAppStore()
 
-const data = reactive({ username: store.app.user.username })
+const data = reactive({ username: store.user.username })
 const errorMessage = ref('')
 const message = ref('')
 const isUsertaken = ref(false)
@@ -87,7 +87,7 @@ function checkError() {
   } else errorMessage.value = ''
 }
 function finish() {
-  const uid = store.app.user.uid
+  const uid = store.user.uid
   store.updateUsername(uid, data.username)
   router.push('/home')
 }
