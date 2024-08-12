@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="h-screen">
     <keep-alive>
       <v-navigation-drawer v-model="drawer">
         <side-bar></side-bar>
@@ -25,7 +25,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container class="ma-0 pa-0 mx-auto">
+      <v-container class="container h-full ma-0 pa-0 mx-auto">
         <router-view></router-view>
 
         <!-- <bottom-navigation></bottom-navigation> -->
@@ -47,3 +47,9 @@ const router = useRouter()
 
 let drawer = ref(false)
 </script>
+
+<style scoped>
+.container > div {
+  height: 100%;
+}
+</style>
