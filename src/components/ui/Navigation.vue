@@ -29,9 +29,10 @@ const menu = [
     icon: 'home',
     public: true
   },
-  { name: 'Chats', route: 'chats', icon: 'envelop', public: false },
+  { name: 'Chats', route: 'chats', icon: 'envelop', public: true },
   { name: 'Rooms', route: 'rooms', icon: 'door', public: true },
   { name: 'Games', route: 'games', icon: 'gamepad', public: true },
+  { name: 'Books', route: 'books', icon: 'book', public: true },
   // { name: "Explore", route: "/explore", icon: "search" },
   // { name: "Notifications", route: "/notifications", icon: "notifications" },
   // { name: "Bookmarks", route: "/bookmarks", icon: "bookmark" },

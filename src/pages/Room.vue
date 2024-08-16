@@ -41,7 +41,7 @@ const { back } = inject('app')
 // Components
 import SideBar from '../components/ui/SideBar.vue'
 import Messenger from '../components/ui/Messenger.vue'
-import Bubbles from '@/components/room/Bubbles.vue'
+import Bubbles from '../components/room/Bubbles.vue'
 
 const store = useAppStore()
 const drawer = ref(false)

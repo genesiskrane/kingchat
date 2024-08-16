@@ -43,11 +43,11 @@ async function init() {
   createScene()
 
   setRenderer()
-
   configControls()
 }
 
 function finalize() {
+  setRaycaster()
   fitCameraView(mesh.get('board'))
 
   // Animate Scene
@@ -91,7 +91,7 @@ function addLights() {
   const color = 0xffffff
   const intensity = 3
   const light = new THREE.DirectionalLight(color, intensity)
-  light.position.set(-1, 2, 4)
+  light.position.set(0, 0, 0)
   scene.add(light)
 }
 
@@ -110,6 +110,40 @@ function configControls() {
   controls.update()
 }
 
+function setRaycaster() {
+  const origin = new THREE.Vector3(0, 0, camera.position.z)
+  const target = new THREE.Vector3(0, 0, 0)
+  const direction = target.clone().sub(origin).normalize()
+
+  const raycaster = new THREE.Raycaster(origin, direction)
+  const mouse = new THREE.Vector2()
+
+  const onDocumentMouseDown = (event) => {
+    console.log('mouse down')
+
+    event.preventDefault()
+    mouse.x = (event.clientX / window.innerWidth) * 2 - 1
+    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+    raycaster.setFromCamera(mouse, camera)
+    const rayHelper = new THREE.ArrowHelper(direction, origin, 10, 0xff0000)
+    scene.add(rayHelper)
+    const intersects = raycaster.intersectObject(mesh.get('cube'))
+    console.log(intersects)
+  }
+  const onDocumentMouseMove = () => {}
+  const onDocumentMouseUp = () => {}
+  const onDocumentTouchStart = () => {}
+  const onDocumentTouchMove = () => {}
+  const onDocumentTouchEnd = () => {}
+
+  window.addEventListener('mousedown', onDocumentMouseDown, false)
+  window.addEventListener('mousemove', onDocumentMouseMove, false)
+  window.addEventListener('mouseup', onDocumentMouseUp, false)
+  window.addEventListener('touchstart', onDocumentTouchStart, false)
+  window.addEventListener('touchmove', onDocumentTouchMove, false)
+  window.addEventListener('touchend', onDocumentTouchEnd, false)
+}
 function createScene() {
   let board = mesh.get('board')
   let cube = mesh.get('cube')

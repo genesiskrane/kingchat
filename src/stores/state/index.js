@@ -8,7 +8,25 @@ export function useState() {
     isLoggedIn: false
   })
   const user = reactive({})
-  const chats = ref([])
+  const chats = ref([
+    {
+      profile: {
+        _id: 'xxxxxx',
+        username: 'CAC_APP_ROBOT',
+        displayName: 'CAC APP',
+        photoURL:
+          'https://storage.googleapis.com/kingchatone.appspot.com/users/avatars/9rNXsPIZWWYOCI5jbEyMU20Lwcz2.jpg',
+        lastSeen: '1722756268877'
+      },
+      messages: [
+        {
+          text: 'Welcome to The CAC App',
+          time: Date.now()
+        }
+      ],
+      lastMessage: {}
+    }
+  ])
   const rooms = reactive({})
   const online = ref([])
   const recent = ref([])

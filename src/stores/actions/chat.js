@@ -24,7 +24,7 @@ export function useChat() {
     // Sort Main Chats
     for (let [index, chat] of chats.entries()) {
       chat.messages.sort((a, b) => a.time - b.time)
-
+console.log(chat);
       chat.lastMessage = {
         message: chat.messages[chat.messages.length - 1].text,
         time: chat.messages[chat.messages.length - 1].time,

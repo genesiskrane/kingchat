@@ -54,4 +54,5 @@ const getBoardHTML = ({ width, height }) => {
 
   return bound
 }
+
 export { getBoardHTML }

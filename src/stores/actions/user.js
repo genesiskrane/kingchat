@@ -26,15 +26,16 @@ function useUser() {
         data.user.uid = data.user._id
 
         store.$patch({ user: data.user })
-        store.$patch({ chats: data.chats })
+        store.chats.push(...data.chats)
+        store.sortChats()
+        store.sendChatDeliveryReciepts()
       } catch (error) {
         console.log(error)
       }
-
-      store.sortChats()
-      store.sendChatDeliveryReciepts()
     } else {
       store.user.uid = 'anonymous'
+      store.initSockets(store.user.uid)
+      store.sortChats()
     }
 
     try {

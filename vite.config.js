@@ -7,8 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       three: path.resolve(__dirname, 'src/assets/js/three.js'),
-      GLTFLoader: path.resolve(__dirname, 'src/assets/js/GLTFLoader.js')
-      ,OrbitControls: path.resolve(__dirname, 'src/assets/js/OrbitControls.js')
+      GLTFLoader: path.resolve(__dirname, 'src/assets/js/GLTFLoader.js'),
+      OrbitControls: path.resolve(__dirname, 'src/assets/js/OrbitControls.js')
     }
   },
   plugins: [vue()]

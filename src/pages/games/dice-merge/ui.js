@@ -42,7 +42,6 @@ function createAllMesh({ width, height }) {
 
   // Create Cube Mesh
   const cube = new THREE.Mesh(models.cube, new THREE.MeshBasicMaterial({ color: 'red' }))
-  cube.scale.set(2, 2, 2)
 
   // Scale Cube to fit Board Cells
   // Calculate the bounding box of the cube
@@ -56,18 +55,19 @@ function createAllMesh({ width, height }) {
   boardDimensions.getSize(boardSize)
 
   console.log(boardDimensions, cubeDimensions)
+
   // Desired cube size
-  const desiredSize = boardDimensions.max.x * 2 - 32 / 5
+  const size =
+    boardDimensions.max.x * 2 - 32 > 500
+      ? (500 - 32) / 5 - 8
+      : (boardDimensions.max.x * 2 - 32) / 5 - 8
 
-  console.log(desiredSize)
-  
   // Calculate the scale factors
-  const scaleX = desiredSize / cubeSize.x
-  const scaleY = desiredSize / cubeSize.y
-  const scaleZ = desiredSize / cubeSize.z
+  const scaleX = size / cubeSize.x
+  const scaleY = size / cubeSize.y
+  const scaleZ = size / cubeSize.z
 
-  console.log(scaleX, scaleY, scaleZ)
-  // Apply the scale to the model
+  // Apply the scale to the cube
   cube.scale.set(scaleX, scaleY, scaleZ)
 
   // All All Created Mesh to Mesh Map
