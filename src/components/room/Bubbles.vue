@@ -113,7 +113,7 @@
 </template>
 
 <script setup>
-import { useAppStore } from '@/stores'
+import { useAppStore } from '../../stores'
 import { ref, computed } from 'vue'
 
 const store = useAppStore()

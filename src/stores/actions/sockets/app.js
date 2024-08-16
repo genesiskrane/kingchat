@@ -1,4 +1,4 @@
-import { useAppStore } from '../../'
+import { useAppStore } from '../..'
 
 const initAppSocket = (socket) => {
   socket.on('connect', () => socket.emit('init'))

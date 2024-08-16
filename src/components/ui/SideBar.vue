@@ -2,13 +2,7 @@
   <div id="sidebar" class="flex flex-col justify-between h-screen">
     <div>
       <header class="flex px-4 py-8 gap-4">
-        <div class="p-2 bg-red-500 rounded-2xl">
-          <v-img
-            class="w-20 h-20 "
-            src="../assets/img/icon-black.svg"
-            aspect-ratio="1"
-          ></v-img>
-        </div>
+        <logo></logo>
         <div class="grid items-center">
           <span class="">King Chat</span>
         </div>
@@ -25,6 +19,7 @@
 </template>
 
 <script setup>
-import Navigation from '../ui/Navigation.vue'
-import AppFooter from '../ui/Footer.vue'
+import Logo from './Logo.vue'
+import Navigation from './Navigation.vue'
+import AppFooter from './Footer.vue'
 </script>

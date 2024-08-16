@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client'
-import { useAppStore } from '../../'
+import { useAppStore } from '../..'
 import initAppSocket from './app'
 import initRoomsSocket from './room'
 

@@ -1,5 +1,6 @@
 <template>
   <router-view></router-view>
+
 </template>
 
 <script setup>
@@ -17,3 +18,5 @@ provide('app', {
   back
 })
 </script>
+
+

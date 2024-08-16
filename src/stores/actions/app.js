@@ -1,5 +1,8 @@
+import { useFavicon } from '@vueuse/core'
 import axios from 'axios'
 import { useAppStore } from '..'
+
+import colors from 'vuetify/util/colors'
 
 // Configs
 axios.defaults.baseURL =
@@ -12,6 +15,15 @@ function useApp() {
 
   async function init() {
     console.log('App Initializing')
+
+    console.log(colors)
+
+    // Set Theme Color
+    store.app.themeColor = 'red'
+
+    // Set App Favicon
+    const icon = useFavicon()
+    icon.value = `../../assets/${store.app.themeColor}`
 
     // Initialize Chat Reciepts
     const chatReciepts = sessionStorage.getItem('reciepts')

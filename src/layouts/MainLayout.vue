@@ -37,8 +37,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useAppStore } from '@/stores'
-import SideBar from '../components/app/SideBar.vue'
+import { useAppStore } from '../stores'
+import SideBar from '../components/ui/SideBar.vue'
 // import BottomNavigation from '../components/BottomNavigation.vue'
 
 const store = useAppStore()

@@ -30,7 +30,7 @@
 
 <script setup>
 import { inject } from 'vue'
-import { useAppStore } from '@/stores'
+import { useAppStore } from '../../stores'
 import { useRoute } from 'vue-router'
 
 const { back } = inject('app')

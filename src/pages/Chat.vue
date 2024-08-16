@@ -35,7 +35,7 @@
 <script setup>
 import { ref, reactive, onUnmounted, inject } from 'vue'
 
-import SideBar from '../components/app/SideBar.vue'
+import SideBar from '../components/ui/SideBar.vue'
 import Chat from '../components/chat/Chat.vue'
 
 const drawer = ref(false)

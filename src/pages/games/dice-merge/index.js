@@ -1,176 +1,121 @@
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
-import { start, move, end, cancel } from './events'
+import { OrbitControls } from 'OrbitControls'
+import { GLTFLoader } from 'GLTFLoader'
 
-const loader = new GLTFLoader()
+import { getUIs } from './ui'
 
 let camera
-let cubeGeometry
+let scene = new THREE.Scene()
+const renderer = new THREE.WebGLRenderer()
 
-const sides = new Map()
-sides.set('1', {
-  color: '#ffffff',
-  nodeColor: 'red',
-  cubeRotation: [0.2, 0, 0],
-  position: [0, 50, 0],
-  cameraPosition: [0, 60, 0],
-  rotate: [1.51208, 0, 0],
-  positions: [[0, 0, 0]]
-})
-sides.set('2', {
-  color: '#fd2f2c',
-  nodeColor: '#ffffff',
-  cubeRotation: [0.2, 0, 0],
-  position: [0, 0, 50],
-  cameraPosition: [0, 0, 60],
-  rotate: [3.02416, 0, 0],
-  positions: [
-    [20, 20, 0],
-    [-20, -20, 0]
-  ]
-})
-sides.set('3', {
-  color: '#1056fa',
-  position: [-50, 0, 0],
-  cubeRotation: [0, 0, 0.2],
-  cameraPosition: [-60, 0, 0],
-  rotate: [0, 1.51208, 0],
-  positions: [
-    [20, -20, 0],
-    [0, 0, 0],
-    [-20, 20, 0]
-  ]
-})
-sides.set('4', {
-  color: '#b900fe',
-  position: [50, 0, 0],
-  cubeRotation: [0, 0, -0.2],
-  cameraPosition: [60, 0, 0],
-  rotate: [0, -1.51208, 0],
-  positions: [
-    [20, 20, 0],
-    [20, -20, 0],
-    [-20, 20, 0],
-    [-20, -20, 0]
-  ]
-})
-sides.set('5', {
-  color: '#fe90fe',
-  position: [0, 0, -50],
-  cubeRotation: [-0.2, 0, 0],
-  cameraPosition: [0, 0, -60],
-  rotate: [0, 0, 0],
-  positions: [
-    [20, 20, 0],
-    [20, -20, 0],
-    [0, 0, 0],
-    [-20, 20, 0],
-    [-20, -20, 0]
-  ]
-})
-sides.set('6', {
-  color: '#f78901',
-  position: [0, -50, 0],
-  cubeRotation: [0.2, 0, 0],
-  cameraPosition: [0, -60, 0],
-  rotate: [-1.51208, 0, 0],
-  positions: [
-    [20, 20, 0],
-    [20, -20, 0],
-    [0, 20, 0],
-    [0, -20, 0],
-    [-20, 20, 0],
-    [-20, -20, 0]
-  ]
-})
+let container
+let models = {}
+let mesh
 
-const init = (dice, size) => {
-  loader.load(
-    '../assets/models/cube.gltf',
-    (gltf) => {
-      cubeGeometry = gltf.scene.children[0].children[0].children[0].geometry
-      initDice(dice, size)
-    },
-    undefined,
-    (error) => console.error(error)
-  )
+async function createArena(screenDiv) {
+  container = screenDiv.value
+
+  await load()
+  await init()
+  finalize()
 }
 
-const initDice = (dice, size) => {
-  let width = size
-  let height = size
+const load = async () => {
+  const loader = new GLTFLoader()
 
-  camera = new THREE.OrthographicCamera(-width / 2, width / 2, -height / 2, height / 2, 0.1, 200)
-  let i = 0
+  try {
+    // Get Cube Geometry From Model
+    const gltf = await loader.loadAsync('../assets/models/dice-merge/cube.gltf')
+    models.cube = gltf.scene.children[0].children[0].children[2].geometry
 
-  for (let [key, data] of sides.entries()) {
-    dice[i].style.width = width + 'px'
-    dice[i].style.height = height + 'px'
-
-    let scene = new THREE.Scene()
-
-    let die = createDie(key, data)
-
-    scene.add(die)
-
-    mountCanvas(scene, dice[i], width, height, data.cameraPosition)
-    registerEvents(dice[i])
-    i++
+    console.log(models.cube, gltf.scene.children[0].children[0].children[2].geometry)
+  } catch (e) {
+    console.log(e)
   }
 }
 
-const createDie = (key, data) => {
-  const die = new THREE.Group()
-  const cube = new THREE.Mesh(cubeGeometry, new THREE.MeshBasicMaterial({ color: data.color }))
+async function init() {
+  createCamera(container.offsetWidth, container.offsetHeight)
+  addLights()
 
-  const color = data.nodeColor || '#ffffff'
-  die.add(cube)
+  mesh = await getUIs(models, { width: container.offsetWidth, height: container.offsetHeight })
 
-  for (let [key, data] of sides.entries()) {
-    let num = parseInt(key)
+  createScene()
 
-    const side = new THREE.Group()
-    for (num; num > 0; num--) {
-      let node = new THREE.Mesh(
-        new THREE.CircleGeometry(7.5, 90),
-        new THREE.MeshBasicMaterial({ color })
-      )
+  setRenderer()
 
-      node.material.depthTest = false
-      node.renderOrder = 2
-      side.add(node)
-
-      node.position.set(...data.positions[num - 1])
-    }
-
-    let rotation = data.rotate ? data.rotate : [0, 0, 0]
-    side.rotation.set(...rotation)
-    side.position.set(...data.position)
-    die.add(side)
-  }
-  die.rotation.set(...data.cubeRotation)
-
-  return die
+  configControls()
 }
 
-const mountCanvas = (scene, container, width, height, cameraPosition) => {
-  let renderer = new THREE.WebGLRenderer()
-  camera.position.set(...cameraPosition)
+function finalize() {
+  fitCameraView(mesh.get('board'))
 
-  camera.lookAt(0, 0, 0)
-  // renderer.setClearColor(0x00000, 0)
-  renderer.setSize(width, height)
+  // Animate Scene
+  renderer.setAnimationLoop(() => renderer.render(scene, camera))
+}
+
+// Create Camera
+const createCamera = (width, height) =>
+  (camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000))
+
+// Fitting Camera To Screen
+function fitCameraView(object) {
+  // Step 1: Compute the bounding box of the object
+  const box = new THREE.Box3().setFromObject(object)
+  const boxSize = box.getSize(new THREE.Vector3())
+  const boxCenter = box.getCenter(new THREE.Vector3())
+
+  // Step 2: Determine the distance required to fit the entire object within the camera view
+  const maxDim = Math.max(boxSize.x, boxSize.y, boxSize.z)
+  const fov = camera.fov * (Math.PI / 180) // Convert vertical FOV from degrees to radians
+  let cameraZ = maxDim / (2 * Math.tan(fov / 2))
+
+  // Adjust the camera's position to fit the object, considering the camera's aspect ratio
+  if (camera.aspect > 1) cameraZ /= camera.aspect
+
+  camera.position.set(boxCenter.x, boxCenter.y, cameraZ + boxCenter.z)
+
+  // Step 3: Update the camera
+  camera.lookAt(boxCenter)
+
+  // Optionally, adjust near and far planes
+  camera.near = cameraZ / 100
+  camera.far = cameraZ * 100
+
+  // Update camera projection matrix after modifying properties
+  camera.updateProjectionMatrix()
+}
+
+function addLights() {
+  // Add Lights
+  const color = 0xffffff
+  const intensity = 3
+  const light = new THREE.DirectionalLight(color, intensity)
+  light.position.set(-1, 2, 4)
+  scene.add(light)
+}
+
+// Set Renderer
+function setRenderer() {
+  renderer.setSize(container.offsetWidth, container.offsetHeight)
+  renderer.domElement.style.position = 'absolute'
   container.appendChild(renderer.domElement)
   renderer.render(scene, camera)
 }
 
-const registerEvents = (die) => {
-  // Events
-  die.addEventListener('dragstart', start)
-  die.addEventListener('touchstart', start)
-  die.addEventListener('touchmove', move)
-  die.addEventListener('touchend', end)
-  die.addEventListener('touchcancel', cancel)
+// Optional
+function configControls() {
+  const controls = new OrbitControls(camera, container)
+  controls.target.set(0, 0, 0)
+  controls.update()
 }
 
-export { init }
+function createScene() {
+  let board = mesh.get('board')
+  let cube = mesh.get('cube')
+
+  scene.add(cube)
+  scene.add(board)
+}
+
+export { createArena }

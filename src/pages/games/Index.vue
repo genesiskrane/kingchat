@@ -14,8 +14,8 @@
 </template>
 
 <script setup>
-import { useAppStore } from '@/stores'
-import games from '@/pages/games'
+import { useAppStore } from '../../stores'
+import games from '.'
 
 const store = useAppStore()
 

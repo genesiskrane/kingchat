@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { useAppStore } from '@/stores'
+import { useAppStore } from '../../stores'
 
 const store = useAppStore()
 

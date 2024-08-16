@@ -39,7 +39,7 @@ import { useAppStore } from '../stores'
 const { back } = inject('app')
 
 // Components
-import SideBar from '../components/app/SideBar.vue'
+import SideBar from '../components/ui/SideBar.vue'
 import Messenger from '../components/ui/Messenger.vue'
 import Bubbles from '@/components/room/Bubbles.vue'
 
