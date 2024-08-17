@@ -20,7 +20,7 @@ export function useAuth() {
         store.$patch({ user: { uid: userRecord.user.uid } })
         store.app.isLoggedIn = true
 
-        await store.initUser()
+        await store.getUser()
 
         return true
       } catch (error) {
@@ -40,7 +40,7 @@ export function useAuth() {
         store.$patch({ user: { uid: userRecord.user.uid } })
         store.app.isLoggedIn = true
 
-        await store.initUser()
+        await store.getUser()
 
         return true
       } catch (error) {

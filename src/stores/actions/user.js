@@ -1,31 +1,36 @@
-import axios from 'axios'
-import { storage, ref, uploadBytes } from '../../func/firebase'
-import { useAppStore } from '..'
+import axios from 'axios';
+import { storage, ref, uploadBytes } from '../../func/firebase';
+import { useAppStore } from '..';
 
 // Configs
 axios.defaults.baseURL =
   process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
     ? 'https://www.kingchat.one/api'
-    : 'http://localhost:3000/api'
+    : 'http://localhost:3000/api';
 
 function useUser() {
-  const store = useAppStore()
+  const store = useAppStore();
 
-  async function getUser() {
-    store.initSockets(store.user.uid)
+  async function getUser(uid) {
+    store.initSockets(uid);
 
-    try {
-      let { data } = await axios.post('/auth/get-user', {
-        uid: store.user.uid
-      })
+    if (uid != 'anonymous') {
+      try {
+        let { data } = await axios.post('/auth/get-user', {
+          uid: store.user.uid
+        });
 
-      data.user.uid = data.user._id
+        data.user.uid = data.user._id;
 
-      store.$patch({ user: data.user })
-      store.chats.push(...data.chats)
-      store.sendChatDeliveryReciepts()
-    } catch (error) {
-      console.log(error)
+        store.$patch({ user: data.user });
+        store.chats.push(...data.chats);
+        store.sendChatDeliveryReciepts();
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (uid == 'anonymous') {
     }
   }
 
@@ -34,37 +39,37 @@ function useUser() {
       let isUsernameUpdated = await axios.post('/auth/update-username', {
         uid,
         username
-      })
-      store.getUser()
-      return isUsernameUpdated
+      });
+      store.getUser();
+      return isUsernameUpdated;
     } catch (error) {
-      console.log(error)
-      return error
+      console.log(error);
+      return error;
     }
   }
 
   async function upload(file, imgPath) {
-    const imgRef = ref(storage, imgPath)
-    const snapshot = await uploadBytes(imgRef, file)
+    const imgRef = ref(storage, imgPath);
+    const snapshot = await uploadBytes(imgRef, file);
 
-    let bucket = snapshot.metadata.bucket
-    let path = snapshot.metadata.fullPath
-    let imgURL = `https://storage.googleapis.com/${bucket}/${path}`
-    return imgURL
+    let bucket = snapshot.metadata.bucket;
+    let path = snapshot.metadata.fullPath;
+    let imgURL = `https://storage.googleapis.com/${bucket}/${path}`;
+    return imgURL;
   }
 
   async function updateProfilePhotoImage(uid, imgURL) {
-    store.$patch({ user: { photoURL: imgURL } })
+    store.$patch({ user: { photoURL: imgURL } });
 
     try {
       let { data } = await axios.post('/auth/update-profile-photo-image', {
         uid,
         imgURL
-      })
-      await store.getUser()
-      return data
+      });
+      await store.getUser();
+      return data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -73,7 +78,7 @@ function useUser() {
     updateUsername,
     upload,
     updateProfilePhotoImage
-  }
+  };
 }
 
-export { useUser }
+export { useUser };

@@ -28,24 +28,26 @@
       </v-main>
     </v-app>
 
-    
+    <div class="card flex justify-center">
+      <Button label="Check" icon="pi pi-check" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { inject } from 'vue'
-import { useAppStore } from '../../stores'
-import { useRoute } from 'vue-router'
+import { inject } from 'vue';
+import { useAppStore } from '../../stores';
+import { useRoute } from 'vue-router';
 
-const { back } = inject('app')
+const { back } = inject('app');
 
-const route = useRoute()
-const store = useAppStore()
+const route = useRoute();
+const store = useAppStore();
 
-let paths = route.path.split('/')
-let gameID = paths[paths.length - 1]
+let paths = route.path.split('/');
+let gameID = paths[paths.length - 1];
 
-const game = store.games.find((game) => game.id == gameID)
+const game = store.games.find((game) => game.id == gameID);
 
-const getImgURL = (imgURL) => `../${imgURL}`
+const getImgURL = (imgURL) => `../${imgURL}`;
 </script>
