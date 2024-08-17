@@ -52,6 +52,7 @@ function useApp() {
       //   Get Recent Users, Rooms & Services
       let { data } = await axios.get('/app', { params: { id: store.user.uid } });
 
+      data.services.forEach((service) => store.app.services.push(service.profile));
       store.chats.push(...setUpServices(data.services));
       store.$patch({ recent: data.recent });
       store.$patch({ rooms: data.rooms });

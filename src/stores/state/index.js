@@ -5,7 +5,8 @@ export function useState() {
   const app = reactive({
     name: 'King Chat',
     isInitialized: false,
-    isLoggedIn: false
+    isLoggedIn: false,
+    services: []
   });
   const user = reactive({});
   const chats = ref([]);
