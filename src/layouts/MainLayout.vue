@@ -1,5 +1,5 @@
 <template>
-  <v-app class="h-screen">
+  <v-app class="min-h-screen">
     <keep-alive>
       <v-navigation-drawer v-model="drawer">
         <side-bar></side-bar>

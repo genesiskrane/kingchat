@@ -1,3 +1,14 @@
 <template>
-  <div>Augment's Bookstore</div>
+  <div>
+    <p class="mb-8">Genres</p>
+    <ul>
+      <li v-for="(genre, i) in store.bookStore.genres" :key="i">{{ i + 1 }}) {{ genre }}</li>
+    </ul>
+  </div>
 </template>
+
+<script setup>
+import { useAppStore } from '../../stores'
+
+const store = useAppStore()
+</script>

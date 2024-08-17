@@ -43,7 +43,7 @@ async function init() {
   createScene()
 
   setRenderer()
-  configControls()
+  // configControls()
 }
 
 function finalize() {

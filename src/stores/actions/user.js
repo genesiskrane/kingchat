@@ -11,44 +11,22 @@ axios.defaults.baseURL =
 function useUser() {
   const store = useAppStore()
 
-  async function initUser() {
-    console.log('Reinitializing User Data')
-
-    if (store.user.uid) {
-      // Initialize Socket
-      store.initSockets(store.user.uid)
-
-      try {
-        let { data } = await axios.post('/auth/get-user', {
-          uid: store.user.uid
-        })
-
-        data.user.uid = data.user._id
-
-        store.$patch({ user: data.user })
-        store.chats.push(...data.chats)
-        store.sortChats()
-        store.sendChatDeliveryReciepts()
-      } catch (error) {
-        console.log(error)
-      }
-    } else {
-      store.user.uid = 'anonymous'
-      store.initSockets(store.user.uid)
-      store.sortChats()
-    }
+  async function getUser() {
+    store.initSockets(store.user.uid)
 
     try {
-      //   Get Recent Users & Rooms
-      let { data } = await axios.get('/app', { params: { id: store.user.uid } })
+      let { data } = await axios.post('/auth/get-user', {
+        uid: store.user.uid
+      })
 
-      store.$patch({ recent: data.recent })
-      store.$patch({ rooms: data.rooms })
+      data.user.uid = data.user._id
+
+      store.$patch({ user: data.user })
+      store.chats.push(...data.chats)
+      store.sendChatDeliveryReciepts()
     } catch (error) {
       console.log(error)
     }
-
-    store.$patch({ app: { isInitialized: true } })
   }
 
   async function updateUsername(uid, username) {
@@ -57,7 +35,7 @@ function useUser() {
         uid,
         username
       })
-      store.initUser()
+      store.getUser()
       return isUsernameUpdated
     } catch (error) {
       console.log(error)
@@ -83,7 +61,7 @@ function useUser() {
         uid,
         imgURL
       })
-      await store.initUser()
+      await store.getUser()
       return data
     } catch (error) {
       console.log(error)
@@ -91,7 +69,7 @@ function useUser() {
   }
 
   return {
-    initUser,
+    getUser,
     updateUsername,
     upload,
     updateProfilePhotoImage

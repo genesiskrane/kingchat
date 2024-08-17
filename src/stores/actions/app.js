@@ -33,10 +33,31 @@ function useApp() {
     store.$patch({ user: { uid: JSON.parse(sessionStorage.getItem('uid')) } })
     if (store.user.uid) store.app.isLoggedIn = true
 
-    if (!store.app.isInitialized) await store.initUser()
+    if (!store.app.isInitialized) {
+      store.user.uid = store.user.uid ? store.user.uid : 'anonymous'
+
+      await store.getApp()
+      await store.getUser()
+
+      store.sortChats()
+    }
 
     console.log('App Initialized')
     return
+  }
+
+  async function getApp() {
+    try {
+      //   Get Recent Users & Rooms
+      let { data } = await axios.get('/app', { params: { id: store.user.uid } })
+
+      store.$patch({ recent: data.recent })
+      store.$patch({ rooms: data.rooms })
+      store.$patch({ bookStore: data.bookStore })
+    } catch (error) {
+      console.log(error)
+    }
+    store.$patch({ app: { isInitialized: true } })
   }
 
   async function getProfile(uid) {
@@ -69,6 +90,7 @@ function useApp() {
 
   return {
     init,
+    getApp,
     getProfile,
     send
   }
