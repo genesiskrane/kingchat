@@ -27,9 +27,10 @@
         </v-container>
       </v-main>
     </v-app>
-
-    <div class="card flex justify-center">
-      <Button label="Check" icon="pi pi-check" />
+    <div>
+      <div class="card flex justify-center">
+        <Button label="Check" icon="pi pi-check" />
+      </div>
     </div>
   </div>
 </template>

@@ -37,7 +37,7 @@ const routes = [
       },
       {
         path: '/books',
-        name: 'Books',
+        name: 'Genres',
         component: () => import('../pages/books/Index.vue')
       },
       {

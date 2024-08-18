@@ -48,6 +48,7 @@ app.component('Button', Button);
 
 app.use(vuetify);
 app.use(PrimeVue, {
+  ripple: true,
   theme: {
     preset: Aura
   }

@@ -1,14 +1,24 @@
 <template>
-  <div>
-    <p class="mb-8">Genres</p>
-    <ul>
-      <li v-for="(genre, i) in store.bookStore.genres" :key="i">{{ i + 1 }}) {{ genre.name }}</li>
-    </ul>
+  <div class="py-4">
+    <div class="grid grid-cols-3 gap-y-6">
+      <div v-for="(genre, i) in store.bookStore.genres" :key="i" class="basis-1/3 text-center px-4">
+        <router-link :to="`${genre.id}`">
+          <div>
+            <img
+              class="rounded-sm mx-auto w-full"
+              :src="genre.photoURL"
+              :alt="genre.name + '\'s image'"
+            />
+            <span class="name text-sm font-semibold"> {{ genre.name }} </span>
+          </div>
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { useAppStore } from '../../stores'
+import { useAppStore } from '../../stores';
 
-const store = useAppStore()
+const store = useAppStore();
 </script>

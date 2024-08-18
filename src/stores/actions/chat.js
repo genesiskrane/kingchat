@@ -174,12 +174,11 @@ export function useChat() {
     const lastDelivered = Date.now();
 
     let reciepts = JSON.parse(sessionStorage.getItem('reciepts')) || [];
-    console.log(reciepts);
-
     chats.forEach(({ _id, messages }) => {
       const services = store.app.services.map((service) => service._id);
       const reciever = _id.split(store.user.uid).find((string) => string.length > 0);
 
+      if (!reciever) return;
       const isService = services.includes(reciever);
       if (isService && messages.length <= 1) return;
 

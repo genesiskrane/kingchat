@@ -14,7 +14,7 @@ function useUser() {
   async function getUser(uid) {
     store.initSockets(uid);
 
-    if (uid != 'anonymous') {
+    if (uid !== 'anonymous') {
       try {
         let { data } = await axios.post('/auth/get-user', {
           uid: store.user.uid
