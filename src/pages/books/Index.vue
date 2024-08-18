@@ -1,7 +1,7 @@
 <template>
   <div class="py-4">
     <div class="grid grid-cols-3 gap-y-6">
-      <div v-for="(genre, i) in store.bookStore.genres" :key="i" class="basis-1/3 text-center px-4">
+      <div v-for="(genre, i) in store.bookStore.genres" :key="i" class="text-center px-4">
         <router-link :to="`${genre.id}`">
           <div>
             <img

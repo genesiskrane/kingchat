@@ -18,7 +18,6 @@
             <v-btn id="login" @click="router.push('/auth/login')">
               <span class="">Login</span>
             </v-btn>
-            <v-btn id="signup" @click="router.push('/auth/signup')"> SignUp </v-btn>
           </div>
         </div>
       </v-app-bar-title>
@@ -35,17 +34,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAppStore } from '../stores'
-import SideBar from '../components/ui/SideBar.vue'
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useAppStore } from '../stores';
+import SideBar from '../components/ui/SideBar.vue';
 // import BottomNavigation from '../components/BottomNavigation.vue'
 
-const store = useAppStore()
-const route = useRoute()
-const router = useRouter()
+const store = useAppStore();
+const route = useRoute();
+const router = useRouter();
 
-let drawer = ref(false)
+let drawer = ref(false);
 </script>
 
 <style scoped>
