@@ -1,16 +1,16 @@
-import { useAppStore } from '../stores'
+import { useAppStore } from '../stores';
 
 const routes = [
   {
     path: '/',
     name: 'app',
     beforeEnter: (to, from, next) => {
-      const store = useAppStore()
+      const store = useAppStore();
 
       if (to.path == '/') {
-        if (to.path == '/' && store.app.isLoggedIn) next('/chats')
-        else if (to.path == '/' && !store.app.isLoggedIn) next('/games')
-      } else next()
+        if (to.path == '/' && store.app.isLoggedIn) next('/chats');
+        else if (to.path == '/' && !store.app.isLoggedIn) next('/games');
+      } else next();
     },
 
     component: () => import('../layouts/MainLayout.vue'),
@@ -28,7 +28,19 @@ const routes = [
       {
         path: '/rooms',
         name: 'Rooms',
-        component: () => import('../pages/Rooms.vue')
+        component: () => import('../pages/Rooms.vue'),
+        children: [
+          {
+            path: ':room',
+            component: () => import('../pages/Room.vue'),
+            beforeEnter: async (to) => {
+              const store = useAppStore();
+
+              let roomInfo = await store.openRoom(to);
+              return;
+            }
+          }
+        ]
       },
       {
         path: '/games',
@@ -115,22 +127,23 @@ const routes = [
   {
     path: '/chat',
     beforeEnter: (to, from) => {
-      if (from.path !== '/') sessionStorage.setItem('route', JSON.stringify({ from: from.path }))
-      to.query.origin = JSON.parse(sessionStorage.getItem('route')).from
+      if (from.path !== '/') sessionStorage.setItem('route', JSON.stringify({ from: from.path }));
+      to.query.origin = JSON.parse(sessionStorage.getItem('route')).from;
     },
     children: [{ path: ':username', component: () => import('../pages/Chat.vue') }]
   },
   {
-    path: '/rooms',
+    path: '/rooms'
+  },
+  {
+    path: '/books',
     children: [
       {
-        path: ':room',
-        component: () => import('../pages/Room.vue'),
+        path: ':genre',
+        component: () => import('../pages/books/Genre.vue'),
         beforeEnter: async (to) => {
-          const store = useAppStore()
-
-          let roomInfo = await store.openRoom(to)
-          return
+          const store = useAppStore();
+          await store.getGenre(to.params.genre);
         }
       }
     ]
@@ -149,6 +162,6 @@ const routes = [
     path: '/:catchAll(.*)*',
     component: () => import('../pages/ErrorNotFound.vue')
   }
-]
+];
 
-export default routes
+export default routes;

@@ -3,6 +3,7 @@ import { useAuth } from './auth'
 import { useChat } from './chat'
 import { useUser } from './user'
 import { useRoom } from './room'
+import { useBook } from './book'
 import { useSockets } from './sockets'
 
 export const useActions = () => ({
@@ -11,5 +12,6 @@ export const useActions = () => ({
   ...useAuth(),
   ...useChat(),
   ...useRoom(),
+  ...useBook(),
   ...useSockets()
 })
