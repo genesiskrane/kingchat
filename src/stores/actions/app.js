@@ -56,7 +56,7 @@ function useApp() {
       store.chats.push(...setUpServices(data.services));
       store.$patch({ recent: data.recent });
       store.$patch({ rooms: data.rooms });
-      store.$patch({ bookStore: data.bookStore });
+      store.bookStore.genres.push(...data.bookStore.genres);
 
       function setUpServices(services) {
         let chats = [];

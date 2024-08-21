@@ -43,7 +43,7 @@ async function init() {
   createScene();
 
   setRenderer();
-  configControls()
+  // configControls()
 }
 
 function finalize() {
@@ -118,6 +118,34 @@ function setRaycaster() {
   const raycaster = new THREE.Raycaster(origin, direction);
   const mouse = new THREE.Vector2();
 
+  let objectInFocus;
+
+  const onDocumentClick = (event) => {
+    console.log('clicked');
+    console.log(event.clientX);
+    console.log(event.clientY);
+    console.log(container.offsetWidth);
+    console.log(container.offsetHeight);
+    const rect = container.getBoundingClientRect();
+    console.log(rect);
+
+    event.preventDefault();
+    mouse.x = ((event.clientX - rect.left) / container.offsetWidth) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / container.offsetHeight) * 2 + 1;
+    console.log(mouse.x, mouse.y);
+
+    raycaster.setFromCamera(mouse, camera);
+    const rayHelper = new THREE.ArrowHelper(direction, origin, 10, 0xff0000);
+    scene.add(rayHelper);
+    const intersects = raycaster.intersectObject(mesh.get('cube'));
+    console.log(intersects);
+    if (intersects.length > 0) {
+      const cube = mesh.get('cube'); //Get Cube
+      objectInFocus = cube; // Save As Object in Focus
+      cube.position.z += 50; // Lift Cube
+    }
+  };
+
   const onDocumentMouseDown = (event) => {
     console.log('mouse down');
     console.log(event.clientX);
@@ -137,13 +165,26 @@ function setRaycaster() {
     scene.add(rayHelper);
     const intersects = raycaster.intersectObject(mesh.get('cube'));
     console.log(intersects);
+    if (intersects.length > 0) {
+      const cube = mesh.get('cube'); //Get Cube
+      objectInFocus = cube; // Save As Object in Focus
+      cube.position.z += 50; // Lift Cube
+    }
   };
   const onDocumentMouseMove = () => {};
-  const onDocumentMouseUp = () => {};
+  const onDocumentMouseUp = (event) => {
+    // Check If There Was An Object In Focus
+    if (objectInFocus) {
+      const cube = objectInFocus; // Get Object In Focus
+      cube.position.z -= 20; // Drop Object in Focus
+    }
+    console.log(event);
+  };
   const onDocumentTouchStart = () => {};
   const onDocumentTouchMove = () => {};
   const onDocumentTouchEnd = () => {};
 
+  container.addEventListener('click', onDocumentClick, false);
   container.addEventListener('mousedown', onDocumentMouseDown, false);
   container.addEventListener('mousemove', onDocumentMouseMove, false);
   container.addEventListener('mouseup', onDocumentMouseUp, false);

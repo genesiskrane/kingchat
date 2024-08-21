@@ -15,11 +15,24 @@ function useBook() {
     const { name } = store.bookStore.genres.find((genre) => genre.id == id);
     const { data } = await axios.get('/books/get-genre?genre=' + name);
 
-    store.bookStore[id] = data;
+    store.bookStore.books.push(...data);
+  }
+
+  async function getBook(id) {
+    const book = store.bookStore.books.find((book) => book._id == id);
+    if (!book) {
+      try {
+        const { data } = await axios.get('/books/get-book?bookID=' + id);
+        store.bookStore.books.push(data);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   }
 
   return {
-    getGenre
+    getGenre,
+    getBook
   };
 }
 

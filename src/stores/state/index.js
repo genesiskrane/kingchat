@@ -13,7 +13,7 @@ export function useState() {
   const rooms = reactive({});
   const online = ref([]);
   const recent = ref([]);
-  const bookStore = ref({});
+  const bookStore = ref({ books: [], genres: [] });
   const sockets = reactive({ app: null, room: null });
 
   return {

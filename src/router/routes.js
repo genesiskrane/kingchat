@@ -149,6 +149,19 @@ const routes = [
     ]
   },
   {
+    path: '/book',
+    children: [
+      {
+        path: ':bookID',
+        component: () => import('../pages/books/Book.vue'),
+        beforeEnter: async (to) => {
+          const store = useAppStore();
+          await store.getBook(to.params.bookID);
+        }
+      }
+    ]
+  },
+  {
     name: 'Game',
     path: '/games',
     component: () => import('../pages/games/Game.vue'),
