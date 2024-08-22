@@ -12,8 +12,6 @@ export function useSockets() {
   const store = useAppStore();
 
   async function initSockets(uid) {
-    console.log('Reinitializing Sockets');
-
     store.sockets.app = io(ioURL, {
       auth: { uid }
     });
@@ -22,7 +20,6 @@ export function useSockets() {
       auth: { uid }
     });
 
-    console.log(store.sockets);
     initAppSocket(store.sockets.app);
     initRoomsSocket(store.sockets.room);
   }

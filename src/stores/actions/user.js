@@ -14,7 +14,7 @@ function useUser() {
   async function getUser(uid) {
     store.initSockets(uid);
 
-    if (uid !== 'anonymous') {
+    if (uid.substring(0, 9) !== 'anonymous') {
       try {
         let { data } = await axios.post('/auth/get-user', {
           uid: store.user.uid
@@ -23,15 +23,15 @@ function useUser() {
         data.user.uid = data.user._id;
 
         store.$patch({ user: data.user });
-        store.chats.push(...data.chats);
+
+        store.chats = findAndReplace(data.chats);
         store.sendChatDeliveryReciepts();
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     }
 
-    if (uid == 'anonymous') {
-    }
+    store.sortChats();
   }
 
   async function updateUsername(uid, username) {
@@ -71,6 +71,26 @@ function useUser() {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function findAndReplace(incomingChats) {
+    let updatedChatList = [...store.chats];
+    const remainingElements = [];
+    console.log(updatedChatList);
+    for (let i = 0; i < incomingChats.length; i++) {
+      const index = updatedChatList.findIndex((chat) => chat._id == incomingChats[i]._id);
+      console.log(index, incomingChats[i].profile.displayName);
+      if (index !== -1) console.log(updatedChatList[index]._id == incomingChats[i]._id);
+      if (index !== -1) {
+        console.log('Adding', incomingChats[i]);
+        updatedChatList[index] = incomingChats[i];
+        console.log(updatedChatList.length);
+      } else remainingElements.push(incomingChats[i]);
+    }
+
+    updatedChatList.push(...remainingElements);
+
+    return updatedChatList;
   }
 
   return {

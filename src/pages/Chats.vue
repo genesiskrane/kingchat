@@ -41,16 +41,17 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useAppStore } from '../stores'
+import { computed, onUnmounted } from 'vue';
+import { useAppStore } from '../stores';
 
-const store = useAppStore()
+const store = useAppStore();
 
-const chats = computed(() => store.$state.chats)
+const chats = computed(() => store.chats);
 
+onUnmounted(() => console.log('Chats Just Unmounted'));
 function getLink(username) {
   return {
     path: `/chat/${username}`
-  }
+  };
 }
 </script>

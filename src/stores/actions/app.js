@@ -1,15 +1,17 @@
+import ShortUniqueId from 'short-unique-id';
 import { useFavicon } from '@vueuse/core';
 import axios from 'axios';
 import { useAppStore } from '..';
 
 import colors from 'vuetify/util/colors';
-import { checkActionCode } from 'firebase/auth';
 
 // Configs
 axios.defaults.baseURL =
   process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
     ? 'https://www.kingchat.one/api'
     : 'http://localhost:3000/api';
+
+const uid = new ShortUniqueId({ length: 5 });
 
 function useApp() {
   const store = useAppStore();
@@ -35,12 +37,12 @@ function useApp() {
     if (store.user.uid) store.app.isLoggedIn = true;
 
     if (!store.app.isInitialized) {
-      store.user.uid = store.user.uid ? store.user.uid : 'anonymous';
-
+      store.chats = [];
+      store.user.uid = store.user.uid ? store.user.uid : 'anonymous-' + uid.rnd();
+      console.log('Now getting App');
       await store.getApp(store.user.uid);
+      console.log(store.chats);
       await store.getUser(store.user.uid);
-
-      store.sortChats();
     }
 
     console.log('App Initialized');
@@ -48,12 +50,14 @@ function useApp() {
   }
 
   async function getApp() {
+    console.log('getting App');
     try {
       //   Get Recent Users, Rooms & Services
       let { data } = await axios.get('/app', { params: { id: store.user.uid } });
-
+      console.log(data);
       data.services.forEach((service) => store.app.services.push(service.profile));
       store.chats.push(...setUpServices(data.services));
+      console.log(store.chats);
       store.$patch({ recent: data.recent });
       store.$patch({ rooms: data.rooms });
       store.bookStore.genres.push(...data.bookStore.genres);
@@ -66,6 +70,7 @@ function useApp() {
           service.meta = {};
           service.meta[service.profile._id] = {};
           service.meta[store.user.uid] = {};
+
           chats.push(service);
         });
         return chats;

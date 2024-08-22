@@ -141,76 +141,76 @@
 </template>
 
 <script setup>
-import { useAppStore } from '../../stores'
-import { ref,  computed, onMounted } from 'vue'
+import { useAppStore } from '../../stores';
+import { ref, computed, onMounted } from 'vue';
 
-const store = useAppStore()
-const { chat } = defineProps(['chat'])
+const store = useAppStore();
+const { chat } = defineProps(['chat']);
 
-const bubbleDiv = ref(null)
-defineExpose({ bubbleDiv })
+const bubbleDiv = ref(null);
+defineExpose({ bubbleDiv });
 
-const sender = store.user.uid
-const reciever = chat._id.split(sender).find((id) => id.length > 0)
+const sender = store.user.uid;
+const reciever = chat._id.split(sender).find((id) => id.length > 0);
 
-let observer
-const status = computed(() => chat.meta)
+let observer;
+const status = computed(() => chat.meta);
 
 let messages = computed(() => {
-  let messages = {}
-  messages.read = chat.messages.filter((message) => message.time < status.value[sender].lastRead)
-  messages.unread = chat.messages.filter((message) => message.time > status.value[sender].lastRead)
+  let messages = {};
+  messages.read = chat.messages.filter((message) => message.time < status.value[sender].lastRead);
+  messages.unread = chat.messages.filter((message) => message.time > status.value[sender].lastRead);
 
-  return messages
-})
+  return messages;
+});
 
 function mountReadTriggers() {
-  const marginBottom = bubbleDiv.value.parentElement.children[1].offsetHeight
+  const marginBottom = bubbleDiv.value.parentElement.children[1].offsetHeight;
 
   let options = {
     root: null,
     rootMargin: `0px 0px -${marginBottom}px 0px`,
     threshold: 0
-  }
+  };
 
-  observer = new IntersectionObserver(sendReciept, options)
+  observer = new IntersectionObserver(sendReciept, options);
 
-  let bubbles = []
-  let bubbleDivChildren = bubbleDiv.value.children
+  let bubbles = [];
+  let bubbleDivChildren = bubbleDiv.value.children;
 
   for (let bubble of bubbleDivChildren) {
-    const target = bubble.children[0].children[0].children[1].children[1]
-    if (target.getAttribute('time')) bubbles.push(target)
+    const target = bubble.children[0].children[0].children[1].children[1];
+    if (target.getAttribute('time')) bubbles.push(target);
   }
 
   bubbles.forEach((target) => {
-    const time = target.getAttribute('time')
+    const time = target.getAttribute('time');
     if (time > status.value[sender].lastRead) {
-      observer.observe(target)
+      observer.observe(target);
     }
-  })
+  });
 }
 
 onMounted(() => {
-  const observer = new MutationObserver(() => mountReadTriggers())
-  observer.observe(bubbleDiv.value, { childList: true })
-})
+  const observer = new MutationObserver(() => mountReadTriggers());
+  observer.observe(bubbleDiv.value, { childList: true });
+});
 
 function getSide(sender) {
-  return store.user.uid == sender ? 'right' : 'left'
+  return store.user.uid == sender ? 'right' : 'left';
 }
 
 function sendReciept(entries) {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      const time = entry.target.getAttribute('time')
+      const time = entry.target.getAttribute('time');
       if (time > status.value[sender].lastRead) {
-        console.log('Sending Read Reciept')
-        store.sendReciept(chat._id, { lastRead: time })
-        observer.unobserve(entry.target)
+        console.log('Sending Read Reciept');
+        store.sendReciept(chat._id, { lastRead: time });
+        observer.unobserve(entry.target);
       }
     }
-  })
+  });
 }
 </script>
 
@@ -223,9 +223,8 @@ function sendReciept(entries) {
   max-width: 75%;
   border-radius: calc(var(--r) + var(--t)) / var(--r);
   background-clip: border-box;
-  mask:
-    radial-gradient(100% 100% at var(--p) 0px, #15194f00 99%, #0b0 102%) var(--p) 100% / var(--t)
-      var(--t) no-repeat,
+  mask: radial-gradient(100% 100% at var(--p) 0px, #15194f00 99%, #0b0 102%) var(--p) 100% /
+      var(--t) var(--t) no-repeat,
     linear-gradient(#000 0 0) padding-box;
   border-inline: var(--t) solid transparent;
 }

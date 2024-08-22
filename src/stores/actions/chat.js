@@ -15,7 +15,6 @@ export function useChat() {
     const chats = store.chats;
     const recent = store.recent;
     console.log('Sorting Chats');
-    console.log(store.chats);
 
     // Sort Recent Active Users
     if (!store.app.isInitialized)
@@ -25,7 +24,6 @@ export function useChat() {
     // Sort Main Chats
     for (let [index, chat] of chats.entries()) {
       chat.messages.sort((a, b) => a.time - b.time);
-      console.log(chat);
       chat.lastMessage = {
         message: chat.messages[chat.messages.length - 1].text,
         time: chat.messages[chat.messages.length - 1].time,
@@ -56,6 +54,8 @@ export function useChat() {
         uid
       );
       store.chats.push(chat);
+      store.sortChats();
+      console.log(chat, store.chats);
     } else {
       store.chats[chatIndex].messages.push(message);
       store.chats[chatIndex].lastMessage = {
@@ -64,7 +64,7 @@ export function useChat() {
         displayTime: store.formatTimeDisplay(message.time)
       };
     }
-
+    console.log('reciept sent');
     store.sockets.app.emit(
       'reciept',
       { uid, chatid, reciept: { lastDelivered: Date.now() } },
@@ -155,7 +155,6 @@ export function useChat() {
   function sendReciept(chatid, reciept) {
     const uid = store.user.uid;
 
-    console.log(store.sockets);
     store.sockets.app.emit('reciept', { uid, chatid, reciept }, ({ chatid, reciept }) => {
       let chatIndex = store.chats.findIndex((chat) => chat._id == chatid);
 
@@ -165,8 +164,6 @@ export function useChat() {
         }
       }
     });
-
-    console.log(chatid);
   }
 
   function sendChatDeliveryReciepts() {
