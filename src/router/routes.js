@@ -85,45 +85,11 @@ const routes = [
     ]
   },
   {
-    path: '/auth',
-    component: () => import('../layouts/Auth.vue'),
-    redirect: '/auth/login',
-    children: [
-      { path: 'signup', component: () => import('../pages/auth/SignUp.vue') },
-      {
-        path: 'login',
-        component: () => import('../pages/auth/Login.vue')
-      },
-      {
-        path: 'forgot-password',
-        component: () => import('../pages/auth/ForgotPassword.vue')
-      },
-      {
-        path: 'email-verification',
-        component: () => import('../pages/auth/EmailVerification.vue')
-      },
-      {
-        path: 'create-password',
-        component: () => import('../pages/auth/CreatePassword.vue')
-      },
-      {
-        path: 'pick-profile-picture',
-        component: () => import('../pages/auth/PickProfilePicture.vue')
-      },
-      {
-        path: 'create-username',
-        component: () => import('../pages/auth/CreateUsername.vue')
-      },
-      {
-        path: 'recovery-code-confirmation',
-        component: () => import('../pages/auth/RecoveryCodeConfirmation.vue')
-      },
-      {
-        path: 'reset-password',
-        component: () => import('../pages/auth/ResetPassword.vue')
-      }
-    ]
+    path: '/:username',
+    name: 'page',
+    component: () => import('../pages/Page.vue')
   },
+
   {
     path: '/chat',
     beforeEnter: (to, from) => {
@@ -171,6 +137,47 @@ const routes = [
       { path: 'chess', component: () => import('../pages/games/chess/Index.vue') }
     ]
   },
+  {
+    path: '/auth',
+    component: () => import('../layouts/Auth.vue'),
+    redirect: '/auth/login',
+    children: [
+      { path: 'signup', component: () => import('../pages/auth/SignUp.vue') },
+      {
+        path: 'login',
+        component: () => import('../pages/auth/Login.vue')
+      },
+      {
+        path: 'forgot-password',
+        component: () => import('../pages/auth/ForgotPassword.vue')
+      },
+      {
+        path: 'email-verification',
+        component: () => import('../pages/auth/EmailVerification.vue')
+      },
+      {
+        path: 'create-password',
+        component: () => import('../pages/auth/CreatePassword.vue')
+      },
+      {
+        path: 'pick-profile-picture',
+        component: () => import('../pages/auth/PickProfilePicture.vue')
+      },
+      {
+        path: 'create-username',
+        component: () => import('../pages/auth/CreateUsername.vue')
+      },
+      {
+        path: 'recovery-code-confirmation',
+        component: () => import('../pages/auth/RecoveryCodeConfirmation.vue')
+      },
+      {
+        path: 'reset-password',
+        component: () => import('../pages/auth/ResetPassword.vue')
+      }
+    ]
+  },
+
   {
     path: '/:catchAll(.*)*',
     component: () => import('../pages/ErrorNotFound.vue')

@@ -109,11 +109,21 @@ function useApp() {
     }
   }
 
+  async function getUserPage(username) {
+    try {
+      const { data } = await axios.get('/app/get-user-page?username=' + username);
+      return data;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return {
     init,
     getApp,
     getProfile,
-    send
+    send,
+    getUserPage
   };
 }
 

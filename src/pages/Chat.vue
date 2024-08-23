@@ -14,13 +14,15 @@
       </v-avatar>
 
       <v-app-bar-title>
-        <div>
-          <p>
-            <span> {{ active.profile.displayName }}</span>
-            <br />
-            <span class="text-xs">@{{ active.profile.username }} </span>
-          </p>
-        </div>
+        <router-link :to="'../'+active.profile.username">
+          <div>
+            <p>
+              <span> {{ active.profile.displayName }}</span>
+              <br />
+              <span class="text-xs">@{{ active.profile.username }} </span>
+            </p>
+          </div>
+        </router-link>
       </v-app-bar-title>
     </v-app-bar>
 
@@ -33,48 +35,50 @@
 </template>
 
 <script setup>
-import { ref, reactive, onUnmounted, inject } from 'vue'
+import { ref, reactive, onUnmounted, inject } from 'vue';
 
-import SideBar from '../components/ui/SideBar.vue'
-import Chat from '../components/chat/Chat.vue'
+import SideBar from '../components/ui/SideBar.vue';
+import Chat from '../components/chat/Chat.vue';
 
-const drawer = ref(false)
+const drawer = ref(false);
 
-import { useRoute } from 'vue-router'
-import { useRouter } from 'vue-router'
-import { useAppStore } from '../stores'
+import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
+import { useAppStore } from '../stores';
 
-const { back } = inject('app')
+const { back } = inject('app');
 
-const store = useAppStore()
-const route = useRoute()
-const router = useRouter()
+const store = useAppStore();
+const route = useRoute();
+const router = useRouter();
 
-const origin = route.query.origin
-let array
+const origin = route.query.origin;
+let array;
 
 switch (origin) {
   case '/home':
-    array = 'recent'
-    break
+    array = 'recent';
+    break;
   case '/chats':
-    array = 'chats'
-    break
+    array = 'chats';
+    break;
 }
 
-let active = store['chats'].find((user) => user.profile.username == route.params.username)
+let active = store['chats'].find((user) => user.profile.username == route.params.username);
 
 if (!active) {
-  let { _id, profile } = store[array].find((user) => user.profile.username == route.params.username)
-  active = store.createNewChat(_id, profile)
+  let { _id, profile } = store[array].find(
+    (user) => user.profile.username == route.params.username
+  );
+  active = store.createNewChat(_id, profile);
 }
 
 const to = reactive({
   type: 'Chat',
   chatid: active._id
-})
+});
 
 onUnmounted(() => {
-  store.chats = store.chats.filter((chat) => chat.messages.length > 0)
-})
+  store.chats = store.chats.filter((chat) => chat.messages.length > 0);
+});
 </script>
