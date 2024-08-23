@@ -14,7 +14,7 @@
       </v-avatar>
 
       <v-app-bar-title>
-        <router-link :to="'../'+active.profile.username">
+        <router-link :to="'../' + active.profile.username">
           <div>
             <p>
               <span> {{ active.profile.displayName }}</span>
@@ -43,14 +43,12 @@ import Chat from '../components/chat/Chat.vue';
 const drawer = ref(false);
 
 import { useRoute } from 'vue-router';
-import { useRouter } from 'vue-router';
 import { useAppStore } from '../stores';
 
 const { back } = inject('app');
 
 const store = useAppStore();
 const route = useRoute();
-const router = useRouter();
 
 const origin = route.query.origin;
 let array;
@@ -70,6 +68,7 @@ if (!active) {
   let { _id, profile } = store[array].find(
     (user) => user.profile.username == route.params.username
   );
+  console.log(_id, profile);
   active = store.createNewChat(_id, profile);
 }
 

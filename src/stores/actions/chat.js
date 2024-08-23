@@ -17,9 +17,8 @@ export function useChat() {
     console.log('Sorting Chats');
 
     // Sort Recent Active Users
-    if (!store.app.isInitialized)
-      for (let [index, user] of recent.entries())
-        recent[index].chatid = [store.user.uid, user.profile._id].sort().join('');
+    for (let [index, user] of recent.entries())
+      recent[index]._id = [store.user.uid, user.profile._id].sort().join('');
 
     // Sort Main Chats
     for (let [index, chat] of chats.entries()) {
@@ -111,6 +110,7 @@ export function useChat() {
 
   function createNewChat(chatid, profile) {
     const uid = store.user.uid;
+    console.log(chatid);
     let chat = new Chat(chatid, null, profile, uid);
     store.chats.push(chat);
     return store.chats.find((chat) => chat._id == chatid);

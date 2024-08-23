@@ -10,15 +10,24 @@
         </div>
       </div>
       <div class="flex flex-row p-4 justify-between w-full max-w-full">
-        <div class="flex gap-2 w-[90%]">
-          <div class="grid content-center">
-            <v-img :src="user.photoURL" aspect-ratio="1" class="w-12 h-12 rounded-full"></v-img>
+        <router-link
+          :to="{
+            name: 'page',
+            params: {
+              username: user.username
+            }
+          }"
+        >
+          <div class="flex gap-2 w-[90%]">
+            <div class="grid content-center">
+              <v-img :src="user.photoURL" aspect-ratio="1" class="w-12 h-12 rounded-full"></v-img>
+            </div>
+            <div class="flex flex-col overflow-hidden">
+              <div id="display-name" class="truncate">{{ user.displayName }}</div>
+              <div id="username" class="truncate">@{{ user.username }}</div>
+            </div>
           </div>
-          <div class="flex flex-col overflow-hidden">
-            <div id="display-name" class="truncate">{{ user.displayName }}</div>
-            <div id="username" class="truncate">@{{ user.username }}</div>
-          </div>
-        </div>
+        </router-link>
         <div class="grid content-center flex-grow">
           <div>
             <v-img src="../assets/icons/more.svg" class="w-6 h-6" @click="toggleMenu()"></v-img>
