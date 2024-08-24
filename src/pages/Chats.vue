@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col w-full">
+  <div class="flex flex-col w-full relative">
     <div v-for="(chat, key) in chats" :key="key">
       <router-link :to="getLink(chat.profile.username)">
         <div class="flex flex-row px-2 py-2 gap-2">
@@ -37,6 +37,11 @@
 
       <hr />
     </div>
+    <div id="add-post" class="fixed bottom-0 right-0 mr-6 mb-6">
+      <router-link :to="{ name: 'new', params: { username: user.username } }">
+        <v-btn icon="mdi-plus" color="red" size="default"></v-btn>
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -47,7 +52,7 @@ import { useAppStore } from '../stores';
 const store = useAppStore();
 
 const chats = computed(() => store.chats);
-
+const user = store.user;
 onUnmounted(() => console.log('Chats Just Unmounted'));
 function getLink(username) {
   return {

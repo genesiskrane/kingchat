@@ -177,7 +177,11 @@ const routes = [
       }
     ]
   },
-
+  {
+    path: '/:username/new',
+    name: 'new',
+    component: () => import('../pages/app/New.vue')
+  },
   {
     path: '/:catchAll(.*)*',
     component: () => import('../pages/ErrorNotFound.vue')
