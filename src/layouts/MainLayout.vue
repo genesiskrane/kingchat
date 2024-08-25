@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '../stores';
 import SideBar from '../components/ui/SideBar.vue';
@@ -53,7 +53,7 @@ const store = useAppStore();
 const route = useRoute();
 const router = useRouter();
 
-const pageName = reactive(null);
+const pageName = ref(null);
 let drawer = ref(false);
 
 function updatePageTitle(name) {

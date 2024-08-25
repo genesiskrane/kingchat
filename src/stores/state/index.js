@@ -12,6 +12,7 @@ export function useState() {
   const chats = ref([]);
   const rooms = reactive({});
   const online = ref([]);
+  const posts = ref([]);
   const recent = ref([]);
   const bookStore = ref({ books: [], genres: [] });
   const sockets = reactive({ app: null, room: null });
@@ -24,6 +25,7 @@ export function useState() {
     chats,
     rooms,
     online,
+    posts,
     recent,
     games,
     bookStore
