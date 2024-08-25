@@ -12,7 +12,7 @@
       <v-app-bar-title>
         <div class="flex flex-row justify-between px-2">
           <div class="grid items-center">
-            <span class="capitalize">{{ route.name }}</span>
+            <span class="capitalize">{{ pageName }}</span>
           </div>
           <div v-if="!store.app.isLoggedIn">
             <v-btn id="login" @click="router.push('/auth/login')">
@@ -25,7 +25,11 @@
 
     <v-main>
       <v-container class="container h-full ma-0 pa-0 mx-auto">
-        <router-view></router-view>
+        <router-view v-slot="{ Component }">
+          <transition :name="route.meta.transition || 'fade'">
+            <component :is="Component" />
+          </transition>
+        </router-view>
 
         <!-- <bottom-navigation></bottom-navigation> -->
       </v-container>
@@ -38,13 +42,28 @@ import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '../stores';
 import SideBar from '../components/ui/SideBar.vue';
+
+import { useEventBus } from '@vueuse/core';
+
+const bus = useEventBus('pageTitle');
+
 // import BottomNavigation from '../components/BottomNavigation.vue'
 
 const store = useAppStore();
 const route = useRoute();
 const router = useRouter();
 
+const pageName = ref(null);
 let drawer = ref(false);
+
+function updatePageTitle(name) {
+  pageName.value = name;
+}
+
+updatePageTitle(route.name);
+
+bus.on(updatePageTitle);
+
 </script>
 
 <style scoped>

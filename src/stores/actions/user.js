@@ -93,11 +93,20 @@ function useUser() {
     return updatedChatList;
   }
 
+  // Posts
+
+  async function createPost(post) {
+    const { data } = await axios.post('/create-post', post);
+    console.log('Post Made', data);
+    return data;
+  }
+
   return {
     getUser,
     updateUsername,
     upload,
-    updateProfilePhotoImage
+    updateProfilePhotoImage,
+    createPost
   };
 }
 

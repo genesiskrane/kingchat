@@ -180,7 +180,8 @@ const routes = [
   {
     path: '/:username/new',
     name: 'new',
-    component: () => import('../pages/app/New.vue')
+    component: () => import('../pages/app/New.vue'),
+    meta: { transition: 'slide-bottom' }
   },
   {
     path: '/:catchAll(.*)*',
