@@ -31,7 +31,7 @@ const whatsHappening = ref(null);
 async function post() {
   const text = whatsHappening.value.innerText.trim();
 
-  const post = { text, time: Date.now(), by: user.uid };
+  const post = { text, time: Date.now(), author: user.uid };
   const isPosted = await store.createPost(post);
   if (isPosted) {
     emit('toggle-modal', !showModal);

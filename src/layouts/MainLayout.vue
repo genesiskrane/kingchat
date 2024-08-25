@@ -24,7 +24,7 @@
     </v-app-bar>
 
     <v-main>
-      <v-container class="container h-full ma-0 pa-0 mx-auto">
+      <v-container class="container h-full ma-0 pa-0 mx-auto relative">
         <router-view v-slot="{ Component }">
           <transition :name="route.meta.transition || 'fade'">
             <component :is="Component" />

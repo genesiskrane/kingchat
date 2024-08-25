@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col w-full relative">
-    <div v-for="(chat, key) in chats" :key="key">
+  <div class="flex flex-col w-full">
+    <div v-for="(chat, key) in chats" :key="key" v-ripple>
       <div class="flex flex-row px-2 py-2 gap-2">
         <div>
           <router-link :to="getProfileLink(chat.profile.username)">
