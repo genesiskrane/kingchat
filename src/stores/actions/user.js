@@ -16,13 +16,14 @@ function useUser() {
 
     if (uid.substring(0, 9) !== 'anonymous') {
       try {
-        let { data } = await axios.post('/auth/get-user', {
+        let { data } = await axios.post('/app/get-user', {
           uid: store.user.uid
         });
 
         data.user.uid = data.user._id;
 
         store.$patch({ user: data.user });
+        store.posts.push(...data.posts);
 
         store.chats = findAndReplace(data.chats);
         store.sendChatDeliveryReciepts();

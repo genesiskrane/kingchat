@@ -12,7 +12,7 @@
       <v-app-bar-title>
         <div class="flex flex-row justify-between px-2">
           <div class="grid items-center">
-            <span class="capitalize">{{ pageName }}</span>
+            <span class="capitalize">{{ pageName || route.name }}</span>
           </div>
           <div v-if="!store.app.isLoggedIn">
             <v-btn id="login" @click="router.push('/auth/login')">
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '../stores';
 import SideBar from '../components/ui/SideBar.vue';
@@ -53,17 +53,14 @@ const store = useAppStore();
 const route = useRoute();
 const router = useRouter();
 
-const pageName = ref(null);
+const pageName = reactive(null);
 let drawer = ref(false);
 
 function updatePageTitle(name) {
   pageName.value = name;
 }
 
-updatePageTitle(route.name);
-
 bus.on(updatePageTitle);
-
 </script>
 
 <style scoped>

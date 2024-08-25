@@ -25,24 +25,21 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRoute } from 'vue-router';
 import { useEventBus } from '@vueuse/core';
 
 import CreatePost from './CreatePost.vue';
 
-const route = useRoute();
-
 const bus = useEventBus('pageTitle');
 const showModal = ref(false);
 
-const notification = ref(true);
+const notification = ref(false);
 const notificationMessage = ref('');
 
 function toggleModal(isOpen) {
   showModal.value = isOpen;
 
   if (isOpen) bus.emit('Create New Post');
-  else bus.emit(route.name);
+  else bus.emit(null);
 }
 
 function notify(msg, timeout) {
