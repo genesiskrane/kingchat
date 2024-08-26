@@ -25,17 +25,17 @@ function timeAgo(timestamp) {
   const diffInYears = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24 * 365));
 
   if (diffInYears > 0) {
-    return `${diffInYears} year(s) ago`;
+    return `${diffInYears} y`;
   } else if (diffInMonths > 0) {
-    return `${diffInMonths} month(s) ago`;
+    return `${diffInMonths} mn`;
   } else if (diffInDays > 0) {
-    return `${diffInDays} day(s) ago`;
+    return `${diffInDays}d`;
   } else if (diffInHours > 0) {
-    return `${diffInHours} hour(s) ago`;
+    return `${diffInHours}h`;
   } else if (diffInMinutes > 0) {
-    return `${diffInMinutes} minute(s) ago`;
+    return `${diffInMinutes}m`;
   } else {
-    return `${diffInSeconds} second(s) ago`;
+    return `${diffInSeconds}s`;
   }
 }
 
