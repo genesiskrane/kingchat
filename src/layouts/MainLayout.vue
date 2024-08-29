@@ -6,7 +6,7 @@
       </v-navigation-drawer>
     </keep-alive>
 
-    <v-app-bar :elevation="2" color="red-darken-1">
+    <v-app-bar :elevation="2" color="red-darken-1" :style="{ top: appBarTop + 'px' }">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '../stores';
 import SideBar from '../components/ui/SideBar.vue';
@@ -56,14 +56,33 @@ const router = useRouter();
 const pageName = ref(null);
 let drawer = ref(false);
 
+let lastScrollY = ref(0);
+let appBarTop = ref(0);
+
 function updatePageTitle(name) {
   pageName.value = name;
 }
 
 bus.on(updatePageTitle);
+
+onMounted(() => window.addEventListener('scroll', handleScroll));
+onUnmounted(() => window.removeEventListener('scroll', handleScroll));
+
+function handleScroll() {
+  const currentScrollY = window.scrollY;
+  const appBarHeight = 64;
+
+  if (currentScrollY > lastScrollY.value && currentScrollY > 10) appBarTop.value = -appBarHeight;
+  else if (currentScrollY < lastScrollY.value || currentScrollY <= 10) appBarTop.value = 0;
+
+  lastScrollY.value = currentScrollY;
+}
 </script>
 
 <style scoped>
+.v-app-bar {
+  transition: top 0.3s ease-in-out;
+}
 .container > div {
   height: 100%;
 }
