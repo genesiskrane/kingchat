@@ -14,22 +14,20 @@ function useUser() {
   async function getUser(uid) {
     store.initSockets(uid);
 
-    if (uid.substring(0, 9) !== 'anonymous') {
-      try {
-        let { data } = await axios.post('/app/get-user', {
-          uid: store.user.uid
-        });
+    try {
+      let { data } = await axios.post('/app/get-user', {
+        uid: store.user.uid
+      });
 
-        data.user.uid = data.user._id;
+      data.user.uid = data.user._id;
 
-        store.$patch({ user: data.user });
-        store.posts.push(...data.posts);
+      store.$patch({ user: data.user });
+      store.posts.push(...data.posts);
 
-        store.chats = findAndReplace(data.chats);
-        store.sendChatDeliveryReciepts();
-      } catch (error) {
-        console.error(error);
-      }
+      store.chats = findAndReplace(data.chats);
+      if (uid.substring(0, 9) !== 'anonymous') store.sendChatDeliveryReciepts();
+    } catch (error) {
+      console.error(error);
     }
 
     store.sortChats();

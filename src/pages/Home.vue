@@ -11,7 +11,9 @@
           <div>
             <span class="font-semibold">{{ post.author.displayName }}</span>
             &nbsp;
-            <span class="text-xs">@{{ post.author.username }} {{ timeAgo(post.createdAt) }}</span>
+            <span class="text-xs"
+              >@{{ post.author.username }} &#8226; {{ timeAgo(post.createdAt) }}</span
+            >
           </div>
           <p>
             {{ post.text }}
