@@ -39,9 +39,7 @@ function useApp() {
     if (!store.app.isInitialized) {
       store.chats = [];
       store.user.uid = store.user.uid ? store.user.uid : 'anonymous-' + uid.rnd();
-      console.log('Now getting App');
       await store.getApp(store.user.uid);
-      console.log(store.chats);
       await store.getUser(store.user.uid);
     }
 

@@ -9,7 +9,7 @@ const routes = [
 
       if (to.path == '/') {
         if (to.path == '/' && store.app.isLoggedIn) next('/chats');
-        else if (to.path == '/' && !store.app.isLoggedIn) next('/games');
+        else if (to.path == '/' && !store.app.isLoggedIn) next('/home');
       } else next();
     },
 

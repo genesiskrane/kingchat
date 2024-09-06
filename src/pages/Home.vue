@@ -4,15 +4,15 @@
       <div v-for="(post, i) in posts" :key="i" class="clearfix">
         <div class="py-2">
           <v-img
-            :src="post.author.photoURL"
-            :alt="post.author.displayName + '\'s DP'"
+            :src="post.authors[0].photoURL"
+            :alt="post.authors[0].displayName + '\'s DP'"
             class="w-12 h-12 rounded-full float-left m-1"
           ></v-img>
           <div>
-            <span class="font-semibold">{{ post.author.displayName }}</span>
+            <span class="font-semibold">{{ post.authors[0].displayName }}</span>
             &nbsp;
             <span class="text-xs"
-              >@{{ post.author.username }} &#8226; {{ timeAgo(post.createdAt) }}</span
+              >@{{ post.authors[0].username }} &#8226; {{ timeAgo(post.createdAt) }}</span
             >
           </div>
           <p>

@@ -15,9 +15,8 @@ function useUser() {
     store.initSockets(uid);
 
     try {
-      let { data } = await axios.post('/app/get-user', {
-        uid: store.user.uid
-      });
+      let { data } = await axios.post('/app/get-user', { uid });
+      console.log(uid);
 
       data.user.uid = data.user._id;
 
@@ -75,7 +74,7 @@ function useUser() {
   function findAndReplace(incomingChats) {
     let updatedChatList = [...store.chats];
     const remainingElements = [];
-    console.log(updatedChatList);
+
     for (let i = 0; i < incomingChats.length; i++) {
       const index = updatedChatList.findIndex((chat) => chat._id == incomingChats[i]._id);
       console.log(index, incomingChats[i].profile.displayName);
@@ -96,7 +95,6 @@ function useUser() {
 
   async function createPost(post) {
     const { data } = await axios.post('/create-post', post);
-    console.log('Post Made', data);
     return data;
   }
 
