@@ -21,7 +21,7 @@ function useUser() {
       data.user.uid = data.user._id;
 
       store.$patch({ user: data.user });
-      store.posts.push(...data.posts);
+      store.posts = data.posts;
 
       store.chats = findAndReplace(data.chats);
       if (uid.substring(0, 9) !== 'anonymous') store.sendChatDeliveryReciepts();
@@ -38,7 +38,7 @@ function useUser() {
         uid,
         username
       });
-      store.getUser();
+      store.getUser(uid);
       return isUsernameUpdated;
     } catch (error) {
       console.log(error);
@@ -64,7 +64,7 @@ function useUser() {
         uid,
         imgURL
       });
-      await store.getUser();
+      await store.getUser(uid);
       return data;
     } catch (error) {
       console.log(error);

@@ -26,27 +26,29 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAppStore } from '../../stores'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAppStore } from '../../stores';
 
-import { passwordStrength } from 'check-password-strength'
+import { passwordStrength } from 'check-password-strength';
 
-const router = useRouter()
-const store = useAppStore()
+const router = useRouter();
+const store = useAppStore();
 
-const password = ref('')
-const passwordMeter = ref('')
+const loading = ref(false);
+
+const password = ref('');
+const passwordMeter = ref('');
 
 async function checkStrength() {
-  passwordMeter.value = passwordStrength(password.value).value
+  passwordMeter.value = passwordStrength(password.value).value;
 }
 
 async function submit() {
-  let res = await store.createPassword(store.user.uid, password.value)
-  await store.login({ id: store.user.email, password: password.value })
+  let res = await store.createPassword(store.user.uid, password.value);
+  await store.login({ id: store.user.email, password: password.value });
 
-  if (res) router.push('/auth/pick-profile-picture')
-  else console.log(res)
+  if (res) router.push('/auth/pick-profile-picture');
+  else console.log(res);
 }
 </script>
