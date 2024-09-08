@@ -15,9 +15,7 @@
               >@{{ post.authors[0].username }} &#8226; {{ timeAgo(post.createdAt) }}</span
             >
           </div>
-          <p>
-            {{ post.text }}
-          </p>
+          <p class="whitespace-pre-line">{{ post.text }}</p>
         </div>
         <hr />
       </div>

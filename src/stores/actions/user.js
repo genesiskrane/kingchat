@@ -5,7 +5,7 @@ import { useAppStore } from '..';
 // Configs
 axios.defaults.baseURL =
   process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
-    ? 'https://www.kingchat.one/api'
+    ? 'https://kingchat.one/api'
     : 'http://localhost:3000/api';
 
 function useUser() {

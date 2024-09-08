@@ -5,7 +5,7 @@ import initRoomsSocket from './room';
 
 const ioURL =
   process.env.NODE_ENV == 'production' && window.location.hostname !== 'localhost'
-    ? 'https://www.kingchat.one'
+    ? 'https://kingchat.one'
     : 'http://localhost:3000';
 
 export function useSockets() {
