@@ -19,7 +19,7 @@
               >
             </div>
             <div>
-              <p class="whitespace-pre-line">{{ post.text }}</p>
+              <p class="whitespace-pre-line" v-html="post.text"></p>
             </div>
 
             <div id="media" v-if="post.media.length > 0">
