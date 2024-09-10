@@ -36,7 +36,7 @@
                   </template>
 
                   <template v-if="item.type == 'video'">
-                    <video :src="item.url" controls class="w-96 h-2/3"></video>
+                    <video :src="item.url" controls class="w-96 h-96"></video>
                   </template>
                 </div>
               </div>

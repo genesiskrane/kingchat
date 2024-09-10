@@ -1,9 +1,9 @@
 <template>
   <v-bottom-navigation grow mode="shift">
-    <v-btn value="recent">
+    <v-btn value="history">
       <v-icon>mdi-history</v-icon>
 
-      <span>Recent</span>
+      <span>History</span>
     </v-btn>
 
     <v-btn value="favorites">

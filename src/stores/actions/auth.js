@@ -85,7 +85,6 @@ export function useAuth() {
     store.chats.length = 0;
     store.user.uid = 'anonymous-' + uid.rnd();
     await store.init();
-    console.log(store.chats);
   }
 
   async function verifyUsername(username) {

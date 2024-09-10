@@ -92,10 +92,6 @@ const routes = [
 
   {
     path: '/chat',
-    beforeEnter: (to, from) => {
-      if (from.path !== '/') sessionStorage.setItem('route', JSON.stringify({ from: from.path }));
-      to.query.origin = JSON.parse(sessionStorage.getItem('route')).from;
-    },
     children: [{ path: ':username', component: () => import('../pages/Chat.vue') }]
   },
   {
