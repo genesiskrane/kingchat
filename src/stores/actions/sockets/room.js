@@ -1,18 +1,18 @@
-import { useAppStore } from '../..'
+import { useAppStore } from '../..';
 
 const initRoomsSocket = (socket) => {
-  socket.on('connect', () => socket.emit('init'))
+  socket.on('connect', () => socket.emit('init'));
 
   socket.on('init', (data) => {
-    console.log('Live Data:', data)
-  })
+    console.log('Live Data:', data);
+  });
 
   socket.on('send', (data) => {
-    console.log(data)
-  })
+    console.log(data);
+  });
 
   socket.on('online', ({ online }) => {
-    const store = useAppStore()
+    const store = useAppStore();
 
     // Populate Online Users
     store.online = online = online
@@ -24,20 +24,13 @@ const initRoomsSocket = (socket) => {
       .map((profile) => ({
         chatid: [store.user.uid, profile._id].sort().join(''),
         profile
-      }))
-
-    // Remove Found Online Users From Recent Users
-    store.recent = store.recent.filter(({ profile }) => {
-      let uid = profile._id
-      let account = online.find(({ profile }) => profile._id == uid)
-      if (!account) return true
-    })
-  })
+      }));
+  });
 
   socket.on('message', (chatid, message) => {
-    const store = useAppStore()
-    store.message(chatid, message)
-  })
-}
+    const store = useAppStore();
+    store.message(chatid, message);
+  });
+};
 
-export default initRoomsSocket
+export default initRoomsSocket;

@@ -17,9 +17,12 @@ function useApp() {
   const store = useAppStore();
 
   async function init() {
-    console.log('App Initializing');
-
     console.log(colors);
+
+    console.info('App Initializing');
+    const loadingElement = document.getElementById('loading');
+    loadingElement.children[0].style.borderTop = '8px solid red';
+    loadingElement.style.display = 'flex';
 
     // Set Theme Color
     store.app.themeColor = 'red';
@@ -43,20 +46,20 @@ function useApp() {
       await store.getUser(store.user.uid);
     }
 
-    console.log('App Initialized');
+    console.info('App Initialized');
+
+    loadingElement.style.display = 'none';
+
     return;
   }
 
   async function getApp() {
-    console.log('getting App');
     try {
-      //   Get Recent Users, Rooms & Services
+      //   Get Rooms & Services
       let { data } = await axios.get('/app', { params: { id: store.user.uid } });
-      console.log(data);
+      store.app.services = [];
       data.services.forEach((service) => store.app.services.push(service.profile));
       store.chats.push(...setUpServices(data.services));
-      console.log(store.chats);
-      store.$patch({ recent: data.recent });
       store.$patch({ rooms: data.rooms });
       store.bookStore.genres.push(...data.bookStore.genres);
 

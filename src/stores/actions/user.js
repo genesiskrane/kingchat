@@ -77,13 +77,9 @@ function useUser() {
 
     for (let i = 0; i < incomingChats.length; i++) {
       const index = updatedChatList.findIndex((chat) => chat._id == incomingChats[i]._id);
-      console.log(index, incomingChats[i].profile.displayName);
-      if (index !== -1) console.log(updatedChatList[index]._id == incomingChats[i]._id);
-      if (index !== -1) {
-        console.log('Adding', incomingChats[i]);
-        updatedChatList[index] = incomingChats[i];
-        console.log(updatedChatList.length);
-      } else remainingElements.push(incomingChats[i]);
+
+      if (index !== -1) updatedChatList[index] = incomingChats[i];
+      else remainingElements.push(incomingChats[i]);
     }
 
     updatedChatList.push(...remainingElements);

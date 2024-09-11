@@ -50,27 +50,7 @@ const { back } = inject('app');
 const store = useAppStore();
 const route = useRoute();
 
-const origin = route.query.origin;
-let array;
-
-switch (origin) {
-  case '/home':
-    array = 'recent';
-    break;
-  case '/chats':
-    array = 'chats';
-    break;
-}
-
-let active = store['chats'].find((user) => user.profile.username == route.params.username);
-
-if (!active) {
-  let { _id, profile } = store[array].find(
-    (user) => user.profile.username == route.params.username
-  );
-  console.log(_id, profile);
-  active = store.createNewChat(_id, profile);
-}
+let active = store.chats.find((user) => user.profile.username == route.params.username);
 
 const to = reactive({
   type: 'Chat',

@@ -13,12 +13,6 @@ export function useChat() {
 
   function sortChats() {
     const chats = store.chats;
-    const recent = store.recent;
-    console.log('Sorting Chats');
-
-    // Sort Recent Active Users
-    for (let [index, user] of recent.entries())
-      recent[index]._id = [store.user.uid, user.profile._id].sort().join('');
 
     // Sort Main Chats
     for (let [index, chat] of chats.entries()) {
@@ -36,12 +30,9 @@ export function useChat() {
     chats.sort((a, b) => b.lastMessage.time - a.lastMessage.time);
 
     store.$patch({ chats });
-    store.$patch({ recent });
-
-    console.log('Chats Sorted');
   }
 
-  async function message({ chatid, message }) {
+  async function message(chatid, message) {
     let uid = store.user.uid;
     let chatIndex = store.chats.findIndex((chat) => chat._id == chatid);
 
@@ -53,8 +44,6 @@ export function useChat() {
         uid
       );
       store.chats.push(chat);
-      store.sortChats();
-      console.log(chat, store.chats);
     } else {
       store.chats[chatIndex].messages.push(message);
       store.chats[chatIndex].lastMessage = {
@@ -63,7 +52,11 @@ export function useChat() {
         displayTime: store.formatTimeDisplay(message.time)
       };
     }
-    console.log('reciept sent');
+
+    store.sortChats();
+
+    console.log(store.chats[chatIndex]);
+
     store.sockets.app.emit(
       'reciept',
       { uid, chatid, reciept: { lastDelivered: Date.now() } },
@@ -110,47 +103,64 @@ export function useChat() {
 
   function createNewChat(chatid, profile) {
     const uid = store.user.uid;
-    console.log(chatid);
     let chat = new Chat(chatid, null, profile, uid);
     store.chats.push(chat);
     return store.chats.find((chat) => chat._id == chatid);
   }
 
   function sendToPrivateChat(chatid, message, uid) {
-    store.sockets.app.emit(
-      'send',
-      { chatid, message, uid },
-      async (chatid, { message, reciept }) => {
-        let chatIndex = store.chats.findIndex((chat) => chat._id == chatid);
+    const recieverID = chatid.split(uid).find((id) => id.length > 0);
+    let recieverIsService = store.app.services.some((service) => service._id === recieverID);
 
-        store.chats[chatIndex].messages.push(message);
-        store.chats[chatIndex].lastMessage = {
-          time: message.time,
-          message: message.text,
-          displayTime: store.formatTimeDisplay(message.time)
-        };
-
-        store.chats.sort((a, b) => b.lastMessage.time - a.lastMessage.time);
-
+    if (!recieverIsService)
+      store.sockets.app.emit('send', { chatid, message, uid }, (chatid, { message, reciept }) => {
+        logMessage(chatid, message);
         updateReciept(chatid, reciept);
-      }
-    );
+      });
+
+    if (recieverIsService)
+      store.sockets.app.emit(
+        'sendToService',
+        { chatid, message, uid },
+        (chatid, { message, reciept }) => {
+          logMessage(chatid, message);
+          updateReciept(chatid, reciept);
+        }
+      );
 
     // Update Message Length
-    // (This is to track new messages delivered by their length)
+    updateChatLength(chatid);
+  }
+
+  function logMessage(chatid, message) {
+    let chatIndex = store.chats.findIndex((chat) => chat._id == chatid);
+
+    store.chats[chatIndex].messages.push(message);
+    store.chats[chatIndex].lastMessage = {
+      time: message.time,
+      message: message.text,
+      displayTime: store.formatTimeDisplay(message.time)
+    };
+
+    store.chats.sort((a, b) => b.lastMessage.time - a.lastMessage.time);
+  }
+
+  function updateChatLength(chatid) {
+    // This is to track new messages delivered by their length
     let reciepts = JSON.parse(sessionStorage.getItem('reciepts'));
     let recieptIndex = reciepts.findIndex((reciept) => reciept.id == chatid);
 
     if (recieptIndex >= 0) reciepts[recieptIndex].length++;
     else reciepts.push({ id: chatid, length: 1 });
+
     sessionStorage.setItem('reciepts', JSON.stringify(reciepts));
   }
 
-  function updateReciept(chatid, reciept) {
-    let chatIndex = store.chats.findIndex((chat) => chat._id == chatid);
-    console.log(chatIndex, store.chats);
-    Object.assign(store.chats[chatIndex].meta[store.user.uid], reciept);
-  }
+  const updateReciept = (chatid, reciept) =>
+    Object.assign(
+      store.chats[store.chats.findIndex((chat) => chat._id == chatid)].meta[store.user.uid],
+      reciept
+    );
 
   function sendReciept(chatid, reciept) {
     const uid = store.user.uid;

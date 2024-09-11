@@ -2,10 +2,44 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>King Chat</title>
+    <style>
+      #loading {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        z-index: 9999;
+      }
+      .spinner {
+        border: 8px solid #f3f3f3;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 2s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
   </head>
   <body>
+    <div id="loading">
+      <div class="spinner"></div>
+    </div>
+
     <div id="webpage"></div>
 
     <script type="module" src="/src/main.js"></script>
