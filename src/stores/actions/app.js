@@ -2,8 +2,7 @@ import ShortUniqueId from 'short-unique-id';
 import { useFavicon } from '@vueuse/core';
 import axios from 'axios';
 import { useAppStore } from '..';
-
-import colors from 'vuetify/util/colors';
+import { inject } from 'vue';
 
 // Configs
 axios.defaults.baseURL =
@@ -16,20 +15,22 @@ const uid = new ShortUniqueId({ length: 5 });
 function useApp() {
   const store = useAppStore();
 
-  async function init() {
-    console.log(colors);
+  const themeColors = inject('theme');
+  const themeName = inject('themeName');
 
+  async function init() {
     console.info('App Initializing');
     const loadingElement = document.getElementById('loading');
-    loadingElement.children[0].style.borderTop = '8px solid red';
+    loadingElement.children[0].style.borderTop = '8px solid ' + themeColors.base;
     loadingElement.style.display = 'flex';
 
     // Set Theme Color
-    store.app.themeColor = 'red';
+    store.app.theme = themeColors;
+    store.app.themeName = themeName;
 
     // Set App Favicon
     const icon = useFavicon();
-    icon.value = `../../assets/${store.app.themeColor}`;
+    icon.value = `../../assets/${store.app.themeName}`;
 
     // Initialize Chat Reciepts
     const chatReciepts = sessionStorage.getItem('reciepts');

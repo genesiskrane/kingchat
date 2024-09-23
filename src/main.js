@@ -1,6 +1,8 @@
 import './assets/css/main.css';
 import '@mdi/font/css/materialdesignicons.css'; // Ensure you are using css-loader
 
+import colors from 'vuetify/util/colors';
+
 import { auth, onAuthStateChanged } from './func/firebase';
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
@@ -30,6 +32,16 @@ const vuetify = createVuetify({
 });
 
 const app = createApp(App);
+
+// Set Theme Color
+
+const colorNames = Object.keys(colors);
+colorNames.splice(-1);
+const themeName = colorNames[Math.floor(Math.random() * colorNames.length)];
+const color = colors[themeName];
+
+app.provide('theme', color);
+app.provide('themeName', themeName);
 
 app.use(vuetify);
 app.use(createPinia());

@@ -9,7 +9,7 @@
           </ul>
         </div>
       </div>
-      <div class="flex flex-row p-4 justify-between w-full max-w-full">
+      <div class="flex flex-row p-4 justify-between w-full max-w-full gap-2">
         <router-link
           :to="{
             name: 'page',
@@ -17,18 +17,17 @@
               username: user.username
             }
           }"
+          class="flex flex-row flex-grow-0 overflow-hidden gap-2"
         >
-          <div class="flex gap-2 w-[90%]">
-            <div class="grid content-center">
-              <v-img :src="user.photoURL" aspect-ratio="1" class="w-12 h-12 rounded-full"></v-img>
-            </div>
-            <div class="flex flex-col overflow-hidden">
-              <div id="display-name" class="truncate">{{ user.displayName }}</div>
-              <div id="username" class="truncate">@{{ user.username }}</div>
-            </div>
+          <div class="grid content-center">
+            <v-img :src="user.photoURL" aspect-ratio="1" class="w-12 h-12 rounded-full"></v-img>
+          </div>
+          <div class="flex flex-col overflow-hidden">
+            <div id="display-name" class="truncate">{{ user.displayName }}</div>
+            <div id="username" class="truncate">@{{ user.username }}</div>
           </div>
         </router-link>
-        <div class="grid content-center flex-grow">
+        <div class="grid content-center flex-grow shrink-0">
           <div>
             <v-img src="../assets/icons/more.svg" class="w-6 h-6" @click="toggleMenu()"></v-img>
           </div>

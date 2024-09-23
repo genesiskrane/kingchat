@@ -4,20 +4,24 @@
       <div v-for="(post, i) in posts" :key="i" class="clearfix">
         <div class="py-2 flex flex-row gap-2">
           <div>
-            <v-img
-              :src="post.authors[0].photoURL"
-              :alt="post.authors[0].displayName + '\'s DP'"
-              class="w-12 h-12 rounded-full"
-            ></v-img>
+            <router-link :to="`/${post.authors[0].username}`">
+              <v-img
+                :src="post.authors[0].photoURL"
+                :alt="post.authors[0].displayName + '\'s DP'"
+                class="w-12 h-12 rounded-full"
+              ></v-img>
+            </router-link>
           </div>
           <div>
-            <div>
-              <span class="font-semibold">{{ post.authors[0].displayName }}</span>
-              &nbsp;
-              <span class="text-xs"
-                >@{{ post.authors[0].username }} &#8226; {{ timeAgo(post.createdAt) }}</span
-              >
-            </div>
+            <router-link :to="`/${post.authors[0].username}`">
+              <div>
+                <span class="font-semibold">{{ post.authors[0].displayName }}</span>
+                &nbsp;
+                <span class="text-xs"
+                  >@{{ post.authors[0].username }} &#8226; {{ timeAgo(post.createdAt) }}</span
+                >
+              </div>
+            </router-link>
             <div>
               <p class="whitespace-pre-line" v-html="post.text"></p>
             </div>
@@ -32,7 +36,7 @@
                   {{ increaseItemCount() }}
 
                   <template v-if="item.type == 'photo'">
-                    <img :src="item.url" :alt="`Status Item ${itemCount}`" />
+                    <img :src="item.url" :alt="`Status Item ${itemCount}`" class="max-h-96" />
                   </template>
 
                   <template v-if="item.type == 'video'">

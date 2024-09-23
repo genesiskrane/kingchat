@@ -19,7 +19,7 @@
     <div id="sender" class="grid items-end">
       <v-btn
         class="flex flex-row min-h-min px-1.5 gap-1.5"
-        color="red-darken-1"
+        :color="themeColors.base"
         rounded="0"
         @click="send()"
       >
@@ -30,47 +30,49 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useAppStore } from '../../stores'
+import { ref, inject } from 'vue';
+import { useAppStore } from '../../stores';
 
-const props = defineProps(['to'])
-const store = useAppStore()
+const themeColors = inject('theme');
 
-const placeholder = ref()
-const text = ref()
-const active = ref(false)
-const label = ref('Type a message')
+const props = defineProps(['to']);
+const store = useAppStore();
 
-const widgetDiv = ref(null)
-defineExpose({ widgetDiv })
+const placeholder = ref();
+const text = ref();
+const active = ref(false);
+const label = ref('Type a message');
 
-let keydown = {}
+const widgetDiv = ref(null);
+defineExpose({ widgetDiv });
+
+let keydown = {};
 
 function analyseText(e) {
-  let textLength = text.value.innerText.length
-  if (textLength !== 0) active.value = true
+  let textLength = text.value.innerText.length;
+  if (textLength !== 0) active.value = true;
 
-  if (e.type == 'keyup') delete keydown[e.keyCode]
+  if (e.type == 'keyup') delete keydown[e.keyCode];
 
   if (e.type == 'keydown') {
-    keydown[e.keyCode] = true
+    keydown[e.keyCode] = true;
 
     if (e.keyCode == 13 && Object.keys(keydown).length == 1) {
-      e.preventDefault()
-      send()
+      e.preventDefault();
+      send();
     }
   }
 }
 
 function send() {
-  const message = text.value.innerText.trim()
+  const message = text.value.innerText.trim();
 
-  text.value.innerText = ''
-  active.value = false
+  text.value.innerText = '';
+  active.value = false;
 
-  let chatid = props.to.chatid
-  let type = props.to.type
+  let chatid = props.to.chatid;
+  let type = props.to.type;
 
-  store.send({ chatid, type }, message)
+  store.send({ chatid, type }, message);
 }
 </script>

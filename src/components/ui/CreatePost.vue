@@ -3,7 +3,7 @@
     <v-container class="bg-white flex flex-col gap-4 h-full">
       <div class="flex flex-row justify-between w-full">
         <v-icon @click="emit('toggle-modal', !showModal)">mdi-close</v-icon>
-        <v-btn density="compact" rounded flat color="green" @click="post">Post</v-btn>
+        <v-btn density="compact" rounded flat :color="themeColors.base" @click="post">Post</v-btn>
       </div>
       <div class="flex items-center justify-start gap-2">
         <img :src="user.profile.photoURL" class="w-8 h-8 rounded-full" />
@@ -17,8 +17,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useAppStore } from '../../stores';
+
+const themeColors = inject('theme');
+
 
 const emit = defineEmits(['toggle-modal', 'notify']);
 const store = useAppStore();

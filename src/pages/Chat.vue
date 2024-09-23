@@ -4,7 +4,7 @@
       <side-bar></side-bar>
     </v-navigation-drawer>
 
-    <v-app-bar :elevation="2" color="red-darken-1">
+    <v-app-bar :elevation="2" :color="themeColors.base">
       <v-app-bar-nav-icon @click="back()">
         <v-icon icon="mdi-keyboard-backspace"></v-icon>
       </v-app-bar-nav-icon>
@@ -46,6 +46,7 @@ import { useRoute } from 'vue-router';
 import { useAppStore } from '../stores';
 
 const { back } = inject('app');
+const themeColors = inject('theme');
 
 const store = useAppStore();
 const route = useRoute();

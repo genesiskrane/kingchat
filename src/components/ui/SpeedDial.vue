@@ -10,7 +10,12 @@
   </v-snackbar>
 
   <div id="add-post" class="fixed bottom-0 right-0 mr-6 mb-6">
-    <v-btn icon="mdi-plus" color="red" size="default" @click="toggleModal(!showModal)"></v-btn>
+    <v-btn
+      icon="mdi-plus"
+      :color="themeColors.base"
+      size="default"
+      @click="toggleModal(!showModal)"
+    ></v-btn>
   </div>
 
   <transition name="slide-up">
@@ -24,10 +29,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, inject } from 'vue';
 import { useEventBus } from '@vueuse/core';
 
 import CreatePost from './CreatePost.vue';
+
+const themeColors = inject('theme');
 
 const bus = useEventBus('pageTitle');
 const showModal = ref(false);

@@ -6,7 +6,7 @@
       </v-navigation-drawer>
     </keep-alive>
 
-    <v-app-bar :elevation="2" color="red-darken-1" :style="{ top: appBarTop + 'px' }">
+    <v-app-bar :elevation="2" :color="themeColors.base" :style="{ top: appBarTop + 'px' }">
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-app-bar-title>
@@ -38,12 +38,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, inject } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAppStore } from '../stores';
 import SideBar from '../components/ui/SideBar.vue';
 
 import { useEventBus } from '@vueuse/core';
+
+const themeColors = inject('theme');
 
 const bus = useEventBus('pageTitle');
 

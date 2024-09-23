@@ -28,7 +28,7 @@
                 </div>
                 <div class="text-center">
                   <span class="text-xs">
-                    <v-badge color="primary" :content="chat.unread" inline></v-badge>
+                    <v-badge color="black" :content="chat.unread" inline></v-badge>
                   </span>
                 </div>
               </div>
@@ -44,9 +44,10 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 import { useAppStore } from '../stores';
 import SpeedDial from '../components/ui/SpeedDial.vue';
+
 
 const store = useAppStore();
 
