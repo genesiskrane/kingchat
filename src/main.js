@@ -16,9 +16,6 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
 onAuthStateChanged(auth, async (user) => {
-  if (user) console.log('Auth Changed', user.uid);
-  else console.log(user);
-
   let uid = user ? user.uid : '';
 
   sessionStorage.setItem('uid', JSON.stringify(uid));
