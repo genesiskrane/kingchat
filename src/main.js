@@ -39,6 +39,7 @@ const colorNames = Object.keys(colors);
 colorNames.splice(-1);
 const themeName = colorNames[Math.floor(Math.random() * colorNames.length)];
 const color = colors[themeName];
+console.log(color);
 
 app.provide('theme', color);
 app.provide('themeName', themeName);
