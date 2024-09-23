@@ -54,7 +54,7 @@ function finalize() {
 
 // Create Camera
 const createCamera = (width, height) =>
-  (camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000));
+  (camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000));
 
 // Fitting Camera To Screen
 function fitCameraView(object) {
@@ -77,8 +77,8 @@ function fitCameraView(object) {
   camera.lookAt(boxCenter);
 
   // Optionally, adjust near and far planes
-  camera.near = cameraZ / 500;
-  camera.far = cameraZ * 500;
+  camera.near = cameraZ / 100;
+  camera.far = cameraZ * 100;
 
   // Update camera projection matrix after modifying properties
   camera.updateProjectionMatrix();
@@ -95,7 +95,9 @@ function addLights() {
 
 // Set Renderer
 function setRenderer() {
+  console.log(container.offsetWidth, container.offsetHeight);
   renderer.setSize(container.offsetWidth, container.offsetHeight);
+  // renderer.setPixelRatio(window.devicePixelRatio);
   // renderer.domElement.style.position = 'absolute'
   container.appendChild(renderer.domElement);
   renderer.render(scene, camera);
@@ -229,6 +231,8 @@ function createScene() {
   cube.castShadow = true;
   cube.receiveShadow = true;
 
+  const helper = new THREE.CameraHelper(camera);
+  scene.add(helper);
   scene.add(cube);
   scene.add(board);
 }

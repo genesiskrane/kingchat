@@ -43,5 +43,4 @@ provide('app', {
   back,
   timeAgo
 });
-
 </script>

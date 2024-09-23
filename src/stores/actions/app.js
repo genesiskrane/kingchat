@@ -48,7 +48,7 @@ function useApp() {
 
     console.info('App Initialized');
 
-    loadingElement.style.display = 'none';
+    setTimeout(() => (loadingElement.style.display = 'none'), 1500);
 
     return;
   }
