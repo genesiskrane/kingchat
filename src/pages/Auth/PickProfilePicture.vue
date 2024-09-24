@@ -24,7 +24,7 @@
             :loading="loading"
             class="mt-2 basis-2/3"
             text="Upload"
-            color="indigo-darken-1"
+            :color="themeColors.darken4"
             @click="next()"
           ></v-btn>
         </div>
@@ -34,9 +34,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAppStore } from '../../stores'
+
+const themeColors = inject('theme')
 
 const router = useRouter()
 const store = useAppStore()

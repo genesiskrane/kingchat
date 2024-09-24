@@ -1,11 +1,7 @@
 <template>
   <div class="grid content-center h-full w-full">
-    <div>
-      <v-img
-        src="../assets/img/icon-black.svg"
-        class="w-20 h-20 mx-auto my-8 rounded-2xl bg-red-500"
-        aspect-ratio="1"
-      ></v-img>
+    <div class="w-32 m-auto">
+      <logo class="rounded-sm"></logo>
     </div>
     <div>
       <h2 class="my-2 text-center">Sign Up</h2>
@@ -45,14 +41,18 @@
           :loading="loading"
           class="mt-2"
           text="Next"
-          color="indigo-darken-3"
+          :color="themeColors.darken4"
           block
           :disabled="isFormInvalid"
           @click="submit()"
         ></v-btn>
         <div class="text-center my-2">
           <span>Already have an account? </span>
-          <router-link to="/auth/login"><span class="font-bold">Login</span></router-link>
+          <router-link to="/auth/login"
+            ><span class="font-bold" :style="{ color: themeColors.darken4 }"
+              >Login</span
+            ></router-link
+          >
         </div>
       </v-form>
     </div>
@@ -60,19 +60,22 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, reactive, computed, inject } from 'vue';
+import { useRouter } from 'vue-router';
 
-import { email, required, minLength, maxLength } from '@vuelidate/validators'
-import { useVuelidate } from '@vuelidate/core'
+import { email, required, minLength, maxLength } from '@vuelidate/validators';
+import { useVuelidate } from '@vuelidate/core';
 
-import { useAppStore } from '../../stores'
+import { useAppStore } from '../../stores';
+import Logo from '../../components/ui/Logo.vue';
 
-const store = useAppStore()
-const router = useRouter()
+const themeColors = inject('theme');
 
-let loading = ref(false)
-let isEmailAvialableResponse = ref('')
+const store = useAppStore();
+const router = useRouter();
+
+let loading = ref(false);
+let isEmailAvialableResponse = ref('');
 
 const data = reactive({
   name: '',
@@ -81,7 +84,7 @@ const data = reactive({
   month: '',
   day: '',
   year: ''
-})
+});
 
 const rules = {
   name: { required, minLengthValue: minLength(1), maxLengthValue: maxLength(50) },
@@ -89,22 +92,22 @@ const rules = {
   month: { required },
   day: { required },
   year: { required }
-}
+};
 
-const v$ = useVuelidate(rules, data)
+const v$ = useVuelidate(rules, data);
 
 const isFormInvalid = computed(() => {
   if (isEmailAvialableResponse.value !== '') {
-    console.log(v$.value.$invalid)
-    return true
-  } else return v$.value.$invalid
-})
+    console.log(v$.value.$invalid);
+    return true;
+  } else return v$.value.$invalid;
+});
 
-let days = []
-for (let i = 31; i > 0; i--) days.push(i)
+let days = [];
+for (let i = 31; i > 0; i--) days.push(i);
 
-let years = []
-for (let i = 2024; i > 1980; i--) years.push(i)
+let years = [];
+for (let i = 2024; i > 1980; i--) years.push(i);
 
 let months = [
   'January',
@@ -119,35 +122,35 @@ let months = [
   'October',
   'November',
   'December'
-]
+];
 
 async function submit() {
-  console.log('SignUp Form Submitted', data)
+  console.log('SignUp Form Submitted', data);
 
-  loading.value = true
+  loading.value = true;
 
-  data.name = data.name.trim()
-  data.email = data.email.toLowerCase()
+  data.name = data.name.trim();
+  data.email = data.email.toLowerCase();
 
-  let user = await store.signup(data)
+  let user = await store.signup(data);
 
-  console.log(store.user.uid, user)
+  console.log(store.user.uid, user);
 
   if (user.uid) {
-    loading.value = false
-    router.push('/auth/email-verification')
+    loading.value = false;
+    router.push('/auth/email-verification');
   }
 }
 
 async function verifyEmail(email) {
-  isEmailAvialableResponse.value = ''
+  isEmailAvialableResponse.value = '';
 
   if (email.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6}$/)) {
-    let response = await store.verifyEmail(email)
+    let response = await store.verifyEmail(email);
     if (response.data.email) {
-      isEmailAvialableResponse.value = 'Email already in use.'
-      v$.value.$invalid = true
+      isEmailAvialableResponse.value = 'Email already in use.';
+      v$.value.$invalid = true;
     }
-  } else console.log('Email Not Verifiable')
+  } else console.log('Email Not Verifiable');
 }
 </script>

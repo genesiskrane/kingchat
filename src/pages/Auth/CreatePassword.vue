@@ -1,11 +1,7 @@
 <template>
   <div class="grid content-center h-full w-full">
-    <div>
-      <v-img
-        src="../assets/img/icon-black.svg"
-        class="w-20 h-20 mx-auto my-8 rounded-2xl bg-red-500"
-        aspect-ratio="1"
-      ></v-img>
+    <div class="w-32 m-auto">
+      <logo class="rounded-sm"></logo>
     </div>
     <div>
       <h2 class="my-2 text-center">You'll need a password</h2>
@@ -31,6 +27,7 @@ import { useRouter } from 'vue-router';
 import { useAppStore } from '../../stores';
 
 import { passwordStrength } from 'check-password-strength';
+import Logo from '../../components/ui/Logo.vue';
 
 const router = useRouter();
 const store = useAppStore();

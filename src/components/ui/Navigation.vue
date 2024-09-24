@@ -1,11 +1,11 @@
 <template>
-  <nav class="flex flex-col justify-between">
-    <template v-for="item in menu" :key="item">
+  <nav class="flex flex-col justify-between" ref="nav">
+    <template v-for="(item, index) in menu" :key="index">
       <template v-if="item.public | store.app.isLoggedIn">
         <router-link :to="getLink(item)" class="px-4 py-2">
           <div class="flex flex-row justify-start gap-4">
-            <div>
-              <img :src="geticon(item.icon)" alt="" />
+            <div class="svg">
+              {{ geticon(item.icon, index) }}
             </div>
             <div class="inline-flex items-center">
               <span>{{ item.name }}</span>
@@ -18,9 +18,13 @@
 </template>
 
 <script setup>
-import { useAppStore } from '../../stores'
+import { ref, inject } from 'vue';
+import { useAppStore } from '../../stores';
 
-const store = useAppStore()
+const themeColors = inject('theme');
+
+const store = useAppStore();
+const nav = ref(null);
 
 const menu = [
   {
@@ -41,13 +45,28 @@ const menu = [
   // { name: 'Events', route: '/events', icon: 'event' },
   // { name: 'Profile', route: '/profile', icon: 'person' },
   { name: 'Store', route: 'store', icon: 'buy', public: false }
-]
+];
 
 function getLink(item) {
-  return `/${item.route}`
+  return `/${item.route}`;
 }
 
-function geticon(name) {
-  return `../assets/icons/${name}.svg`
+function geticon(name, index) {
+  fetch(`../assets/icons/${name}.svg`)
+    .then((response) => response.text())
+    .then((svgContent) => {
+      document.querySelectorAll('.svg')[index].innerHTML = svgContent;
+
+      const svgElement = document.querySelectorAll('.svg')[index].querySelector('svg');
+
+      changeSvgColor(svgElement, themeColors.darken1);
+    });
+
+  function changeSvgColor(svg, hexColor) {
+    const paths = svg.querySelectorAll('path');
+    paths.forEach((path) => {
+      path.setAttribute('fill', hexColor); // Change the fill color
+    });
+  }
 }
 </script>

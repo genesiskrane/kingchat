@@ -1,18 +1,14 @@
 <template>
   <div class="grid content-center h-full w-full">
-    <div>
-      <v-img
-        src="../assets/img/icon-black.svg"
-        class="w-20 h-20 mx-auto rounded-2xl bg-red-500 my-8"
-        aspect-ratio="1"
-      ></v-img>
+    <div class="w-32 m-auto">
+      <logo class="rounded-sm"></logo>
     </div>
     <div>
       <h2 class="my-2 text-center">Verify Email</h2>
       <v-form @submit.prevent="" class="flex flex-col mx-4 gap-4">
         <v-alert text="Invalid OTP" type="warning" v-model="alert" rounded closable></v-alert>
 
-        <div class="text-right">Resend Verification Email</div>
+        <div class="text-right text-xs font-bold">Resend Verification Email</div>
 
         <v-text-field
           v-model="code"
@@ -29,24 +25,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useAppStore } from '../../stores'
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAppStore } from '../../stores';
 
-const router = useRouter()
-const store = useAppStore()
+import Logo from '../../components/ui/Logo.vue';
 
-const alert = ref(false)
-const code = ref('')
+const router = useRouter();
+const store = useAppStore();
+
+const alert = ref(false);
+const code = ref('');
 
 async function verify() {
   if (code.value.length == 6) {
-    let isVerified = await store.verifyOTP({ uid: store.user.uid, code: code.value })
+    let isVerified = await store.verifyOTP({ uid: store.user.uid, code: code.value });
 
-    console.log(isVerified)
+    console.log(isVerified);
     if (isVerified) {
-      router.push('/auth/create-password')
-    } else alert.value = true
+      router.push('/auth/create-password');
+    } else alert.value = true;
   }
 }
 </script>
