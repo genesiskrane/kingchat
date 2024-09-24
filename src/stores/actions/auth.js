@@ -49,7 +49,6 @@ export function useAuth() {
 
         return true;
       } catch (error) {
-        console.log(error);
         let message = error.message
           .substring(error.message.indexOf('(') + 1, error.message.indexOf(')'))
           .split('/')[1];

@@ -6,7 +6,13 @@
       </div>
       <div>
         <v-form @submit.prevent="submit" class="flex flex-col mx-4 gap-4">
-          <v-alert text="Wrong Password" type="error" v-model="alert" rounded closable></v-alert>
+          <v-alert
+            text="Invalid Credentials"
+            type="error"
+            v-model="alert"
+            rounded
+            closable
+          ></v-alert>
           <v-text-field
             v-model="data.id"
             label="Username or Email"
@@ -75,11 +81,13 @@ const v$ = useVuelidate(rules, data);
 
 async function submit() {
   loading.value = true;
-  console.log('Logging In...');
   let res = await store.login(data);
 
-  if (res) router.push('/home');
-  else if (res == 'invalid-credential') alert.value = true;
+  if (res == true) router.push('/home');
+  else {
+    alert.value = true;
+    loading.value = false;
+  }
 }
 
 function forgotPassword() {
